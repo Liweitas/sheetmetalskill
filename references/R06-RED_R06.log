@@ -1,0 +1,35 @@
+test_root_axis_or_flat_link_change_is_not_an_angle_evidence_substitute (test_direction_readback.ActualDirection.test_root_axis_or_flat_link_change_is_not_an_angle_evidence_substitute) ... FAIL
+test_synchronous_UP_plus90_claim_cannot_override_actual_DOWN_minus90 (test_direction_readback.ActualDirection.test_synchronous_UP_plus90_claim_cannot_override_actual_DOWN_minus90) ... FAIL
+test_authority_and_pair_sum_are_distinct_and_display_has_declared_precision (test_direction_readback.InterferenceAuthority.test_authority_and_pair_sum_are_distinct_and_display_has_declared_precision) ... FAIL
+
+======================================================================
+FAIL: test_root_axis_or_flat_link_change_is_not_an_angle_evidence_substitute (test_direction_readback.ActualDirection.test_root_axis_or_flat_link_change_is_not_an_angle_evidence_substitute)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.6.1-direction-repair/dev/step-sheetmetal-delivery/tests/test_direction_readback.py", line 16, in test_root_axis_or_flat_link_change_is_not_an_angle_evidence_substitute
+    self.assertTrue((ROOT/'scripts/native_direction_readback.py').exists())
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: False is not true
+
+======================================================================
+FAIL: test_synchronous_UP_plus90_claim_cannot_override_actual_DOWN_minus90 (test_direction_readback.ActualDirection.test_synchronous_UP_plus90_claim_cannot_override_actual_DOWN_minus90)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.6.1-direction-repair/dev/step-sheetmetal-delivery/tests/test_direction_readback.py", line 10, in test_synchronous_UP_plus90_claim_cannot_override_actual_DOWN_minus90
+    p=ROOT/'scripts/native_direction_readback.py';self.assertTrue(p.exists(),'No actual native angle comparator')
+                                                  ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: False is not true : No actual native angle comparator
+
+======================================================================
+FAIL: test_authority_and_pair_sum_are_distinct_and_display_has_declared_precision (test_direction_readback.InterferenceAuthority.test_authority_and_pair_sum_are_distinct_and_display_has_declared_precision)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.6.1-direction-repair/dev/step-sheetmetal-delivery/tests/test_direction_readback.py", line 23, in test_authority_and_pair_sum_are_distinct_and_display_has_declared_precision
+    self.assertTrue((ROOT/'scripts/interference_volume.py').exists(),'No shared measurement/display contract')
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: False is not true : No shared measurement/display contract
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.001s
+
+FAILED (failures=3)

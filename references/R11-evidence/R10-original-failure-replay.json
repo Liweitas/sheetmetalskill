@@ -1,0 +1,9 @@
+{
+  "name": "exact_R09_deleted_dispatch_replay",
+  "target": "/Users/harryma/Documents/Codex/2026-10-21/task-6/acceptance_R09/named_negative_cases/remove_default_plan_from_R09_published_legacy/customer_INDEPENDENT_R08/revisions/S-304_TEST_ONLY-1.2-20261020-0427-v1_R01",
+  "returncode": 2,
+  "expected": 2,
+  "stdout": "{\n  \"ok\": false,\n  \"errors\": [\n    \"DISPATCH_REQUIRED_PUBLISHED: source manufacturing version cannot waive the publication plan\"\n  ],\n  \"digital_deliverables_complete\": false,\n  \"production_release\": false\n}\n",
+  "stderr": "",
+  "original_modified": false
+}

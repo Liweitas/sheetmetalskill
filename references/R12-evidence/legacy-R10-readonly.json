@@ -1,0 +1,56 @@
+{
+  "root": "sheetmetal-v2.7.3-publication-repair/actual_R10_publications/pending/requirement_INDEPENDENT_R08/revisions/未命名待确认_requirement_INDEPENDENT_R08_R02",
+  "result": {
+    "ok": true,
+    "publication": {
+      "mode": "CURRENT_NAMED_PUBLICATION",
+      "publication_contract": "named-single-zip-v2",
+      "publisher_release": "2.7.3-R10",
+      "source_manufacturing_contract": "2.7.1-R08"
+    },
+    "general_design_stage": null,
+    "manufacturing_delivery_complete": null,
+    "current_workshop_requirements_complete": false,
+    "message_dispatch": {
+      "ok": true,
+      "dispatch_contract": "single-zip-dispatch-v1",
+      "mode": "DEFAULT_ONE_COMPLETE_ZIP",
+      "message_count": 1,
+      "attachment_count": 1,
+      "final_message_plan_checked": true,
+      "production_release": false,
+      "authorization_text_authenticity": "sender must verify actual current user history; JSON cannot prove consent",
+      "actual_messages_sent_or_controlled": false,
+      "scope": "declared messages only; no guarantee against sender bypass"
+    },
+    "contract": "2.7.1-R08",
+    "validator_version": "2.8.1-R12",
+    "digital_deliverables_complete": false,
+    "fresh_CAD_checks_executed": false,
+    "actual_STEP_dimension_readback": null,
+    "quantity_authority": {
+      "input_sets": 3,
+      "canonical_sets": 3,
+      "BOM_quantities": {
+        "U": 3,
+        "L": 3,
+        "LID": 3
+      },
+      "nest_sets": 3,
+      "required_stock_sheets": 3,
+      "receipt_sets": 3
+    },
+    "production_release": false,
+    "checks": [
+      "required kinds",
+      "source material/thickness/dimensions/quantity",
+      "transport/source checks only; final CAD gate not rerun",
+      "nest actual entity/qty/spacing",
+      "source-derived process PDF",
+      "source-derived envelope counts",
+      "revision directory",
+      "inventory",
+      "ZIP CRC/members"
+    ]
+  }
+}

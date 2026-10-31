@@ -1,0 +1,684 @@
+[
+  {
+    "case": "A",
+    "revision_root": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.8.0-general-process/actual_R11_01/A/requirement_SYNTHETIC_R11_A/revisions/未命名待确认_requirement_SYNTHETIC_R11_A_20261023_152229_fa59d628",
+    "job_dimensions_mm": {
+      "length": 376.0,
+      "width": 224.0,
+      "height": 142.0
+    },
+    "thickness_mm": 1.2,
+    "material": "201",
+    "method": "u_external_ends",
+    "q_mm": 0.2,
+    "physical_design_sha256": "e195394f05e5984ea137bbf148a919d3e458b1079022587a9fabf9502c0151db",
+    "general_stage": "confirmation_draft",
+    "manufacturing_delivery_complete": false,
+    "digital_deliverables_complete": true,
+    "parts": [
+      "U",
+      "END_L",
+      "END_R",
+      "LID"
+    ],
+    "actual_holes": 22,
+    "actual_bends": 6,
+    "actual_thickness_by_unfold": {
+      "U": 1.1999999999999988,
+      "END_L": 1.2000000000000002,
+      "END_R": 1.1999999999999886,
+      "LID": 1.199999999999989
+    },
+    "intersections": [
+      {
+        "parts": [
+          "U",
+          "END_L"
+        ],
+        "volume_mm3": 0.0
+      },
+      {
+        "parts": [
+          "U",
+          "END_R"
+        ],
+        "volume_mm3": 0.0
+      },
+      {
+        "parts": [
+          "U",
+          "LID"
+        ],
+        "volume_mm3": 0.0
+      },
+      {
+        "parts": [
+          "END_L",
+          "END_R"
+        ],
+        "volume_mm3": 0.0
+      },
+      {
+        "parts": [
+          "END_L",
+          "LID"
+        ],
+        "volume_mm3": 0.0
+      },
+      {
+        "parts": [
+          "END_R",
+          "LID"
+        ],
+        "volume_mm3": 0.0
+      }
+    ],
+    "assembly_interference_free": true,
+    "PDF_pages": 29,
+    "all_pages_rendered": 29,
+    "format_counts": {
+      "dxf": 4,
+      "step_part": 4,
+      "unfold_step": 4,
+      "geometry_report": 5,
+      "bend_dxf": 2,
+      "bend_usage": 1,
+      "general_parameter_sources": 1,
+      "general_parameter_csv": 1,
+      "general_source_brief": 1,
+      "step_assembly": 1,
+      "step_exploded": 1,
+      "pdf": 1,
+      "formed_isometric_report": 1,
+      "confirmation_png": 2,
+      "fixing_geometry_report": 1,
+      "cad_projections": 1,
+      "run_result": 1,
+      "nest_dxf": 1,
+      "nest_layout": 1,
+      "nest_preview_pdf": 1,
+      "bom_json": 1,
+      "bom_csv": 1,
+      "parameters": 1,
+      "source_job": 1,
+      "hole_table": 1,
+      "cad_report": 1,
+      "delivery_spec": 1,
+      "acceptance_report": 1
+    },
+    "same_parts_translation_only_identity": {
+      "ASSEMBLY": [
+        {
+          "part_id": "U",
+          "translation_mm": [
+            0,
+            0,
+            0
+          ],
+          "symmetric_volume_difference_mm3": 0.0
+        },
+        {
+          "part_id": "END_L",
+          "translation_mm": [
+            0,
+            0,
+            0
+          ],
+          "symmetric_volume_difference_mm3": 0.0
+        },
+        {
+          "part_id": "END_R",
+          "translation_mm": [
+            0,
+            0,
+            0
+          ],
+          "symmetric_volume_difference_mm3": 0.0
+        },
+        {
+          "part_id": "LID",
+          "translation_mm": [
+            0,
+            0,
+            0
+          ],
+          "symmetric_volume_difference_mm3": 0.0
+        }
+      ],
+      "EXPLODED": [
+        {
+          "part_id": "U",
+          "translation_mm": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "symmetric_volume_difference_mm3": 0.0
+        },
+        {
+          "part_id": "END_L",
+          "translation_mm": [
+            -151.6,
+            0.0,
+            0.0
+          ],
+          "symmetric_volume_difference_mm3": 0.0
+        },
+        {
+          "part_id": "END_R",
+          "translation_mm": [
+            151.6,
+            0.0,
+            0.0
+          ],
+          "symmetric_volume_difference_mm3": 0.0
+        },
+        {
+          "part_id": "LID",
+          "translation_mm": [
+            0.0,
+            0.0,
+            84.50000000000001
+          ],
+          "symmetric_volume_difference_mm3": 0.0
+        }
+      ]
+    },
+    "native_checks_fresh": true,
+    "default_message_attachments": 1,
+    "zip": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.8.0-general-process/actual_R11_01/A/requirement_SYNTHETIC_R11_A/revisions/未命名待确认_requirement_SYNTHETIC_R11_A_20261023_152229_fa59d628/未命名待确认_requirement_SYNTHETIC_R11_A_20261023_152229_fa59d628_完整资料.zip",
+    "zip_sha256": "2f0be5d10e74771ec465e67e0cca4befde7ae417a1f043933d1279833884d5c1",
+    "production_release": false
+  },
+  {
+    "case": "B",
+    "revision_root": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.8.0-general-process/actual_R11_01/B/requirement_SYNTHETIC_R11_B/revisions/未命名待确认_requirement_SYNTHETIC_R11_B_20261023_152420_0926ecda",
+    "job_dimensions_mm": {
+      "length": 144.0,
+      "width": 122.0,
+      "height": 277.2
+    },
+    "thickness_mm": 1.0,
+    "material": "201",
+    "method": "u_wrap_bottom_l",
+    "q_mm": 0.2,
+    "physical_design_sha256": "199f9988558c76ade20d0512eea31bb4477b6c0c8ec36989f69567da22a9c3a6",
+    "general_stage": "evidence_based_trial",
+    "manufacturing_delivery_complete": true,
+    "digital_deliverables_complete": true,
+    "parts": [
+      "U",
+      "L",
+      "LID"
+    ],
+    "actual_holes": 16,
+    "actual_bends": 7,
+    "actual_thickness_by_unfold": {
+      "U": 1.0000000000000007,
+      "L": 1.0000000000000002,
+      "LID": 0.9999999999999994
+    },
+    "intersections": [
+      {
+        "parts": [
+          "U",
+          "L"
+        ],
+        "volume_mm3": 0.0
+      },
+      {
+        "parts": [
+          "U",
+          "LID"
+        ],
+        "volume_mm3": 0.0
+      },
+      {
+        "parts": [
+          "L",
+          "LID"
+        ],
+        "volume_mm3": 0.0
+      }
+    ],
+    "assembly_interference_free": true,
+    "PDF_pages": 23,
+    "all_pages_rendered": 23,
+    "format_counts": {
+      "dxf": 3,
+      "step_part": 3,
+      "unfold_step": 3,
+      "geometry_report": 4,
+      "bend_dxf": 3,
+      "bend_usage": 1,
+      "general_parameter_sources": 1,
+      "general_parameter_csv": 1,
+      "general_source_brief": 1,
+      "step_assembly": 1,
+      "step_exploded": 1,
+      "pdf": 1,
+      "formed_isometric_report": 1,
+      "confirmation_png": 2,
+      "fixing_geometry_report": 1,
+      "cad_projections": 1,
+      "run_result": 1,
+      "nest_dxf": 1,
+      "nest_layout": 1,
+      "nest_preview_pdf": 1,
+      "bom_json": 1,
+      "bom_csv": 1,
+      "parameters": 1,
+      "source_job": 1,
+      "hole_table": 1,
+      "cad_report": 1,
+      "delivery_spec": 1,
+      "acceptance_report": 1
+    },
+    "same_parts_translation_only_identity": {
+      "ASSEMBLY": [
+        {
+          "part_id": "U",
+          "translation_mm": [
+            0,
+            0,
+            0
+          ],
+          "symmetric_volume_difference_mm3": 0.0
+        },
+        {
+          "part_id": "L",
+          "translation_mm": [
+            0,
+            0,
+            0
+          ],
+          "symmetric_volume_difference_mm3": 0.0
+        },
+        {
+          "part_id": "LID",
+          "translation_mm": [
+            0,
+            0,
+            0
+          ],
+          "symmetric_volume_difference_mm3": 0.0
+        }
+      ],
+      "EXPLODED": [
+        {
+          "part_id": "U",
+          "translation_mm": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "symmetric_volume_difference_mm3": 0.0
+        },
+        {
+          "part_id": "L",
+          "translation_mm": [
+            -70.4,
+            0.0,
+            0.0
+          ],
+          "symmetric_volume_difference_mm3": 0.0
+        },
+        {
+          "part_id": "LID",
+          "translation_mm": [
+            0.0,
+            0.0,
+            150.3
+          ],
+          "symmetric_volume_difference_mm3": 0.0
+        }
+      ]
+    },
+    "native_checks_fresh": true,
+    "default_message_attachments": 1,
+    "zip": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.8.0-general-process/actual_R11_01/B/requirement_SYNTHETIC_R11_B/revisions/未命名待确认_requirement_SYNTHETIC_R11_B_20261023_152420_0926ecda/未命名待确认_requirement_SYNTHETIC_R11_B_20261023_152420_0926ecda_完整资料.zip",
+    "zip_sha256": "f1e86d532647372c81b436d5eba9e7e95179354af02fe1e80879d47ed7b24a4b",
+    "production_release": false
+  },
+  {
+    "case": "C",
+    "revision_root": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.8.0-general-process/actual_R11_01/C/requirement_SYNTHETIC_R11_C/revisions/未命名待确认_requirement_SYNTHETIC_R11_C_20261023_152607_e14b8577",
+    "job_dimensions_mm": {
+      "length": 622.0,
+      "width": 308.0,
+      "height": 195.0
+    },
+    "thickness_mm": 1.5,
+    "material": "201",
+    "method": "u_external_ends",
+    "q_mm": 0.3,
+    "physical_design_sha256": "823399f1cb7b121e1981ecb598ea3db1802f2abbd0b62b47d5e3581ea4a6d68d",
+    "general_stage": "confirmation_draft",
+    "manufacturing_delivery_complete": false,
+    "digital_deliverables_complete": true,
+    "parts": [
+      "U",
+      "END_L",
+      "END_R",
+      "LID"
+    ],
+    "actual_holes": 36,
+    "actual_bends": 6,
+    "actual_thickness_by_unfold": {
+      "U": 1.5000000000000004,
+      "END_L": 1.5,
+      "END_R": 1.4999999999999998,
+      "LID": 1.5000000000000002
+    },
+    "intersections": [
+      {
+        "parts": [
+          "U",
+          "END_L"
+        ],
+        "volume_mm3": 0.0
+      },
+      {
+        "parts": [
+          "U",
+          "END_R"
+        ],
+        "volume_mm3": 0.0
+      },
+      {
+        "parts": [
+          "U",
+          "LID"
+        ],
+        "volume_mm3": 0.0
+      },
+      {
+        "parts": [
+          "END_L",
+          "END_R"
+        ],
+        "volume_mm3": 0.0
+      },
+      {
+        "parts": [
+          "END_L",
+          "LID"
+        ],
+        "volume_mm3": 0.0
+      },
+      {
+        "parts": [
+          "END_R",
+          "LID"
+        ],
+        "volume_mm3": 0.0
+      }
+    ],
+    "assembly_interference_free": true,
+    "PDF_pages": 29,
+    "all_pages_rendered": 29,
+    "format_counts": {
+      "dxf": 4,
+      "step_part": 4,
+      "unfold_step": 4,
+      "geometry_report": 5,
+      "bend_dxf": 2,
+      "bend_usage": 1,
+      "general_parameter_sources": 1,
+      "general_parameter_csv": 1,
+      "general_source_brief": 1,
+      "step_assembly": 1,
+      "step_exploded": 1,
+      "pdf": 1,
+      "formed_isometric_report": 1,
+      "handle_geometry_report": 1,
+      "confirmation_png": 2,
+      "fixing_geometry_report": 1,
+      "cad_projections": 1,
+      "run_result": 1,
+      "nest_dxf": 1,
+      "nest_layout": 1,
+      "nest_preview_pdf": 1,
+      "bom_json": 1,
+      "bom_csv": 1,
+      "parameters": 1,
+      "source_job": 1,
+      "hole_table": 1,
+      "cad_report": 1,
+      "delivery_spec": 1,
+      "acceptance_report": 1
+    },
+    "same_parts_translation_only_identity": {
+      "ASSEMBLY": [
+        {
+          "part_id": "U",
+          "translation_mm": [
+            0,
+            0,
+            0
+          ],
+          "symmetric_volume_difference_mm3": 0.0
+        },
+        {
+          "part_id": "END_L",
+          "translation_mm": [
+            0,
+            0,
+            0
+          ],
+          "symmetric_volume_difference_mm3": 0.0
+        },
+        {
+          "part_id": "END_R",
+          "translation_mm": [
+            0,
+            0,
+            0
+          ],
+          "symmetric_volume_difference_mm3": 0.0
+        },
+        {
+          "part_id": "LID",
+          "translation_mm": [
+            0,
+            0,
+            0
+          ],
+          "symmetric_volume_difference_mm3": 0.0
+        }
+      ],
+      "EXPLODED": [
+        {
+          "part_id": "U",
+          "translation_mm": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "symmetric_volume_difference_mm3": 0.0
+        },
+        {
+          "part_id": "END_L",
+          "translation_mm": [
+            -237.7,
+            0.0,
+            0.0
+          ],
+          "symmetric_volume_difference_mm3": 0.0
+        },
+        {
+          "part_id": "END_R",
+          "translation_mm": [
+            237.7,
+            0.0,
+            0.0
+          ],
+          "symmetric_volume_difference_mm3": 0.0
+        },
+        {
+          "part_id": "LID",
+          "translation_mm": [
+            0.0,
+            0.0,
+            116.1
+          ],
+          "symmetric_volume_difference_mm3": 0.0
+        }
+      ]
+    },
+    "native_checks_fresh": true,
+    "default_message_attachments": 1,
+    "zip": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.8.0-general-process/actual_R11_01/C/requirement_SYNTHETIC_R11_C/revisions/未命名待确认_requirement_SYNTHETIC_R11_C_20261023_152607_e14b8577/未命名待确认_requirement_SYNTHETIC_R11_C_20261023_152607_e14b8577_完整资料.zip",
+    "zip_sha256": "d84e9335b379f920389a73bb67fa71fec401731e97d380752469dd2cbe712c61",
+    "production_release": false
+  },
+  {
+    "case": "D",
+    "revision_root": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.8.0-general-process/actual_R11_01/D/requirement_SYNTHETIC_R11_D/revisions/未命名待确认_requirement_SYNTHETIC_R11_D_20261023_152807_ed6f7323",
+    "job_dimensions_mm": {
+      "length": 208.0,
+      "width": 116.0,
+      "height": 48.0
+    },
+    "thickness_mm": 0.8,
+    "material": "201",
+    "method": "u_external_ends",
+    "q_mm": null,
+    "physical_design_sha256": "907445f6af13af53fc850125b3fde2eb218c55ca8b0f75676278db83f8aca888",
+    "general_stage": "confirmation_draft",
+    "manufacturing_delivery_complete": false,
+    "digital_deliverables_complete": true,
+    "parts": [
+      "U",
+      "END_L",
+      "END_R"
+    ],
+    "actual_holes": 0,
+    "actual_bends": 2,
+    "actual_thickness_by_unfold": {
+      "U": 0.7999999999999999,
+      "END_L": 0.8,
+      "END_R": 0.8000000000000113
+    },
+    "intersections": [
+      {
+        "parts": [
+          "U",
+          "END_L"
+        ],
+        "volume_mm3": 0.0
+      },
+      {
+        "parts": [
+          "U",
+          "END_R"
+        ],
+        "volume_mm3": 0.0
+      },
+      {
+        "parts": [
+          "END_L",
+          "END_R"
+        ],
+        "volume_mm3": 0.0
+      }
+    ],
+    "assembly_interference_free": true,
+    "PDF_pages": 17,
+    "all_pages_rendered": 17,
+    "format_counts": {
+      "dxf": 3,
+      "step_part": 3,
+      "unfold_step": 3,
+      "geometry_report": 3,
+      "bend_dxf": 1,
+      "bend_usage": 1,
+      "general_parameter_sources": 1,
+      "general_parameter_csv": 1,
+      "general_source_brief": 1,
+      "step_assembly": 1,
+      "step_exploded": 1,
+      "pdf": 1,
+      "formed_isometric_report": 1,
+      "confirmation_png": 2,
+      "cad_projections": 1,
+      "run_result": 1,
+      "nest_dxf": 1,
+      "nest_layout": 1,
+      "nest_preview_pdf": 1,
+      "bom_json": 1,
+      "bom_csv": 1,
+      "parameters": 1,
+      "source_job": 1,
+      "hole_table": 1,
+      "cad_report": 1,
+      "delivery_spec": 1,
+      "acceptance_report": 1
+    },
+    "same_parts_translation_only_identity": {
+      "ASSEMBLY": [
+        {
+          "part_id": "U",
+          "translation_mm": [
+            0,
+            0,
+            0
+          ],
+          "symmetric_volume_difference_mm3": 0.0
+        },
+        {
+          "part_id": "END_L",
+          "translation_mm": [
+            0,
+            0,
+            0
+          ],
+          "symmetric_volume_difference_mm3": 0.0
+        },
+        {
+          "part_id": "END_R",
+          "translation_mm": [
+            0,
+            0,
+            0
+          ],
+          "symmetric_volume_difference_mm3": 0.0
+        }
+      ],
+      "EXPLODED": [
+        {
+          "part_id": "U",
+          "translation_mm": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "symmetric_volume_difference_mm3": 0.0
+        },
+        {
+          "part_id": "END_L",
+          "translation_mm": [
+            -92.8,
+            0.0,
+            0.0
+          ],
+          "symmetric_volume_difference_mm3": 0.0
+        },
+        {
+          "part_id": "END_R",
+          "translation_mm": [
+            92.8,
+            0.0,
+            0.0
+          ],
+          "symmetric_volume_difference_mm3": 0.0
+        }
+      ]
+    },
+    "native_checks_fresh": true,
+    "default_message_attachments": 1,
+    "zip": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.8.0-general-process/actual_R11_01/D/requirement_SYNTHETIC_R11_D/revisions/未命名待确认_requirement_SYNTHETIC_R11_D_20261023_152807_ed6f7323/未命名待确认_requirement_SYNTHETIC_R11_D_20261023_152807_ed6f7323_完整资料.zip",
+    "zip_sha256": "b4b281fdd54f64c6ad0977dd7918ea700b41a384454a5d2ae0bc5cedd2ca82b9",
+    "production_release": false
+  }
+]

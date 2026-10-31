@@ -1,0 +1,296 @@
+[
+  {
+    "case": "F1",
+    "archive_sha256": "47e284060cc355ab3a5a9e8de6c46270727ca9cffdb5b9042b2101e0bc092810",
+    "ZIP_single_top": "未命名待确认_requirement_SYNTH_R11_DECIMAL_20261023_182313_81fdc5db",
+    "CRC_and_inventory_all_file_hashes": true,
+    "native_bend_counts": {
+      "U": 2,
+      "LID": 4
+    },
+    "CUT": {
+      "U": {
+        "entities": 12,
+        "closed_outer_components": 1,
+        "planar": {
+          "planar_checked": true,
+          "boundary_guard_mm": 0.002,
+          "arc_winding_max_sag_mm": 0.001
+        }
+      },
+      "END_L": {
+        "entities": 6,
+        "closed_outer_components": 1,
+        "planar": {
+          "planar_checked": true,
+          "boundary_guard_mm": 0.002,
+          "arc_winding_max_sag_mm": 0.001
+        }
+      },
+      "END_R": {
+        "entities": 6,
+        "closed_outer_components": 1,
+        "planar": {
+          "planar_checked": true,
+          "boundary_guard_mm": 0.002,
+          "arc_winding_max_sag_mm": 0.001
+        }
+      },
+      "LID": {
+        "entities": 20,
+        "closed_outer_components": 1,
+        "planar": {
+          "planar_checked": true,
+          "boundary_guard_mm": 0.002,
+          "arc_winding_max_sag_mm": 0.001
+        }
+      }
+    },
+    "naming": {
+      "ok": true,
+      "status": "UNNAMED_PENDING_CONFIRMATION",
+      "code": null,
+      "missing_fields": [
+        "channel",
+        "material",
+        "thickness",
+        "date",
+        "number",
+        "factory_version"
+      ],
+      "source_job_and_manufacturing_bytes_preserved": true,
+      "factory_allocation_authenticity": "sender/factory verifies; no global serial assignment or reset"
+    },
+    "actual_STEP_dimension_and_translation_ok": true,
+    "printed_dimension_checks": {
+      "ok": true,
+      "dimension_label_count": 62,
+      "orthographic_isometric_exploded_vectors_from_fresh_STEP": true,
+      "exploded_displacement_in_product_dimensions": false,
+      "scope": "actual formed/flat STEP extents and true part dimensions, not receipt dimensions",
+      "isometric_checks": {
+        "U": {
+          "matched_outline_segments": 56,
+          "page_index": 2,
+          "numeric_tolerance_points": 0.05,
+          "visual_review_still_required": true
+        },
+        "END_L": {
+          "matched_outline_segments": 30,
+          "page_index": 4,
+          "numeric_tolerance_points": 0.05,
+          "visual_review_still_required": true
+        },
+        "END_R": {
+          "matched_outline_segments": 30,
+          "page_index": 6,
+          "numeric_tolerance_points": 0.05,
+          "visual_review_still_required": true
+        },
+        "LID": {
+          "matched_outline_segments": 124,
+          "page_index": 8,
+          "numeric_tolerance_points": 0.05,
+          "visual_review_still_required": true
+        }
+      }
+    },
+    "source_derived_process_PDF": {
+      "ok": true,
+      "Chinese_explanations": true,
+      "source_header_and_native_bend_tables": true,
+      "production_release": false
+    },
+    "source_full_result": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.8.1-material-code-repair/CN03_roundtrip_F1/ROUNDTRIP_RESULT.json",
+    "independent_agent_acceptance": false
+  },
+  {
+    "case": "mapped",
+    "archive_sha256": "0d27c7a1960f96483a59392c5179b2a4e1f9d3b3917a4bbab3aee42a2f5abefd",
+    "ZIP_single_top": "S-201-1.0-20261023-0423-v1_20261023_182501_d1d16562",
+    "CRC_and_inventory_all_file_hashes": true,
+    "native_bend_counts": {
+      "U": 2,
+      "LID": 4
+    },
+    "CUT": {
+      "U": {
+        "entities": 16,
+        "closed_outer_components": 1,
+        "planar": {
+          "planar_checked": true,
+          "boundary_guard_mm": 0.002,
+          "arc_winding_max_sag_mm": 0.001
+        }
+      },
+      "END_L": {
+        "entities": 8,
+        "closed_outer_components": 1,
+        "planar": {
+          "planar_checked": true,
+          "boundary_guard_mm": 0.002,
+          "arc_winding_max_sag_mm": 0.001
+        }
+      },
+      "END_R": {
+        "entities": 8,
+        "closed_outer_components": 1,
+        "planar": {
+          "planar_checked": true,
+          "boundary_guard_mm": 0.002,
+          "arc_winding_max_sag_mm": 0.001
+        }
+      },
+      "LID": {
+        "entities": 30,
+        "closed_outer_components": 1,
+        "planar": {
+          "planar_checked": true,
+          "boundary_guard_mm": 0.002,
+          "arc_winding_max_sag_mm": 0.001
+        }
+      }
+    },
+    "naming": {
+      "ok": true,
+      "status": "FORMALLY_NAMED",
+      "code": "S-201-1.0-20261023-0423-v1",
+      "missing_fields": [],
+      "source_job_and_manufacturing_bytes_preserved": true,
+      "factory_allocation_authenticity": "sender/factory verifies; no global serial assignment or reset"
+    },
+    "actual_STEP_dimension_and_translation_ok": true,
+    "printed_dimension_checks": {
+      "ok": true,
+      "dimension_label_count": 62,
+      "orthographic_isometric_exploded_vectors_from_fresh_STEP": true,
+      "exploded_displacement_in_product_dimensions": false,
+      "scope": "actual formed/flat STEP extents and true part dimensions, not receipt dimensions",
+      "isometric_checks": {
+        "U": {
+          "matched_outline_segments": 164,
+          "page_index": 2,
+          "numeric_tolerance_points": 0.05,
+          "visual_review_still_required": true
+        },
+        "END_L": {
+          "matched_outline_segments": 84,
+          "page_index": 5,
+          "numeric_tolerance_points": 0.05,
+          "visual_review_still_required": true
+        },
+        "END_R": {
+          "matched_outline_segments": 84,
+          "page_index": 8,
+          "numeric_tolerance_points": 0.05,
+          "visual_review_still_required": true
+        },
+        "LID": {
+          "matched_outline_segments": 478,
+          "page_index": 11,
+          "numeric_tolerance_points": 0.05,
+          "visual_review_still_required": true
+        }
+      }
+    },
+    "source_derived_process_PDF": {
+      "ok": true,
+      "Chinese_explanations": true,
+      "source_header_and_native_bend_tables": true,
+      "production_release": false
+    },
+    "source_full_result": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.8.1-material-code-repair/CN03_roundtrip_mapped/ROUNDTRIP_RESULT.json",
+    "independent_agent_acceptance": false
+  },
+  {
+    "case": "B_candidate",
+    "archive_sha256": "6bdb716110eb2b55e39c3988dda67b804ede4786783a22520eadfd41e4c251fe",
+    "ZIP_single_top": "未命名待确认_requirement_SYNTHETIC_R12_DEFAULT15_WRAP_T2_20261023_182720_f8ba8e53",
+    "CRC_and_inventory_all_file_hashes": true,
+    "native_bend_counts": {
+      "U": 2,
+      "L": 1,
+      "LID": 4
+    },
+    "CUT": {
+      "U": {
+        "entities": 12,
+        "closed_outer_components": 1,
+        "planar": {
+          "planar_checked": true,
+          "boundary_guard_mm": 0.002,
+          "arc_winding_max_sag_mm": 0.001
+        }
+      },
+      "L": {
+        "entities": 10,
+        "closed_outer_components": 1,
+        "planar": {
+          "planar_checked": true,
+          "boundary_guard_mm": 0.002,
+          "arc_winding_max_sag_mm": 0.001
+        }
+      },
+      "LID": {
+        "entities": 20,
+        "closed_outer_components": 1,
+        "planar": {
+          "planar_checked": true,
+          "boundary_guard_mm": 0.002,
+          "arc_winding_max_sag_mm": 0.001
+        }
+      }
+    },
+    "naming": {
+      "ok": true,
+      "status": "UNNAMED_PENDING_CONFIRMATION",
+      "code": null,
+      "missing_fields": [
+        "channel",
+        "material",
+        "thickness",
+        "date",
+        "number",
+        "factory_version"
+      ],
+      "source_job_and_manufacturing_bytes_preserved": true,
+      "factory_allocation_authenticity": "sender/factory verifies; no global serial assignment or reset"
+    },
+    "actual_STEP_dimension_and_translation_ok": true,
+    "printed_dimension_checks": {
+      "ok": true,
+      "dimension_label_count": 48,
+      "orthographic_isometric_exploded_vectors_from_fresh_STEP": true,
+      "exploded_displacement_in_product_dimensions": false,
+      "scope": "actual formed/flat STEP extents and true part dimensions, not receipt dimensions",
+      "isometric_checks": {
+        "U": {
+          "matched_outline_segments": 60,
+          "page_index": 2,
+          "numeric_tolerance_points": 0.05,
+          "visual_review_still_required": true
+        },
+        "L": {
+          "matched_outline_segments": 50,
+          "page_index": 4,
+          "numeric_tolerance_points": 0.05,
+          "visual_review_still_required": true
+        },
+        "LID": {
+          "matched_outline_segments": 116,
+          "page_index": 6,
+          "numeric_tolerance_points": 0.05,
+          "visual_review_still_required": true
+        }
+      }
+    },
+    "source_derived_process_PDF": {
+      "ok": true,
+      "Chinese_explanations": true,
+      "source_header_and_native_bend_tables": true,
+      "production_release": false
+    },
+    "source_full_result": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.8.1-material-code-repair/CN03_roundtrip_B_candidate/ROUNDTRIP_RESULT.json",
+    "independent_agent_acceptance": false
+  }
+]

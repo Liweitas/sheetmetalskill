@@ -1,0 +1,19 @@
+{
+  "id": "EXTERNAL",
+  "dimensions": {
+    "length": 240,
+    "width": 150,
+    "height": 100
+  },
+  "material": "201 stainless steel",
+  "thickness": 1.2,
+  "Ri": 0.8,
+  "K_ANSI": 0.4,
+  "seam_gap": 0.1,
+  "lid_required": true,
+  "lid": {
+    "skirt_height": 16,
+    "corner_gap": 0.2,
+    "roof_gap": 0
+  }
+}

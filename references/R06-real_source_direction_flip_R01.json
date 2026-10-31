@@ -1,0 +1,21 @@
+{
+  "ok": false,
+  "errors": [
+    "Actual geometry readback: SOLID_01: NATIVE_DIRECTION: B1 actual DOWN/-90.0 deg differs from claimed UP/90.0"
+  ],
+  "actual_geometry_readback": {
+    "ok": false,
+    "errors": [
+      "SOLID_01: NATIVE_DIRECTION: B1 actual DOWN/-90.0 deg differs from claimed UP/90.0"
+    ],
+    "CAD_executed": true,
+    "actual_source_read": true,
+    "source_sha256": "9ea0f5d812f67c48e596c99fad153fca4737871650e83d5f30f03cf5d22501d0",
+    "checks": [],
+    "numeric_tolerance_mm": 1e-05,
+    "numeric_area_tolerance_mm2": 1e-05,
+    "production_release": false
+  },
+  "gate_scope": "complete audit evidence only; source manufacture may be BLOCKED",
+  "production_release": false
+}

@@ -1,0 +1,106 @@
+[
+  {
+    "case": "F1",
+    "input_SHA256": "9b7ab24ea9028eac754564fed59f0c4fb813698c77d6c8699c85ba97e12c19f6",
+    "method": "u_external_ends",
+    "parts": [
+      "U",
+      "END_L",
+      "END_R",
+      "LID"
+    ],
+    "skirt_source": {
+      "parameter": "lid.skirt_height",
+      "value": 12.34,
+      "unit": "mm",
+      "origin": "user",
+      "source": "current brief",
+      "note": "Explicit current input retained without quantization; no machine qualification inferred",
+      "needs_confirmation": false
+    },
+    "actual_STEP_skirt_mm": 12.340000000000003,
+    "native_actual_bends": 6,
+    "PDF_pages": 10,
+    "actual_dimension_labels": 62,
+    "actual_root_overlap_mm3": 0.0,
+    "manufacturing_delivery_complete": false,
+    "current_workshop_requirements_complete": true,
+    "naming": {
+      "status": "UNNAMED_PENDING_CONFIRMATION",
+      "code": null,
+      "prefix": "未命名待确认_requirement_SYNTH_R11_DECIMAL_20261023_182313_81fdc5db",
+      "record": "未命名待确认_requirement_SYNTH_R11_DECIMAL_20261023_182313_81fdc5db_文件更名与命名记录_FILE_NAMING.json"
+    },
+    "zip_sha256": "47e284060cc355ab3a5a9e8de6c46270727ca9cffdb5b9042b2101e0bc092810",
+    "root": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.8.1-material-code-repair/CN03_final_F1/requirement_SYNTH_R11_DECIMAL/revisions/未命名待确认_requirement_SYNTH_R11_DECIMAL_20261023_182313_81fdc5db"
+  },
+  {
+    "case": "mapped",
+    "input_SHA256": "fbb504e861dd042887a00fff8855744eb80ff918a87d2d3639dc215f241492a5",
+    "method": "u_external_ends",
+    "parts": [
+      "U",
+      "END_L",
+      "END_R",
+      "LID"
+    ],
+    "skirt_source": {
+      "parameter": "lid.skirt_height",
+      "value": 15.0,
+      "unit": "mm",
+      "origin": "experience_default",
+      "source": "User general default Sentinel_a06b1b0204b8819192a24d11cae4cdc4: 盖裙 默认都是15mm",
+      "note": "User default 15mm retained; no thickness/size/tool-driven increase. Conflicts require confirmation.",
+      "needs_confirmation": true
+    },
+    "actual_STEP_skirt_mm": 15.000000000005997,
+    "native_actual_bends": 6,
+    "PDF_pages": 14,
+    "actual_dimension_labels": 62,
+    "actual_root_overlap_mm3": 0.0,
+    "manufacturing_delivery_complete": false,
+    "current_workshop_requirements_complete": true,
+    "naming": {
+      "status": "FORMALLY_NAMED",
+      "code": "S-201-1.0-20261023-0423-v1",
+      "prefix": "S-201-1.0-20261023-0423-v1",
+      "record": "S-201-1.0-20261023-0423-v1_文件更名与命名记录_FILE_NAMING.json"
+    },
+    "zip_sha256": "0d27c7a1960f96483a59392c5179b2a4e1f9d3b3917a4bbab3aee42a2f5abefd",
+    "root": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.8.1-material-code-repair/CN03_final_mapped/requirement_SYNTHETIC_R12_CN_DEFAULT15/revisions/S-201-1.0-20261023-0423-v1_20261023_182501_d1d16562"
+  },
+  {
+    "case": "B_candidate",
+    "input_SHA256": "06d4cd98061edc0f5474f41be4a6cca81a38a5794d446b8f0368bc24275d03d6",
+    "method": "u_wrap_bottom_l",
+    "parts": [
+      "U",
+      "L",
+      "LID"
+    ],
+    "skirt_source": {
+      "parameter": "lid.skirt_height",
+      "value": 15.0,
+      "unit": "mm",
+      "origin": "experience_default",
+      "source": "User general default Sentinel_a06b1b0204b8819192a24d11cae4cdc4: 盖裙 默认都是15mm",
+      "note": "User default 15mm retained; no thickness/size/tool-driven increase. Conflicts require confirmation.",
+      "needs_confirmation": true
+    },
+    "actual_STEP_skirt_mm": 15.000000000010004,
+    "native_actual_bends": 7,
+    "PDF_pages": 8,
+    "actual_dimension_labels": 48,
+    "actual_root_overlap_mm3": 0.0,
+    "manufacturing_delivery_complete": false,
+    "current_workshop_requirements_complete": true,
+    "naming": {
+      "status": "UNNAMED_PENDING_CONFIRMATION",
+      "code": null,
+      "prefix": "未命名待确认_requirement_SYNTHETIC_R12_DEFAULT15_WRAP_T2_20261023_182720_f8ba8e53",
+      "record": "未命名待确认_requirement_SYNTHETIC_R12_DEFAULT15_WRAP_T2_20261023_182720_f8ba8e53_文件更名与命名记录_FILE_NAMING.json"
+    },
+    "zip_sha256": "6bdb716110eb2b55e39c3988dda67b804ede4786783a22520eadfd41e4c251fe",
+    "root": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.8.1-material-code-repair/CN03_final_B_candidate/requirement_SYNTHETIC_R12_DEFAULT15_WRAP_T2/revisions/未命名待确认_requirement_SYNTHETIC_R12_DEFAULT15_WRAP_T2_20261023_182720_f8ba8e53"
+  }
+]

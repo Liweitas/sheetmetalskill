@@ -1,0 +1,87 @@
+{
+  "version": "2.6.1-R06",
+  "author_validation_only": true,
+  "independent_retest": "PENDING same independent reviewer",
+  "scope": "Only actual native direction/signed-angle gates and numerical overlap authority/precision; no geometry changes",
+  "real_R05_failures_replayed": {
+    "new_box": {
+      "rejected": true,
+      "actual_CAD_executed": true,
+      "errors": [
+        "NATIVE_DIRECTION: B1 actual DOWN/-90.0 deg differs from claimed UP/90.0"
+      ]
+    },
+    "source": {
+      "rejected": true,
+      "actual_CAD_executed": true,
+      "errors": [
+        "Actual geometry readback: SOLID_01: NATIVE_DIRECTION: B1 actual DOWN/-90.0 deg differs from claimed UP/90.0"
+      ]
+    }
+  },
+  "three_R05_legal_positives": [
+    {
+      "case": "external",
+      "exit": 0,
+      "ok": true,
+      "errors": []
+    },
+    {
+      "case": "wrap_l",
+      "exit": 0,
+      "ok": true,
+      "errors": []
+    },
+    {
+      "case": "source_L_supported",
+      "exit": 0,
+      "ok": true,
+      "errors": []
+    }
+  ],
+  "authority_case": {
+    "case": "Actual independent wrap input regenerated without parameter changes",
+    "authority_values_exactly_same_saved_value": {
+      "canonical": 2.0190650778320265,
+      "native": 2.0190650778320265,
+      "final": 2.0190650778320265,
+      "worker_authority": 2.0190650778320265
+    },
+    "PDF_display_mm3": "2.019065",
+    "PDF_first_page_declares_authority_and_6_digits": true,
+    "pair_sum_diagnostic": {
+      "authoritative_source": "Actual exported/read-back BODY STEP compound common with formed LID STEP",
+      "authoritative_volume_mm3": 2.0190650778320265,
+      "display_decimal_places": 6,
+      "display_volume_mm3": "2.019065",
+      "pairwise_sum_mm3": 2.019099125183112,
+      "pair_sum_minus_authority_mm3": 3.404735108558654e-05,
+      "numerical_comparison_absolute_mm3": 1e-06,
+      "numerical_comparison_relative": 1e-08,
+      "meaning": "CAD Boolean arithmetic only; raw digits are trace data, not physical accuracy. Pairwise sum is a separate diagnostic operation.",
+      "fit_intersection_threshold_unchanged_mm3": 1e-07
+    },
+    "native_recomputed_raw_mm3": 2.0190650778320265,
+    "source_job_SHA256": "e453df23889743705ebf9c8267289b14179da5b8a3ebdbca7a536c2550e2454e",
+    "status": "DELIVERED_FOR_AUTHORIZED_SITE_FIT_WITH_HOLD",
+    "production_release": false,
+    "all_other_formats_present": true,
+    "pages": 18,
+    "actual_direction_gate": true
+  },
+  "new_source_R06_positive": {
+    "status": "AUDIT_COMPLETE_WITH_HOLD",
+    "actual_source_CAD_direction_readback": true
+  },
+  "unit_tests_passed": 208,
+  "correct_R05_logic_unchanged": {
+    "scripts/formed_isometric.py": true,
+    "scripts/site_fit.py": true,
+    "scripts/record_site_fit.py": true,
+    "scripts/common_profiles.py": true,
+    "scripts/select_structure.py": true
+  },
+  "original_R05_frozen_hashes_unchanged": true,
+  "manufacturing_release": false,
+  "public_runtime_dependencies": "same FreeCAD/SheetMetal ordinary Python and Poppler; new-box validator now needs actual CAD runtime too"
+}

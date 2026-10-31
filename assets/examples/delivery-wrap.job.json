@@ -1,0 +1,62 @@
+{
+  "id": "R07_WRAP_185",
+  "dimensions": {
+    "length": 185,
+    "width": 160,
+    "height": 295
+  },
+  "material": "201",
+  "thickness": 1.0,
+  "Ri": 0.8,
+  "K_ANSI": 0.4,
+  "seam_gap": 0.1,
+  "lid_required": true,
+  "lid": {
+    "skirt_height": 16,
+    "corner_gap": 0.2,
+    "roof_gap": 0
+  },
+  "delivery": {
+    "namespace": "customer",
+    "entity_id": "AUTHOR_WRAP_185",
+    "revision": "R01",
+    "sets": 2,
+    "stock": {
+      "length_mm": 2440,
+      "width_mm": 1220,
+      "edge_margin_mm": 10,
+      "part_gap_mm": 10,
+      "status": "assumed",
+      "source": "SYNTHETIC AUTHOR TEST stock candidate, no actual customer approval"
+    }
+  },
+  "holes": [
+    {
+      "id": "HC",
+      "part_id": "LID",
+      "diameter": 18,
+      "point": [
+        92.5,
+        80,
+        295
+      ],
+      "axis": [
+        0,
+        0,
+        1
+      ]
+    }
+  ],
+  "site_fit_acceptance": {
+    "scope": "this_job_only",
+    "job_id": "R07_WRAP_185",
+    "job_design_sha256": "a9513d62aa77f2364f8556d266e65070017174a6073a079fd70985e77e4835ef",
+    "issue": "lid_root_interference",
+    "disposition": "site_fit_and_trial_assembly",
+    "authorization_source": "SYNTHETIC AUTHOR TEST ONLY R07_WRAP_185, not customer authorization",
+    "authorization_quote": "For this synthetic test only retain lid-root interference for site fitting and later trial assembly. Do not change Ri/g/q and do not claim interference eliminated or production release.",
+    "authorized_by": "user",
+    "geometry_interference_eliminated": false,
+    "trial_assembly_confirmed": false
+  }
+}

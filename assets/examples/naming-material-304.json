@@ -1,0 +1,15 @@
+{
+  "channel": "S",
+  "material_code": "304",
+  "material_mapping": {
+    "source_description": "304 stainless steel",
+    "code": "304",
+    "confirmed": true,
+    "source": "SYNTHETIC EXAMPLE ONLY; replace with current actual confirmation"
+  },
+  "thickness": 1.0,
+  "date": "20261023",
+  "number": 423,
+  "factory_version": 1,
+  "source": "SYNTHETIC EXAMPLE ONLY; not a factory allocation"
+}

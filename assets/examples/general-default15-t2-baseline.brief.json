@@ -1,0 +1,24 @@
+{
+  "input_contract": "general-process-v1",
+  "id": "SYNTHETIC_R12_DEFAULT15_WRAP_T2",
+  "units": "mm",
+  "dimension_basis": "inner",
+  "height_basis": "bare_body",
+  "lid_required": true,
+  "material": "201 stainless steel",
+  "thickness": 2.0,
+  "dimensions": {
+    "length": 142,
+    "width": 120,
+    "height": 275
+  },
+  "roof_ports": {
+    "mode": "none"
+  },
+  "fixings": {
+    "mode": "none"
+  },
+  "handles": {
+    "mode": "none"
+  }
+}

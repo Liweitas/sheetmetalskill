@@ -1,0 +1,19 @@
+{
+  "id": "WRAP_L",
+  "dimensions": {
+    "length": 120,
+    "width": 100,
+    "height": 200
+  },
+  "material": "201 stainless steel",
+  "thickness": 1.2,
+  "Ri": 0.8,
+  "K_ANSI": 0.4,
+  "seam_gap": 0.1,
+  "lid_required": true,
+  "lid": {
+    "skirt_height": 16,
+    "corner_gap": 0.2,
+    "roof_gap": 0
+  }
+}

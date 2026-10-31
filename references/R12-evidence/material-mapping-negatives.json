@@ -1,0 +1,81 @@
+{
+  "author_test_only": true,
+  "full_CAD_recheck_for_negatives": false,
+  "positive_actual_CAD_readback_separately_required": true,
+  "source_unchanged_files": 73,
+  "production_release": false,
+  "results": [
+    {
+      "test": "mapping_other_grade",
+      "all_inventory_manifest_ZIP_hashes_rebound": true,
+      "ZIP_CRC_and_members_verified": true,
+      "rejected": true,
+      "error": "NAMING_MATERIAL_MAPPING_SCOPE: bind exact source description and requested code",
+      "expected_guard": "MAPPING_SCOPE",
+      "ZIP_sha256": "cef0503a08678d37696c8cc917f056a5a6e874cd4dba2493d58a2f68640aae30"
+    },
+    {
+      "test": "mapping_wrong_source_description",
+      "all_inventory_manifest_ZIP_hashes_rebound": true,
+      "ZIP_CRC_and_members_verified": true,
+      "rejected": true,
+      "error": "NAMING_MATERIAL_MAPPING_SCOPE: bind exact source description and requested code",
+      "expected_guard": "MAPPING_SCOPE",
+      "ZIP_sha256": "dbd173e4f959b75b56e013dde0d92b60d0f4c2301cb44256ad1f2a62a2ad330c"
+    },
+    {
+      "test": "remove_mapping_proof",
+      "all_inventory_manifest_ZIP_hashes_rebound": true,
+      "ZIP_CRC_and_members_verified": true,
+      "rejected": true,
+      "error": "NAMING_SOURCE_RULE_MISMATCH",
+      "expected_guard": "NAMING_SOURCE_RULE_MISMATCH",
+      "ZIP_sha256": "9d1f5dee7144847fb3c0a6051ee4a2de22c01c6e5a82a9574b48b877bc0bf322"
+    },
+    {
+      "test": "unconfirmed_mapping",
+      "all_inventory_manifest_ZIP_hashes_rebound": true,
+      "ZIP_CRC_and_members_verified": true,
+      "rejected": true,
+      "error": "NAMING_SOURCE_RULE_MISMATCH",
+      "expected_guard": "NAMING_SOURCE_RULE_MISMATCH",
+      "ZIP_sha256": "eb9b6adc778de47237c64574b89c7c9ee32bbc97cf4100e2cb8f4e929f211aa6"
+    },
+    {
+      "test": "synchronous_target_grade_change",
+      "all_inventory_manifest_ZIP_hashes_rebound": true,
+      "ZIP_CRC_and_members_verified": true,
+      "rejected": true,
+      "error": "NAMING_MATERIAL_DIFFERS_SOURCE: source grade and requested code conflict",
+      "expected_guard": "MATERIAL_DIFFERS_SOURCE",
+      "ZIP_sha256": "97dc0c7435955325e98076c1ca0532ac14baf08c62df9448f9ad45644a5eaec3"
+    },
+    {
+      "test": "changed_resolved_confirmation_source",
+      "all_inventory_manifest_ZIP_hashes_rebound": true,
+      "ZIP_CRC_and_members_verified": true,
+      "rejected": true,
+      "error": "NAMING_SOURCE_RULE_MISMATCH",
+      "expected_guard": "NAMING_SOURCE_RULE_MISMATCH",
+      "ZIP_sha256": "f14ab1bb744158d90e7b36b58915cee26d99ac3cb4699a8a7a2e1e09b0c42781"
+    },
+    {
+      "test": "coherent_publisher_downgrade",
+      "all_inventory_manifest_ZIP_hashes_rebound": true,
+      "ZIP_CRC_and_members_verified": true,
+      "rejected": true,
+      "error": "PUBLICATION_MATERIAL_MAPPING_REQUIRES_CURRENT_RELEASE",
+      "expected_guard": "MATERIAL_MAPPING_REQUIRES_CURRENT_RELEASE",
+      "ZIP_sha256": "3fa1c0e6234a120b731d2459bf4fda08e03109f48dcac5c3cd77a6d832bdc8da"
+    },
+    {
+      "test": "erase_default_dispatch",
+      "all_inventory_manifest_ZIP_hashes_rebound": true,
+      "ZIP_CRC_and_members_verified": true,
+      "rejected": true,
+      "error": "DISPATCH_REQUIRED_PUBLISHED: source manufacturing version cannot waive the publication plan",
+      "expected_guard": "DISPATCH_REQUIRED_PUBLISHED",
+      "ZIP_sha256": "1552c5b867ef8ebb03734c531885f25d14d84ce9b3f4926a1fb4600ff9887f95"
+    }
+  ]
+}

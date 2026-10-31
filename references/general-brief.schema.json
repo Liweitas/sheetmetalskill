@@ -1,0 +1,436 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "input_contract": {
+      "const": "general-process-v1"
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]+$"
+    },
+    "shape": {
+      "enum": [
+        "rectangular_box",
+        "irregular",
+        "existing_step"
+      ]
+    },
+    "shape_reference": {
+      "type": "string"
+    },
+    "units": {
+      "enum": [
+        "mm",
+        "cm",
+        "m",
+        "inch"
+      ]
+    },
+    "dimension_basis": {
+      "enum": [
+        "inner",
+        "outer"
+      ]
+    },
+    "height_basis": {
+      "enum": [
+        "including_lid",
+        "bare_body"
+      ]
+    },
+    "lid_required": {
+      "type": "boolean"
+    },
+    "dimensions": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "length": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "width": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "height": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      }
+    },
+    "material": {
+      "type": [
+        "string",
+        "null"
+      ]
+    },
+    "thickness": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "structure": {
+      "enum": [
+        "u_external_ends",
+        "u_wrap_bottom_l"
+      ]
+    },
+    "lid": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "g": {
+          "type": "number",
+          "minimum": 0
+        },
+        "roof_gap": {
+          "type": "number",
+          "minimum": 0
+        },
+        "skirt_height": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "corner_gap": {
+          "type": "number",
+          "minimum": 0
+        },
+        "corner_scheme": {
+          "type": "string"
+        }
+      }
+    },
+    "roof_ports": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "enum": [
+            "none",
+            "two_reference"
+          ]
+        },
+        "diameter": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "pitch": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "from_body_short_end": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "interface_reference": {
+          "type": "string"
+        }
+      }
+    },
+    "handles": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "enum": [
+            "none",
+            "single",
+            "double",
+            "auto"
+          ]
+        },
+        "centers": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 2,
+            "maxItems": 2
+          }
+        }
+      }
+    },
+    "fixings": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "mode": {
+          "enum": [
+            "none",
+            "perimeter_reference"
+          ]
+        },
+        "edge_offset": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "max_spacing": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      }
+    },
+    "process": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "Ri": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "K_ANSI": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "K_evidence": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "kind": {
+              "enum": [
+                "factory_calibration",
+                "documented_trial"
+              ]
+            },
+            "reference": {
+              "type": "string",
+              "minLength": 1
+            },
+            "material": {
+              "type": "string"
+            },
+            "thickness_mm": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "K_ANSI": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "operator": {
+              "type": "string"
+            },
+            "Ri_mm": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "tool_reference": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "required": [
+            "kind",
+            "reference",
+            "material",
+            "thickness_mm",
+            "K_ANSI",
+            "Ri_mm",
+            "tool_reference"
+          ]
+        },
+        "seam_gap": {
+          "type": "number",
+          "minimum": 0
+        },
+        "end_inset": {
+          "type": "number",
+          "minimum": 0
+        },
+        "end_top_flush": {
+          "type": "boolean"
+        },
+        "requested_stage": {
+          "enum": [
+            "confirmation",
+            "trial",
+            "production_record"
+          ]
+        },
+        "factory_verification": {
+          "type": "object"
+        },
+        "corner_relief_candidate": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "baseline_brief_sha256",
+            "baseline_corner_gap_mm",
+            "value_mm",
+            "source",
+            "needs_confirmation"
+          ],
+          "properties": {
+            "baseline_brief_sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "baseline_corner_gap_mm": {
+              "type": "number",
+              "minimum": 0
+            },
+            "value_mm": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "source": {
+              "type": "string",
+              "minLength": 1
+            },
+            "needs_confirmation": {
+              "const": true
+            }
+          }
+        }
+      }
+    },
+    "holes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "part_id": {
+            "enum": [
+              "U",
+              "L",
+              "END_L",
+              "END_R",
+              "LID"
+            ]
+          },
+          "diameter": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "point": {
+            "type": "array",
+            "minItems": 3,
+            "maxItems": 3,
+            "items": {
+              "type": "number"
+            }
+          },
+          "axis": {
+            "type": "array",
+            "minItems": 3,
+            "maxItems": 3,
+            "items": {
+              "type": "number"
+            }
+          }
+        },
+        "required": [
+          "id",
+          "part_id",
+          "diameter",
+          "point",
+          "axis"
+        ]
+      }
+    },
+    "delivery": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "namespace": {
+          "enum": [
+            "customer",
+            "requirement"
+          ]
+        },
+        "entity_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]+$"
+        },
+        "revision": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_-]+$"
+        },
+        "sets": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100
+        },
+        "stock": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "length_mm",
+            "width_mm",
+            "edge_margin_mm",
+            "part_gap_mm",
+            "status",
+            "source"
+          ],
+          "properties": {
+            "length_mm": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "width_mm": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "edge_margin_mm": {
+              "type": "number",
+              "minimum": 0
+            },
+            "part_gap_mm": {
+              "type": "number",
+              "exclusiveMinimum": 0
+            },
+            "available_sheets": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "status": {
+              "enum": [
+                "requested",
+                "confirmed",
+                "assumed"
+              ]
+            },
+            "source": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "required": [
+              "namespace"
+            ],
+            "properties": {
+              "namespace": {
+                "const": "customer"
+              }
+            }
+          },
+          "then": {
+            "required": [
+              "entity_id"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "required": [
+    "input_contract"
+  ],
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "General sheetmetal process brief v1; essential omissions produce explicit needs-input report"
+}

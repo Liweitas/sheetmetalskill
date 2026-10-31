@@ -1,0 +1,461 @@
+{
+  "revision_root": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.8.0-general-process/actual_R11_01/D/requirement_SYNTHETIC_R11_D/revisions/未命名待确认_requirement_SYNTHETIC_R11_D_20261023_152807_ed6f7323",
+  "delivery": {
+    "contract": "2.8.0-R11",
+    "revision_root": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.8.0-general-process/actual_R11_01/D/requirement_SYNTHETIC_R11_D/revisions/未命名待确认_requirement_SYNTHETIC_R11_D_20261023_152807_ed6f7323",
+    "manifest": "未命名待确认_requirement_SYNTHETIC_R11_D_20261023_152807_ed6f7323_核验资料_确认稿候选_manifest_20261023_1528.json",
+    "inventory": "未命名待确认_requirement_SYNTHETIC_R11_D_20261023_152807_ed6f7323_文件哈希_FILE_SHA256.json",
+    "zip": "未命名待确认_requirement_SYNTHETIC_R11_D_20261023_152807_ed6f7323_完整资料.zip",
+    "zip_sha256": "b4b281fdd54f64c6ad0977dd7918ea700b41a384454a5d2ae0bc5cedd2ca82b9",
+    "digital_deliverables_complete": true,
+    "production_release": false,
+    "engineering_status": "GEOMETRY_CHECKED_WITH_HOLD",
+    "stock_status": "assumed",
+    "required_stock_sheets": 1,
+    "sets": 1,
+    "PDF_visual_review_required": true,
+    "independent_review": "PENDING",
+    "message_dispatch_contract": "single-zip-dispatch-v1",
+    "general_design_stage": "confirmation_draft",
+    "manufacturing_delivery_complete": false,
+    "naming": {
+      "status": "UNNAMED_PENDING_CONFIRMATION",
+      "code": null,
+      "prefix": "未命名待确认_requirement_SYNTHETIC_R11_D_20261023_152807_ed6f7323",
+      "record": "未命名待确认_requirement_SYNTHETIC_R11_D_20261023_152807_ed6f7323_文件更名与命名记录_FILE_NAMING.json"
+    },
+    "publication_contract": "named-single-zip-v2",
+    "publisher_release": "2.7.3-R10",
+    "final_message_plan": {
+      "dispatch_contract": "single-zip-dispatch-v1",
+      "namespace": "requirement",
+      "entity_id": "SYNTHETIC_R11_D",
+      "revision": "20261023_152807_ed6f7323",
+      "archive_sha256": "b4b281fdd54f64c6ad0977dd7918ea700b41a384454a5d2ae0bc5cedd2ca82b9",
+      "phase": "final",
+      "messages": [
+        {
+          "attachments": [
+            {
+              "path": "未命名待确认_requirement_SYNTHETIC_R11_D_20261023_152807_ed6f7323_完整资料.zip",
+              "kind": "complete_delivery_zip",
+              "sha256": "b4b281fdd54f64c6ad0977dd7918ea700b41a384454a5d2ae0bc5cedd2ca82b9"
+            }
+          ]
+        }
+      ],
+      "user_request": null,
+      "production_release": false
+    }
+  },
+  "checks": {
+    "ok": true,
+    "publication": {
+      "mode": "CURRENT_NAMED_PUBLICATION",
+      "publication_contract": "named-single-zip-v2",
+      "publisher_release": "2.7.3-R10",
+      "source_manufacturing_contract": "2.8.0-R11"
+    },
+    "general_design_stage": "confirmation_draft",
+    "manufacturing_delivery_complete": false,
+    "message_dispatch": {
+      "ok": true,
+      "dispatch_contract": "single-zip-dispatch-v1",
+      "mode": "DEFAULT_ONE_COMPLETE_ZIP",
+      "message_count": 1,
+      "attachment_count": 1,
+      "final_message_plan_checked": true,
+      "production_release": false,
+      "authorization_text_authenticity": "sender must verify actual current user history; JSON cannot prove consent",
+      "actual_messages_sent_or_controlled": false,
+      "scope": "declared messages only; no guarantee against sender bypass"
+    },
+    "contract": "2.8.0-R11",
+    "validator_version": "2.8.0-R11",
+    "digital_deliverables_complete": true,
+    "fresh_CAD_checks_executed": true,
+    "actual_STEP_dimension_readback": {
+      "ok": true,
+      "CAD_executed": true,
+      "actual_STEP_read": true,
+      "shapes": {
+        "U": {
+          "bbox_mm": [
+            0.8,
+            0.0,
+            0.0,
+            207.2,
+            116.0,
+            48.0
+          ],
+          "sha256": "fa5c19169fedd0f03754ad155d10bd2949988e953a56d6ff1abcde2444810207",
+          "source": "fresh Part.read, no PDF or JSON bbox used"
+        },
+        "END_L": {
+          "bbox_mm": [
+            0.0,
+            0.2,
+            0.2,
+            0.8,
+            115.80000000000001,
+            47.8
+          ],
+          "sha256": "433ca9204a94fadbfe8cd86ed9dcc2c7ef82e163c98a65d88154eb6554d8b608",
+          "source": "fresh Part.read, no PDF or JSON bbox used"
+        },
+        "END_R": {
+          "bbox_mm": [
+            207.2,
+            0.2,
+            0.2,
+            208.0,
+            115.80000000000001,
+            47.8
+          ],
+          "sha256": "28962f9fc1e8c668a9b1d26d85983863cdc3c14ad2d3664b1390059f6604da1e",
+          "source": "fresh Part.read, no PDF or JSON bbox used"
+        },
+        "ASSEMBLY": {
+          "bbox_mm": [
+            0.0,
+            0.0,
+            0.0,
+            208.0,
+            116.0,
+            48.0
+          ],
+          "sha256": "89c8b7ea352d13ff0aa13501ae01d33bef0ae6071815961db9ba6c4412244006",
+          "source": "fresh Part.read, no PDF or JSON bbox used"
+        },
+        "EXPLODED": {
+          "bbox_mm": [
+            -92.8,
+            0.0,
+            0.0,
+            300.8,
+            116.0,
+            48.0
+          ],
+          "sha256": "e38830744b94ef29c6a57d045e3530d569d7f264767c6a1591464467135ab6f2",
+          "source": "fresh Part.read, no PDF or JSON bbox used"
+        }
+      },
+      "body_bbox_mm": [
+        0.0,
+        0.0,
+        0.0,
+        208.0,
+        116.0,
+        48.0
+      ],
+      "translation_only_identity": {
+        "ASSEMBLY": [
+          {
+            "part_id": "U",
+            "translation_mm": [
+              0,
+              0,
+              0
+            ],
+            "symmetric_volume_difference_mm3": 0.0
+          },
+          {
+            "part_id": "END_L",
+            "translation_mm": [
+              0,
+              0,
+              0
+            ],
+            "symmetric_volume_difference_mm3": 0.0
+          },
+          {
+            "part_id": "END_R",
+            "translation_mm": [
+              0,
+              0,
+              0
+            ],
+            "symmetric_volume_difference_mm3": 0.0
+          }
+        ],
+        "EXPLODED": [
+          {
+            "part_id": "U",
+            "translation_mm": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "symmetric_volume_difference_mm3": 0.0
+          },
+          {
+            "part_id": "END_L",
+            "translation_mm": [
+              -92.8,
+              0.0,
+              0.0
+            ],
+            "symmetric_volume_difference_mm3": 0.0
+          },
+          {
+            "part_id": "END_R",
+            "translation_mm": [
+              92.8,
+              0.0,
+              0.0
+            ],
+            "symmetric_volume_difference_mm3": 0.0
+          }
+        ]
+      },
+      "production_release": false,
+      "printed_three_views": {
+        "U": {
+          "page_index": 3,
+          "printed_mm": [
+            206.4,
+            48.0,
+            116.0,
+            48.0,
+            206.4,
+            116.0
+          ],
+          "actual_STEP_extents_mm": [
+            206.39999999999998,
+            116.0,
+            48.0
+          ],
+          "label_order": "front X/Z, right Y/Z, top X/Y",
+          "numeric_readback_tolerance_mm": 1e-05
+        },
+        "END_L": {
+          "page_index": 6,
+          "printed_mm": [
+            0.8,
+            47.6,
+            115.6,
+            47.6,
+            0.8,
+            115.6
+          ],
+          "actual_STEP_extents_mm": [
+            0.8,
+            115.60000000000001,
+            47.599999999999994
+          ],
+          "label_order": "front X/Z, right Y/Z, top X/Y",
+          "numeric_readback_tolerance_mm": 1e-05
+        },
+        "END_R": {
+          "page_index": 8,
+          "printed_mm": [
+            0.8,
+            47.6,
+            115.6,
+            47.6,
+            0.8,
+            115.6
+          ],
+          "actual_STEP_extents_mm": [
+            0.8000000000000114,
+            115.60000000000001,
+            47.599999999999994
+          ],
+          "label_order": "front X/Z, right Y/Z, top X/Y",
+          "numeric_readback_tolerance_mm": 1e-05
+        },
+        "ASSEMBLY": {
+          "page_index": 1,
+          "printed_mm": [
+            208.0,
+            48.0,
+            116.0,
+            48.0,
+            208.0,
+            116.0
+          ],
+          "actual_STEP_extents_mm": [
+            208.0,
+            116.0,
+            48.0
+          ],
+          "label_order": "front X/Z, right Y/Z, top X/Y",
+          "numeric_readback_tolerance_mm": 1e-05
+        },
+        "EXPLODED": {
+          "page_index": 2,
+          "printed_mm": [
+            393.6,
+            48.0,
+            116.0,
+            48.0,
+            393.6,
+            116.0
+          ],
+          "actual_STEP_extents_mm": [
+            393.6,
+            116.0,
+            48.0
+          ],
+          "label_order": "front X/Z, right Y/Z, top X/Y",
+          "numeric_readback_tolerance_mm": 1e-05
+        }
+      }
+    },
+    "quantity_authority": {
+      "input_sets": 1,
+      "canonical_sets": 1,
+      "BOM_quantities": {
+        "U": 1,
+        "END_L": 1,
+        "END_R": 1
+      },
+      "nest_sets": 1,
+      "required_stock_sheets": 1,
+      "receipt_sets": 1
+    },
+    "production_release": false,
+    "checks": [
+      "required kinds",
+      "source material/thickness/dimensions/quantity",
+      "native CAD checks",
+      "nest actual entity/qty/spacing",
+      "source-derived process PDF",
+      "source-derived envelope counts",
+      "revision directory",
+      "inventory",
+      "ZIP CRC/members"
+    ]
+  },
+  "manufacturing_geometry_changed": false,
+  "original_source_unchanged": true,
+  "engineering": {
+    "status": "GEOMETRY_CHECKED_WITH_HOLD",
+    "package_version": "2.8.0-R11",
+    "core_validation_contract": "2.6.1-R06",
+    "project": "未命名待确认_requirement_SYNTHETIC_R11_D_20261023_152807_ed6f7323_参数_确认稿候选_project_20261023_1528.json",
+    "manifest": "未命名待确认_requirement_SYNTHETIC_R11_D_20261023_152807_ed6f7323_核验资料_确认稿候选_manifest_20261023_1528.json",
+    "selected_method": "u_external_ends",
+    "sheet_parts": [
+      "U",
+      "END_L",
+      "END_R"
+    ],
+    "all_planned_DXFs_present": true,
+    "CAD_executed": true,
+    "native03_executed": false,
+    "native03": null,
+    "pdf": "PDF/未命名待确认_requirement_SYNTHETIC_R11_D_20261023_152807_ed6f7323_完整折弯工艺PDF_确认稿候选_SYNTHETIC_R11_D_THREE_VIEWS_BENDING_HOLD_20261023_1528.pdf",
+    "pdf_pages": 17,
+    "pdf_rendered_pages": 17,
+    "PDF_visual_review_required": true,
+    "holds": [
+      "NO_FACTORY_CALIBRATION",
+      "TOOLING_AND_FIRST_ARTICLE_NOT_VERIFIED",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "ACTUAL_T",
+      "BEND_CALIBRATION",
+      "TOOLING"
+    ],
+    "production_release": false,
+    "source_job_sha256": "ce7b2b05a2b779428043510c9f0f813a8f42ce4d055196426be41061b6b2092d",
+    "candidate_resolutions": [],
+    "end_profile": {
+      "inset_yz_mm": 0.2,
+      "top_flush": false,
+      "concentric_with_U": true,
+      "axial_gaps_mm": [
+        0.0,
+        0.0
+      ],
+      "ends": [
+        {
+          "part_id": "END_L",
+          "actual_bbox": [
+            0.0,
+            0.2,
+            0.2,
+            0.8,
+            115.80000000000001,
+            47.8
+          ],
+          "corner_radius_mm": 1.4000000000000001,
+          "corner_centers_yz": [
+            [
+              1.6,
+              1.6
+            ],
+            [
+              1.6,
+              1.6
+            ],
+            [
+              114.4,
+              1.6
+            ],
+            [
+              114.4,
+              1.6
+            ]
+          ]
+        },
+        {
+          "part_id": "END_R",
+          "actual_bbox": [
+            207.2,
+            0.2,
+            0.2,
+            208.0,
+            115.80000000000001,
+            47.8
+          ],
+          "corner_radius_mm": 1.4000000000000001,
+          "corner_centers_yz": [
+            [
+              1.6,
+              1.6
+            ],
+            [
+              1.6,
+              1.6
+            ],
+            [
+              114.4,
+              1.6
+            ],
+            [
+              114.4,
+              1.6
+            ]
+          ]
+        }
+      ]
+    },
+    "fixing_pairs": [],
+    "handle_geometry_reports": {},
+    "confirmation_images": [
+      "未命名待确认_requirement_SYNTHETIC_R11_D_20261023_152807_ed6f7323_确认图_确认稿候选_SYNTHETIC_R11_D_ASSEMBLED_CONFIRMATION_20261023_1528.png",
+      "未命名待确认_requirement_SYNTHETIC_R11_D_20261023_152807_ed6f7323_确认图_确认稿候选_SYNTHETIC_R11_D_EXPLODED_CONFIRMATION_20261023_1528.png"
+    ],
+    "handle_body": "not modeled; mounting reference only",
+    "manufacturing_profiles": [],
+    "fit": {
+      "applicable": false
+    },
+    "site_fit_acceptance": null,
+    "geometry_interference_eliminated": false,
+    "trial_assembly_confirmed": false,
+    "formed_isometric_parts": [
+      "U"
+    ],
+    "formed_isometric_report": "evidence/未命名待确认_requirement_SYNTHETIC_R11_D_20261023_152807_ed6f7323_成形斜视核验_确认稿候选_FORMED_ISOMETRIC_20261023_1528.json"
+  },
+  "general_input_report": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.8.0-general-process/actual_R11_01/D/.general-process-inputs/brief-q8flccbc/compilation.json"
+}

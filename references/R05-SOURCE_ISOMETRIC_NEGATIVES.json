@@ -1,0 +1,23 @@
+[
+  {
+    "test": "missing source formed view after rebound SHA",
+    "rejected": true,
+    "errors": [
+      "ISOMETRIC: source bent-part view coverage incomplete"
+    ]
+  },
+  {
+    "test": "source view wrong map after rebound SHA",
+    "rejected": true,
+    "errors": [
+      "PDF vector outline does not match actual unfolded DXF; raster/Form drawings require a separate verified CAD/PDF adapter and visual review"
+    ]
+  },
+  {
+    "test": "source fake direction after rebound SHA",
+    "rejected": true,
+    "errors": [
+      "ISOMETRIC: source bend direction evidence differs from native unfold"
+    ]
+  }
+]

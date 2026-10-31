@@ -1,0 +1,1464 @@
+{
+  "schema_version": "2.2.0",
+  "policies": {
+    "lid_gap_single_side": {
+      "value": 0.5,
+      "unit": "mm",
+      "source": [
+        "workflow-defaults-2.1"
+      ],
+      "status": "default",
+      "note": "Conditional on an applicable new lid project; explicit customer values override"
+    },
+    "lid_corner_scheme": {
+      "value": "03",
+      "unit": "1",
+      "source": [
+        "workflow-defaults-2.1"
+      ],
+      "status": "default",
+      "note": "Conditional on an applicable new lid project; explicit customer values override"
+    },
+    "handle_trapezoid_wide_pitch": {
+      "value": 85.0,
+      "unit": "mm",
+      "source": [
+        "workflow-handle85-2.2"
+      ],
+      "status": "default",
+      "note": "Only applicable new four-hole trapezoid handles; explicit project overrides retain provenance; old orders not redesigned"
+    }
+  },
+  "project": {
+    "record_kind": {
+      "value": "new",
+      "unit": "1",
+      "source": [
+        "policy-timezone"
+      ],
+      "status": "confirmed",
+      "note": "Fictional handle readback fixture; no customer geometry"
+    },
+    "customer_id": {
+      "value": "FICTIONAL-A",
+      "unit": "1",
+      "source": [
+        "user"
+      ],
+      "status": "confirmed",
+      "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+    },
+    "project_id": {
+      "value": "SYNTHETIC-A",
+      "unit": "1",
+      "source": [
+        "user"
+      ],
+      "status": "confirmed",
+      "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+    },
+    "revision": {
+      "value": "fixture-only",
+      "unit": "1",
+      "source": [
+        "user"
+      ],
+      "status": "confirmed",
+      "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+    },
+    "version": {
+      "value": "20400102_1015",
+      "unit": "1",
+      "source": [
+        "policy-timezone"
+      ],
+      "status": "confirmed",
+      "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+    },
+    "version_timezone": {
+      "value": "Asia/Shanghai",
+      "unit": "1",
+      "source": [
+        "policy-timezone"
+      ],
+      "status": "confirmed",
+      "note": "Explicit project numbering rule, not a design default"
+    },
+    "recorded_at": {
+      "value": "2040-01-02T10:15:00+08:00",
+      "unit": "ISO8601",
+      "source": [
+        "policy-timezone"
+      ],
+      "status": "confirmed",
+      "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+    },
+    "quantity_sets": {
+      "value": null,
+      "unit": "set",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    }
+  },
+  "attachment": {
+    "reference": {
+      "value": "synthetic-local-fixture-A",
+      "unit": "1",
+      "source": [
+        "user"
+      ],
+      "status": "confirmed",
+      "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+    },
+    "filename": {
+      "value": "synthetic-input-a.txt",
+      "unit": "1",
+      "source": [
+        "user"
+      ],
+      "status": "confirmed",
+      "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+    },
+    "sha256": {
+      "value": "d06942f0e97a74dd58ccbb3bfb41240f3d242ced6994a9ad359820fcc96018b2",
+      "unit": "1",
+      "source": [
+        "user"
+      ],
+      "status": "confirmed",
+      "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+    },
+    "bytes": {
+      "value": 61,
+      "unit": "byte",
+      "source": [
+        "user"
+      ],
+      "status": "confirmed",
+      "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+    },
+    "preserve_original": {
+      "value": true,
+      "unit": "1",
+      "source": [
+        "user"
+      ],
+      "status": "confirmed",
+      "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+    }
+  },
+  "step_facts": {
+    "declared_unit": {
+      "value": "mm",
+      "unit": "1",
+      "source": [
+        "step"
+      ],
+      "status": "measured",
+      "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+    },
+    "scale_to_mm": {
+      "value": 1,
+      "unit": "1",
+      "source": [
+        "step"
+      ],
+      "status": "measured",
+      "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+    },
+    "audit_passed": {
+      "value": true,
+      "unit": "1",
+      "source": [
+        "step"
+      ],
+      "status": "measured",
+      "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+    },
+    "solid_count": {
+      "value": 3,
+      "unit": "count",
+      "source": [
+        "step"
+      ],
+      "status": "measured",
+      "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+    },
+    "source_material": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "source_thickness": {
+      "value": 1.6,
+      "unit": "mm",
+      "source": [
+        "step"
+      ],
+      "status": "measured",
+      "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+    },
+    "outer_dimensions": {
+      "X": {
+        "value": 180,
+        "unit": "mm",
+        "source": [
+          "step"
+        ],
+        "status": "measured",
+        "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+      },
+      "Y": {
+        "value": 96,
+        "unit": "mm",
+        "source": [
+          "step"
+        ],
+        "status": "measured",
+        "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+      },
+      "Z": {
+        "value": 124,
+        "unit": "mm",
+        "source": [
+          "step"
+        ],
+        "status": "measured",
+        "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+      }
+    },
+    "source_lid_present": {
+      "value": false,
+      "unit": "1",
+      "source": [
+        "step"
+      ],
+      "status": "measured",
+      "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+    },
+    "physical_hole_count": {
+      "value": 4,
+      "unit": "count",
+      "source": [
+        "step"
+      ],
+      "status": "measured",
+      "note": "Fictional handle readback fixture; no customer geometry"
+    },
+    "inner_radius": {
+      "value": 1.8,
+      "unit": "mm",
+      "source": [
+        "step"
+      ],
+      "status": "measured",
+      "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+    }
+  },
+  "requirements": {
+    "scope": {
+      "value": "body_only",
+      "unit": "1",
+      "source": [
+        "user"
+      ],
+      "status": "confirmed",
+      "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+    },
+    "body_only": {
+      "value": true,
+      "unit": "1",
+      "source": [
+        "user"
+      ],
+      "status": "confirmed",
+      "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+    },
+    "lid_required": {
+      "value": false,
+      "unit": "1",
+      "source": [
+        "user"
+      ],
+      "status": "confirmed",
+      "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+    },
+    "nuts_required": {
+      "value": false,
+      "unit": "1",
+      "source": [
+        "user"
+      ],
+      "status": "confirmed",
+      "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+    },
+    "material": {
+      "value": "5052 aluminum - synthetic scenario",
+      "unit": "1",
+      "source": [
+        "user"
+      ],
+      "status": "confirmed",
+      "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+    },
+    "nominal_t": {
+      "value": 1.6,
+      "unit": "mm",
+      "source": [
+        "user"
+      ],
+      "status": "confirmed",
+      "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+    },
+    "measured_t": {
+      "value": null,
+      "unit": "mm",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "measured_hardness_HRB": {
+      "value": null,
+      "unit": "HRB",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "dimension_basis": {
+      "value": "outer",
+      "unit": "1",
+      "source": [
+        "user"
+      ],
+      "status": "confirmed",
+      "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+    },
+    "height_basis": {
+      "value": "bare_body",
+      "unit": "1",
+      "source": [
+        "user"
+      ],
+      "status": "confirmed",
+      "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+    },
+    "dimensions": {
+      "X": {
+        "value": 180,
+        "unit": "mm",
+        "source": [
+          "user"
+        ],
+        "status": "confirmed",
+        "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+      },
+      "Y": {
+        "value": 96,
+        "unit": "mm",
+        "source": [
+          "user"
+        ],
+        "status": "confirmed",
+        "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+      },
+      "Z": {
+        "value": 124,
+        "unit": "mm",
+        "source": [
+          "user"
+        ],
+        "status": "confirmed",
+        "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+      }
+    },
+    "length_axis": {
+      "value": "X",
+      "unit": "1",
+      "source": [
+        "user"
+      ],
+      "status": "confirmed",
+      "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+    },
+    "width_axis": {
+      "value": "Z",
+      "unit": "1",
+      "source": [
+        "user"
+      ],
+      "status": "confirmed",
+      "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+    },
+    "height_axis": {
+      "value": "Y",
+      "unit": "1",
+      "source": [
+        "user"
+      ],
+      "status": "confirmed",
+      "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+    },
+    "origin_and_datums": {
+      "value": "Synthetic origin at lower-left-rear; Y is height; axes have no real CAD referent",
+      "unit": "1",
+      "source": [
+        "user"
+      ],
+      "status": "confirmed",
+      "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+    },
+    "preserve_outer_dimensions": {
+      "value": true,
+      "unit": "1",
+      "source": [
+        "user"
+      ],
+      "status": "confirmed",
+      "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+    },
+    "preserve_hole_axes": {
+      "value": true,
+      "unit": "1",
+      "source": [
+        "user"
+      ],
+      "status": "confirmed",
+      "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+    }
+  },
+  "lid": {
+    "style": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "not_applicable",
+      "note": "No lid: this fit/corner field is not applicable"
+    },
+    "gap": {
+      "value": null,
+      "unit": "mm",
+      "source": [],
+      "status": "not_applicable",
+      "note": "No lid: this fit/corner field is not applicable"
+    },
+    "gap_basis": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "not_applicable",
+      "note": "No lid: this fit/corner field is not applicable"
+    },
+    "gap_datum": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "not_applicable",
+      "note": "No lid: this fit/corner field is not applicable"
+    },
+    "skirt_height": {
+      "value": null,
+      "unit": "mm",
+      "source": [],
+      "status": "not_applicable",
+      "note": "No lid: this fit/corner field is not applicable"
+    },
+    "roof_gap": {
+      "value": null,
+      "unit": "mm",
+      "source": [],
+      "status": "not_applicable",
+      "note": "No lid: this fit/corner field is not applicable"
+    },
+    "seating_datum": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "not_applicable",
+      "note": "No lid: this fit/corner field is not applicable"
+    },
+    "whole_height": {
+      "value": null,
+      "unit": "mm",
+      "source": [],
+      "status": "not_applicable",
+      "note": "No lid: this fit/corner field is not applicable"
+    },
+    "corner_reference": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "not_applicable",
+      "note": "No lid: this fit/corner field is not applicable"
+    },
+    "corner_scheme": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "not_applicable",
+      "note": "No lid: this fit/corner field is not applicable"
+    },
+    "corner_gap": {
+      "value": null,
+      "unit": "mm",
+      "source": [],
+      "status": "not_applicable",
+      "note": "No lid: this fit/corner field is not applicable"
+    },
+    "root_check_passed": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "not_applicable",
+      "note": "No lid: this fit/corner field is not applicable"
+    },
+    "root_overlap_volume": {
+      "value": null,
+      "unit": "mm^3",
+      "source": [],
+      "status": "not_applicable",
+      "note": "No lid: this fit/corner field is not applicable"
+    },
+    "root_check_ref": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "not_applicable",
+      "note": "No lid: this fit/corner field is not applicable"
+    },
+    "geometry_evidence_ref": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "not_applicable",
+      "note": "No lid: this fit/corner field is not applicable"
+    }
+  },
+  "fabrication": {
+    "method": {
+      "value": "keep_source",
+      "unit": "1",
+      "source": [
+        "user"
+      ],
+      "status": "confirmed",
+      "note": "Fictional handle readback fixture; no customer geometry"
+    },
+    "external_end_count": {
+      "value": 2,
+      "unit": "count",
+      "source": [
+        "user"
+      ],
+      "status": "confirmed",
+      "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+    },
+    "seam_gap": {
+      "value": 0.22,
+      "unit": "mm",
+      "source": [
+        "trial"
+      ],
+      "status": "assumed",
+      "note": "SYNTHETIC candidate only; not a manufacturing recommendation"
+    },
+    "end_inset": {
+      "value": 0.45,
+      "unit": "mm",
+      "source": [
+        "trial"
+      ],
+      "status": "assumed",
+      "note": "SYNTHETIC candidate only; not a manufacturing recommendation"
+    },
+    "weld_requirement": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "geometry_difference_ref": {
+      "value": "SYNTHETIC dimension-chain exercise; no actual source/new CAD comparison",
+      "unit": "1",
+      "source": [
+        "step"
+      ],
+      "status": "measured",
+      "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+    },
+    "parts": [
+      {
+        "id": "01",
+        "role": {
+          "value": "body",
+          "unit": "1",
+          "source": [
+            "user"
+          ],
+          "status": "confirmed",
+          "note": "Fictional handle readback fixture; no customer geometry"
+        },
+        "name": {
+          "value": "SYNTHETIC-01",
+          "unit": "1",
+          "source": [
+            "user"
+          ],
+          "status": "confirmed",
+          "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+        },
+        "bends": {
+          "value": 0,
+          "unit": "count",
+          "source": [
+            "user"
+          ],
+          "status": "confirmed",
+          "note": "Fictional handle readback fixture; no customer geometry"
+        },
+        "dimensions": {
+          "X": {
+            "value": 175.5,
+            "unit": "mm",
+            "source": [
+              "user"
+            ],
+            "status": "confirmed",
+            "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+          },
+          "Y": {
+            "value": 96,
+            "unit": "mm",
+            "source": [
+              "user"
+            ],
+            "status": "confirmed",
+            "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+          },
+          "Z": {
+            "value": 124,
+            "unit": "mm",
+            "source": [
+              "user"
+            ],
+            "status": "confirmed",
+            "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+          }
+        }
+      }
+    ]
+  },
+  "handles": {
+    "layout": {
+      "value": "four_hole_trapezoid",
+      "unit": "1",
+      "source": [
+        "user"
+      ],
+      "status": "confirmed",
+      "note": "Fictional handle readback fixture; no customer geometry"
+    },
+    "wide_row_pitch": {
+      "value": 85.0,
+      "unit": "mm",
+      "source": [
+        "workflow-handle85-2.2"
+      ],
+      "status": "default",
+      "note": "Four-hole trapezoid: wider row two actual hole centers85.00mm; not84; no other pitch/row spacing/diameter default"
+    },
+    "narrow_row_pitch": {
+      "value": null,
+      "unit": "mm",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "row_spacing": {
+      "value": null,
+      "unit": "mm",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "patterns": [
+      {
+        "id": "handle-A",
+        "part_id": "01",
+        "wide_hole_ids": [
+          "HW1",
+          "HW2"
+        ],
+        "narrow_hole_ids": [
+          "HN1",
+          "HN2"
+        ]
+      }
+    ],
+    "enabled": {
+      "value": true,
+      "unit": "1",
+      "source": [
+        "user"
+      ],
+      "status": "confirmed",
+      "note": "Fictional handle readback fixture; no customer geometry"
+    },
+    "quantity": {
+      "value": 1,
+      "unit": "count",
+      "source": [
+        "user"
+      ],
+      "status": "confirmed",
+      "note": "Fictional handle readback fixture; no customer geometry"
+    },
+    "hardware_ref": {
+      "value": "synthetic-handle",
+      "unit": "1",
+      "source": [
+        "user"
+      ],
+      "status": "confirmed",
+      "note": "Fictional handle readback fixture; no customer geometry"
+    },
+    "holes_per_handle": {
+      "value": 4,
+      "unit": "count",
+      "source": [
+        "user"
+      ],
+      "status": "confirmed",
+      "note": "Fictional handle readback fixture; no customer geometry"
+    },
+    "hole_group_ids": [
+      "synthetic-handle-holes"
+    ],
+    "position_and_orientation": {
+      "value": "synthetic XY plane; four individually named holes",
+      "unit": "1",
+      "source": [
+        "user"
+      ],
+      "status": "confirmed",
+      "note": "Fictional handle readback fixture; no customer geometry"
+    }
+  },
+  "connectors": [],
+  "hardware": [
+    {
+      "id": "SYN-SCREW-M3",
+      "role": {
+        "value": "screw",
+        "unit": "1",
+        "source": [
+          "user"
+        ],
+        "status": "confirmed",
+        "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+      },
+      "model": {
+        "value": "FICTIONAL screw profile M3 length10, no supplier approval",
+        "unit": "1",
+        "source": [
+          "user"
+        ],
+        "status": "confirmed",
+        "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+      },
+      "drawing_ref": {
+        "value": null,
+        "unit": "1",
+        "source": [],
+        "status": "unknown",
+        "note": null
+      },
+      "thread": {
+        "value": "M3",
+        "unit": "1",
+        "source": [
+          "user"
+        ],
+        "status": "confirmed",
+        "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+      },
+      "length": {
+        "value": 10,
+        "unit": "mm",
+        "source": [
+          "user"
+        ],
+        "status": "confirmed",
+        "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+      },
+      "material": {
+        "value": null,
+        "unit": "1",
+        "source": [],
+        "status": "unknown",
+        "note": null
+      },
+      "head_type": {
+        "value": "fictional countersunk profile",
+        "unit": "1",
+        "source": [
+          "user"
+        ],
+        "status": "confirmed",
+        "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+      },
+      "head_angle": {
+        "value": 90,
+        "unit": "deg",
+        "source": [
+          "user"
+        ],
+        "status": "confirmed",
+        "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+      },
+      "head_size": {
+        "magnitude": {
+          "value": 5.2,
+          "unit": "mm",
+          "source": [
+            "user"
+          ],
+          "status": "confirmed",
+          "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+        },
+        "representation": {
+          "value": "diameter",
+          "unit": "1",
+          "source": [
+            "user"
+          ],
+          "status": "confirmed",
+          "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+        }
+      },
+      "head_tolerance": {
+        "value": null,
+        "unit": "1",
+        "source": [],
+        "status": "unknown",
+        "note": null
+      },
+      "install_size": {
+        "magnitude": {
+          "value": null,
+          "unit": "mm",
+          "source": [],
+          "status": "unknown",
+          "note": null
+        },
+        "representation": {
+          "value": null,
+          "unit": "1",
+          "source": [],
+          "status": "unknown",
+          "note": null
+        }
+      },
+      "install_tolerance": {
+        "value": null,
+        "unit": "1",
+        "source": [],
+        "status": "unknown",
+        "note": null
+      },
+      "minimum_sheet_t": {
+        "value": null,
+        "unit": "mm",
+        "source": [],
+        "status": "unknown",
+        "note": null
+      },
+      "max_sheet_hardness_HRB": {
+        "value": null,
+        "unit": "HRB",
+        "source": [],
+        "status": "unknown",
+        "note": null
+      },
+      "minimum_center_edge": {
+        "value": null,
+        "unit": "mm",
+        "source": [],
+        "status": "unknown",
+        "note": null
+      },
+      "applicable_sheet_material": {
+        "value": null,
+        "unit": "1",
+        "source": [],
+        "status": "unknown",
+        "note": null
+      },
+      "physical_fit_verified": {
+        "value": null,
+        "unit": "1",
+        "source": [],
+        "status": "unknown",
+        "note": null
+      }
+    }
+  ],
+  "hole_groups": [
+    {
+      "id": "synthetic-handle-holes",
+      "purpose": {
+        "value": "handle",
+        "unit": "1",
+        "source": [
+          "user"
+        ],
+        "status": "confirmed",
+        "note": "Fictional handle readback fixture; no customer geometry"
+      },
+      "type": {
+        "value": "clearance",
+        "unit": "1",
+        "source": [
+          "user"
+        ],
+        "status": "confirmed",
+        "note": "Fictional handle readback fixture; no customer geometry"
+      },
+      "count": {
+        "value": 4,
+        "unit": "count",
+        "source": [
+          "user"
+        ],
+        "status": "confirmed",
+        "note": "Fictional handle readback fixture; no customer geometry"
+      },
+      "thread": {
+        "value": "M3",
+        "unit": "1",
+        "source": [
+          "user"
+        ],
+        "status": "confirmed",
+        "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+      },
+      "laser_size": {
+        "magnitude": {
+          "value": 5.2,
+          "unit": "mm",
+          "source": [
+            "user"
+          ],
+          "status": "confirmed",
+          "note": "Fictional handle readback fixture; no customer geometry"
+        },
+        "representation": {
+          "value": "diameter",
+          "unit": "1",
+          "source": [
+            "user"
+          ],
+          "status": "confirmed",
+          "note": "Fictional handle readback fixture; no customer geometry"
+        }
+      },
+      "hardware_ref": {
+        "value": null,
+        "unit": "1",
+        "source": [],
+        "status": "unknown",
+        "note": null
+      },
+      "position_datum": {
+        "value": "SYNTHETIC XYZ assertion only; not measured from CAD",
+        "unit": "1",
+        "source": [
+          "user"
+        ],
+        "status": "confirmed",
+        "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+      },
+      "positions": [
+        {
+          "id": "HW1",
+          "part_id": "01",
+          "center": {
+            "value": [
+              42.5,
+              30,
+              0
+            ],
+            "unit": "mm",
+            "source": [
+              "step"
+            ],
+            "status": "measured",
+            "note": "Fictional handle readback fixture; no customer geometry"
+          },
+          "axis": {
+            "value": [
+              0,
+              0,
+              1
+            ],
+            "unit": "1",
+            "source": [
+              "step"
+            ],
+            "status": "measured",
+            "note": "Fictional handle readback fixture; no customer geometry"
+          }
+        },
+        {
+          "id": "HW2",
+          "part_id": "01",
+          "center": {
+            "value": [
+              127.5,
+              30,
+              0
+            ],
+            "unit": "mm",
+            "source": [
+              "step"
+            ],
+            "status": "measured",
+            "note": "Fictional handle readback fixture; no customer geometry"
+          },
+          "axis": {
+            "value": [
+              0,
+              0,
+              1
+            ],
+            "unit": "1",
+            "source": [
+              "step"
+            ],
+            "status": "measured",
+            "note": "Fictional handle readback fixture; no customer geometry"
+          }
+        },
+        {
+          "id": "HN1",
+          "part_id": "01",
+          "center": {
+            "value": [
+              55.5,
+              57,
+              0
+            ],
+            "unit": "mm",
+            "source": [
+              "step"
+            ],
+            "status": "measured",
+            "note": "Fictional handle readback fixture; no customer geometry"
+          },
+          "axis": {
+            "value": [
+              0,
+              0,
+              1
+            ],
+            "unit": "1",
+            "source": [
+              "step"
+            ],
+            "status": "measured",
+            "note": "Fictional handle readback fixture; no customer geometry"
+          }
+        },
+        {
+          "id": "HN2",
+          "part_id": "01",
+          "center": {
+            "value": [
+              114.5,
+              57,
+              0
+            ],
+            "unit": "mm",
+            "source": [
+              "step"
+            ],
+            "status": "measured",
+            "note": "Fictional handle readback fixture; no customer geometry"
+          },
+          "axis": {
+            "value": [
+              0,
+              0,
+              1
+            ],
+            "unit": "1",
+            "source": [
+              "step"
+            ],
+            "status": "measured",
+            "note": "Fictional handle readback fixture; no customer geometry"
+          }
+        }
+      ],
+      "edge": {
+        "distance": {
+          "value": 16,
+          "unit": "mm",
+          "source": [
+            "user"
+          ],
+          "status": "confirmed",
+          "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+        },
+        "basis": {
+          "value": "center_to_edge",
+          "unit": "1",
+          "source": [
+            "user"
+          ],
+          "status": "confirmed",
+          "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+        },
+        "feature_size": {
+          "magnitude": {
+            "value": 5.2,
+            "unit": "mm",
+            "source": [
+              "user"
+            ],
+            "status": "confirmed",
+            "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+          },
+          "representation": {
+            "value": "diameter",
+            "unit": "1",
+            "source": [
+              "user"
+            ],
+            "status": "confirmed",
+            "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+          }
+        }
+      },
+      "seat": {
+        "enabled": {
+          "value": false,
+          "unit": "1",
+          "source": [
+            "user"
+          ],
+          "status": "confirmed",
+          "note": "Fictional handle readback fixture; no customer geometry"
+        },
+        "side": {
+          "value": "outer",
+          "unit": "1",
+          "source": [
+            "user"
+          ],
+          "status": "confirmed",
+          "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+        },
+        "flush_required": {
+          "value": true,
+          "unit": "1",
+          "source": [
+            "user"
+          ],
+          "status": "confirmed",
+          "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+        },
+        "flush_tolerance": {
+          "value": null,
+          "unit": "mm",
+          "source": [],
+          "status": "unknown",
+          "note": null
+        },
+        "screw_ref": {
+          "value": "SYN-SCREW-M3",
+          "unit": "1",
+          "source": [
+            "user"
+          ],
+          "status": "confirmed",
+          "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+        },
+        "included_angle": {
+          "value": 90,
+          "unit": "deg",
+          "source": [
+            "user"
+          ],
+          "status": "confirmed",
+          "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+        },
+        "mouth_size": {
+          "magnitude": {
+            "value": 5.2,
+            "unit": "mm",
+            "source": [
+              "user"
+            ],
+            "status": "confirmed",
+            "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+          },
+          "representation": {
+            "value": "diameter",
+            "unit": "1",
+            "source": [
+              "user"
+            ],
+            "status": "confirmed",
+            "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+          }
+        },
+        "segments": [],
+        "minimum_remaining_accepted": {
+          "value": null,
+          "unit": "mm",
+          "source": [],
+          "status": "unknown",
+          "note": null
+        },
+        "first_article_passed": {
+          "value": null,
+          "unit": "1",
+          "source": [],
+          "status": "unknown",
+          "note": null
+        }
+      }
+    }
+  ],
+  "bending": {
+    "Ri": {
+      "value": 1.8,
+      "unit": "mm",
+      "source": [
+        "trial"
+      ],
+      "status": "assumed",
+      "note": "SYNTHETIC candidate only; not a manufacturing recommendation"
+    },
+    "compensation_mode": {
+      "value": "K_factor",
+      "unit": "1",
+      "source": [
+        "user"
+      ],
+      "status": "confirmed",
+      "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+    },
+    "K_value": {
+      "value": 0.42,
+      "unit": "1",
+      "source": [
+        "trial"
+      ],
+      "status": "assumed",
+      "note": "SYNTHETIC candidate only; not a manufacturing recommendation"
+    },
+    "K_definition": {
+      "value": "ANSI",
+      "unit": "1",
+      "source": [
+        "user"
+      ],
+      "status": "confirmed",
+      "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+    },
+    "BD90": {
+      "value": null,
+      "unit": "mm",
+      "source": [],
+      "status": "not_applicable",
+      "note": "K method selected; direct BD inactive"
+    },
+    "calibrated": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "calibration_material": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "calibration_t": {
+      "value": null,
+      "unit": "mm",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "calibration_ref": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "machine_backgauge": {
+      "value": null,
+      "unit": "mm",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "backgauge_machine_and_datum": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "tool_clearance_verified": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    }
+  },
+  "delivery": {
+    "formats": {
+      "value": [
+        "dxf",
+        "pdf",
+        "step_parts",
+        "step_assembly",
+        "step_exploded",
+        "confirmation_png"
+      ],
+      "unit": "1",
+      "source": [
+        "user"
+      ],
+      "status": "confirmed",
+      "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+    },
+    "units": {
+      "value": "mm",
+      "unit": "1",
+      "source": [
+        "user"
+      ],
+      "status": "confirmed",
+      "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+    },
+    "acceptance_criteria": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    }
+  },
+  "review": {
+    "digital_checks_passed": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "first_article_passed": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "production_release": {
+      "value": false,
+      "unit": "1",
+      "source": [
+        "user"
+      ],
+      "status": "confirmed",
+      "note": "SYNTHETIC fixture assertion only; not real CAD/factory/customer evidence"
+    },
+    "approver": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "approval_scope": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "approval_at": {
+      "value": null,
+      "unit": "ISO8601",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    }
+  },
+  "exceptions": [],
+  "provenance": [
+    {
+      "id": "policy-timezone",
+      "kind": "policy",
+      "ref": "project versioning uses Asia/Shanghai per workflow",
+      "message_at": null,
+      "recorded_at": null
+    },
+    {
+      "id": "user",
+      "kind": "user",
+      "ref": "SYNTHETIC DEMO A: simulated user record; no real person, document, CAD audit or authorization",
+      "message_at": null,
+      "recorded_at": null
+    },
+    {
+      "id": "step",
+      "kind": "step_measurement",
+      "ref": "SYNTHETIC DEMO A: simulated step_measurement record; no real person, document, CAD audit or authorization",
+      "message_at": null,
+      "recorded_at": null
+    },
+    {
+      "id": "trial",
+      "kind": "engineering_assumption",
+      "ref": "SYNTHETIC DEMO A: simulated engineering_assumption record; no real person, document, CAD audit or authorization",
+      "message_at": null,
+      "recorded_at": null
+    },
+    {
+      "id": "drawing",
+      "kind": "manufacturer_drawing",
+      "ref": "SYNTHETIC DEMO A: simulated manufacturer_drawing record; no real person, document, CAD audit or authorization",
+      "message_at": null,
+      "recorded_at": null
+    },
+    {
+      "id": "workflow-defaults-2.1",
+      "kind": "default_policy",
+      "ref": "User-approved workflow policy: four straight walls g0.5mm per side; default corner scheme03; no q/Ri/corner-gap default",
+      "message_at": null,
+      "recorded_at": null
+    },
+    {
+      "id": "workflow-handle85-2.2",
+      "kind": "default_policy",
+      "ref": "User-approved workflow policy: applicable four-hole trapezoid handle wider row center distance85.00mm; not84; no other hole layout dimensions supplied",
+      "message_at": null,
+      "recorded_at": null
+    }
+  ],
+  "notes": "COMPLETELY FICTIONAL software fixture. Narrow59,spacing27,D5.2 belong only to this fixture; unknown requirements remain unknown. Not CAD/manufacturer/factory approval."
+}

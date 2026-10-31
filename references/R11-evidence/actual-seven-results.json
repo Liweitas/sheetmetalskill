@@ -1,0 +1,37 @@
+[
+  {
+    "case": "A",
+    "returncode": 0,
+    "elapsed_s": 110.4
+  },
+  {
+    "case": "B",
+    "returncode": 0,
+    "elapsed_s": 106.8
+  },
+  {
+    "case": "C",
+    "returncode": 0,
+    "elapsed_s": 119.8
+  },
+  {
+    "case": "D",
+    "returncode": 0,
+    "elapsed_s": 7.1
+  },
+  {
+    "case": "Q0",
+    "returncode": 0,
+    "elapsed_s": 31.0
+  },
+  {
+    "case": "MISSING",
+    "returncode": 0,
+    "elapsed_s": 0.2
+  },
+  {
+    "case": "IRREGULAR",
+    "returncode": 0,
+    "elapsed_s": 0.2
+  }
+]

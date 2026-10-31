@@ -1,0 +1,136 @@
+{
+  "version": "2.7.3-R10",
+  "status": "AUTHOR_VALIDATED_FROZEN_CANDIDATE_PENDING_INDEPENDENT_REVIEW",
+  "independent_R10_review": "PENDING",
+  "production_release": false,
+  "scope": "Fix R09 published R08 default-message-plan erasure by source-independent publication contract binding",
+  "original_R09_failure_replay": {
+    "test": "exact_original_R09_F1",
+    "command": [
+      "/opt/homebrew/opt/python@3.14/bin/python3.14",
+      "-B",
+      "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.7.3-publication-repair/working/step-sheetmetal-delivery/scripts/validate_delivery.py",
+      "/Users/harryma/Documents/Codex/2026-10-21/task-6/acceptance_R09/named_negative_cases/remove_default_plan_from_R09_published_legacy/customer_INDEPENDENT_R08/revisions/S-304_TEST_ONLY-1.2-20261020-0427-v1_R01"
+    ],
+    "returncode": 2,
+    "expected": 2,
+    "result": {
+      "ok": false,
+      "errors": [
+        "DISPATCH_REQUIRED_PUBLISHED: source manufacturing version cannot waive the publication plan"
+      ],
+      "digital_deliverables_complete": false,
+      "production_release": false
+    }
+  },
+  "original_R08_readonly_positive_cases": 2,
+  "actual_publications": [
+    {
+      "test": "R08_formal",
+      "root": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.7.3-publication-repair/actual_R10_publications/first/customer_INDEPENDENT_R08/revisions/S-304_TEST_ONLY-1.2-20261020-0427-v1_R01",
+      "source_manufacturing_contract": "2.7.1-R08",
+      "publication": {
+        "mode": "CURRENT_NAMED_PUBLICATION",
+        "publication_contract": "named-single-zip-v2",
+        "publisher_release": "2.7.3-R10",
+        "source_manufacturing_contract": "2.7.1-R08"
+      },
+      "naming": {
+        "status": "FORMALLY_NAMED",
+        "code": "S-304_TEST_ONLY-1.2-20261020-0427-v1"
+      },
+      "fresh_CAD_checks_executed": true,
+      "all_CAD_DXF_job_preserved": 18,
+      "source_unchanged": true,
+      "production_release": false
+    },
+    {
+      "test": "R08_factory_upgrade",
+      "root": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.7.3-publication-repair/actual_R10_publications/upgrade/customer_INDEPENDENT_R08/revisions/S-304_TEST_ONLY-1.2-20261020-0427-v2_R01",
+      "source_manufacturing_contract": "2.7.1-R08",
+      "publication": {
+        "mode": "CURRENT_NAMED_PUBLICATION",
+        "publication_contract": "named-single-zip-v2",
+        "publisher_release": "2.7.3-R10",
+        "source_manufacturing_contract": "2.7.1-R08"
+      },
+      "naming": {
+        "status": "FORMALLY_NAMED",
+        "code": "S-304_TEST_ONLY-1.2-20261020-0427-v2"
+      },
+      "fresh_CAD_checks_executed": true,
+      "all_CAD_DXF_job_preserved": 18,
+      "source_unchanged": true,
+      "production_release": false
+    },
+    {
+      "test": "R08_pending",
+      "root": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.7.3-publication-repair/actual_R10_publications/pending/requirement_INDEPENDENT_R08/revisions/未命名待确认_requirement_INDEPENDENT_R08_R02",
+      "source_manufacturing_contract": "2.7.1-R08",
+      "publication": {
+        "mode": "CURRENT_NAMED_PUBLICATION",
+        "publication_contract": "named-single-zip-v2",
+        "publisher_release": "2.7.3-R10",
+        "source_manufacturing_contract": "2.7.1-R08"
+      },
+      "naming": {
+        "status": "UNNAMED_PENDING_CONFIRMATION",
+        "code": null
+      },
+      "fresh_CAD_checks_executed": true,
+      "all_CAD_DXF_job_preserved": 16,
+      "source_unchanged": true,
+      "production_release": false
+    },
+    {
+      "test": "R09_named_contract_upgrade",
+      "root": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.7.3-publication-repair/actual_R10_publications/republished_R09/customer_INDEPENDENT_R08/revisions/S-304_TEST_ONLY-1.2-20261020-0427-v1_R01",
+      "source_manufacturing_contract": "2.7.1-R08",
+      "publication": {
+        "mode": "CURRENT_NAMED_PUBLICATION",
+        "publication_contract": "named-single-zip-v2",
+        "publisher_release": "2.7.3-R10",
+        "source_manufacturing_contract": "2.7.1-R08"
+      },
+      "naming": {
+        "status": "FORMALLY_NAMED",
+        "code": "S-304_TEST_ONLY-1.2-20261020-0427-v1"
+      },
+      "fresh_CAD_checks_executed": true,
+      "all_CAD_DXF_job_preserved": 18,
+      "source_unchanged": true,
+      "production_release": false
+    }
+  ],
+  "actual_negative_cases": 19,
+  "public_message_CLI_cases": 4,
+  "unit_tests": 267,
+  "original_input_files_unchanged": {
+    "raw_R08_A": 75,
+    "raw_R08_B": 69,
+    "exact_R09_failure": 76,
+    "legal_R09_named": 76
+  },
+  "protected_manufacturing_algorithm_SHA256": {
+    "cad_build.py": "2981daf3347b24ecdc855dd6928302627fb435328e5591657db580d02dc84ddc",
+    "corner03.py": "57743173d2b1b88820ea6ead73317fc143b86983d592e09944eedeccb070e4f3",
+    "cut_dxf.py": "96599acd6b1fc67409a788a24a2e0fa2e277978901abbd8367af121efc13c0d2",
+    "native_direction_readback.py": "b71befe0909077e662d7adf09ba141a164689e17824b6b950f9117a9c4ea9b40",
+    "pdf_dimension_authority.py": "f89acb4cc6feaba632df4fd3819d2e54fb3f3bab52588f48c7a147b99a10bbfe",
+    "step_dimensions_readback.py": "f465357475e9a2d53656080d1ca9eb65a13a89698e62f9eb2c7bb7ccf921e3c6",
+    "site_fit.py": "80825a6667c8ec367e6e175ffaaf3cf2819901f8d5fec9c2d45ef4c7ec723a90",
+    "record_site_fit.py": "4cdb9e1a960828a4923234940b73bffd7156c75e288f2eca103808b8528492c0"
+  },
+  "BOX530_original_ZIP_SHA_unchanged": "1c2acbe3598cfdc31dcd056e88990482e025089855dbffba68c4e26b453459b9",
+  "R09_frozen_ZIP_SHA_unchanged": "de8a16066dc4a92a1866e0330a36e6450c800f418391e6200ff5b67e3f8dcc9d",
+  "new_CAD_build": false,
+  "global_install_changed": false,
+  "messages_or_uploads_performed": false,
+  "formal_BOX530_factory_number_assigned": false,
+  "evidence_paths": {
+    "unit-R10.log": "639cdcb2a82ea8668c02e8bf08042667216a09a0704f374817d47e341cae9a23",
+    "actual_R10_publications/AUTHOR_PUBLICATION_RESULTS.json": "1a1ca8663ded27c6ef926a49fa5104ba6564cd1e34a913e428aeab612018c153",
+    "actual_R10_negative_cases/AUTHOR_NEGATIVE_RESULTS.json": "cbf0a71c5ec5aae6d5a687c2007411e385bded9c29f3f444b3e01bbbe9c05670",
+    "actual_R10_message_CLI/AUTHOR_MESSAGE_CLI_RESULTS.json": "92147841c90f1fcdbc1d789b1ac6f4e0e4a5eab5cda8986eb678264d0cbd1e0e"
+  }
+}

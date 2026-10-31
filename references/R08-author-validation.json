@@ -1,0 +1,36 @@
+{
+  "version": "2.7.1-R08",
+  "status": "AUTHOR_VALIDATED_FROZEN_CANDIDATE_PENDING_INDEPENDENT_REVIEW",
+  "independent_R08_acceptance": "PENDING",
+  "production_release": false,
+  "scope": [
+    "source-derived process PDF dimensions",
+    "actual STEP vs printed three-view dimensions",
+    "source-derived final envelope sets and stock sheets"
+  ],
+  "unit_tests": 230,
+  "fresh_generated_structures": 2,
+  "inherited_negative_cases_rejected": 31,
+  "fresh_receipt_tests": {
+    "legal_repacked": 1,
+    "synchronized_semantic_negatives_rejected": 4
+  },
+  "exact_R07_evidence_replay": {
+    "legal_accepted": 4,
+    "negative_rejected": 11,
+    "source_partial_rejected_complete": 1,
+    "original_files_unchanged": 1163
+  },
+  "final_readonly_fresh_CAD_checks": 6,
+  "R07_independent_result": "FAILED_TWO_SEMANTIC_LEAKS_PRESERVED",
+  "source_step_mode": "SOURCE_AUDIT_ONLY_PARTIAL_HOLD",
+  "original_CAD_global_skill_unchanged": true,
+  "evidence_sha256": {
+    "unit-final-R08.log": "adc4ca7f95a9ea5d47545145623c430ca4d98d27a45a2e7174b5c160c2ca0a4b",
+    "exact_independent_replay_R08/SUMMARY.json": "14ca5d8ce5f0970334e707e6cef428fcaf1c6afb52492505d6675c3b0708e69a",
+    "exact_independent_replay_R08/INPUT_UNCHANGED_PROOF.json": "a156260d830e0c9b68d1cf9025526b5b860066821e4d875e049e2a4e932f0ec0",
+    "author_full_R08/AUTHOR_DELIVERY_CONTRACT_RESULTS.json": "02171af69773698c013992322502a2d3cbe30edc337652ec409124363a092a42",
+    "receipt_authority_R08_fresh/RECEIPT_AUTHORITY_RESULTS.json": "689c3bf2760e0dbe4a2e2a0ab94b42a9c2c2c44a7ca7514b679a7cfd82fe9d9d",
+    "FINAL_READONLY_CHECK.json": "3fe112ac1ff17727b6043fd5d3d4ea0dd4a4c0970fcc6d4cdd561efac7d65277"
+  }
+}

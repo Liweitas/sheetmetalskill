@@ -1,0 +1,20 @@
+[
+  {
+    "case": "external",
+    "exit": 0,
+    "ok": true,
+    "errors": []
+  },
+  {
+    "case": "wrap_l",
+    "exit": 0,
+    "ok": true,
+    "errors": []
+  },
+  {
+    "case": "source_L_supported",
+    "exit": 0,
+    "ok": true,
+    "errors": []
+  }
+]

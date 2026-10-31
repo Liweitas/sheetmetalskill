@@ -1,0 +1,17 @@
+test_flat_b_label_must_link_to_actual_native_line_not_claimed_coordinate (test_formed_isometric.FormedIsometric.test_flat_b_label_must_link_to_actual_native_line_not_claimed_coordinate) ... FAIL
+test_isometric_basis_preserves_three_axes_and_does_not_flatten_height (test_formed_isometric.FormedIsometric.test_isometric_basis_preserves_three_axes_and_does_not_flatten_height) ... ok
+test_missing_isometric_coverage_or_direction_is_rejected (test_formed_isometric.FormedIsometric.test_missing_isometric_coverage_or_direction_is_rejected) ... ok
+
+======================================================================
+FAIL: test_flat_b_label_must_link_to_actual_native_line_not_claimed_coordinate (test_formed_isometric.FormedIsometric.test_flat_b_label_must_link_to_actual_native_line_not_claimed_coordinate)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.6.0-root-fit-repair/dev/step-sheetmetal-delivery/tests/test_formed_isometric.py", line 18, in test_flat_b_label_must_link_to_actual_native_line_not_claimed_coordinate
+    self.assertTrue(hasattr(m,'validate_flat_link'),'Native flat/identifier geometric linkage missing')
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: False is not true : Native flat/identifier geometric linkage missing
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.002s
+
+FAILED (failures=1)

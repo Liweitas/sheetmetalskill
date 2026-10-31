@@ -1,0 +1,105 @@
+{
+  "version": "2.5.1",
+  "release_state": "candidate_R04",
+  "author_selftest_only": true,
+  "independent_R04_acceptance": "pending",
+  "unit_tests_passed": 188,
+  "actual_R03_independent_inputs_replayed_read_only": {
+    "positive_passed": 4,
+    "negative_rejected": 11,
+    "all_expected": true,
+    "three_previous_leaks": {
+      "false_AUDIT_RESULT_only": {
+        "case": "false_AUDIT_RESULT_only",
+        "expected": false,
+        "ok": false,
+        "errors": [
+          "AUDIT_RESULT state mismatch: status",
+          "AUDIT_RESULT state mismatch: geometry_delivery_complete",
+          "AUDIT_RESULT state mismatch: manufacturing_delivery_complete",
+          "AUDIT_RESULT state mismatch: production_release"
+        ],
+        "actual_geometry_readback": null,
+        "gate_scope": "complete audit evidence only; source manufacture may be BLOCKED",
+        "production_release": false
+      },
+      "false_geometry_complete": {
+        "case": "false_geometry_complete",
+        "expected": false,
+        "ok": false,
+        "errors": [
+          "Manifest state mismatch: geometry_delivery_complete",
+          "Manifest state mismatch: checked_parts",
+          "Manifest state mismatch: diagnostic_parts",
+          "Manifest state mismatch: holds"
+        ],
+        "actual_geometry_readback": null,
+        "gate_scope": "complete audit evidence only; source manufacture may be BLOCKED",
+        "production_release": false
+      },
+      "scaled_dxf_rehashed": {
+        "case": "scaled_dxf_rehashed",
+        "expected": false,
+        "ok": false,
+        "errors": [
+          "Actual geometry readback: SOLID_03: Actual source/unfold STEP/DXF geometric difference mm2: {'source_vs_STEP': 0.0, 'STEP_vs_DXF': 240168.69291793363, 'source_vs_DXF': 240168.69291793127}"
+        ],
+        "actual_geometry_readback": {
+          "ok": false,
+          "errors": [
+            "SOLID_03: Actual source/unfold STEP/DXF geometric difference mm2: {'source_vs_STEP': 0.0, 'STEP_vs_DXF': 240168.69291793363, 'source_vs_DXF': 240168.69291793127}"
+          ],
+          "CAD_executed": true,
+          "actual_source_read": true,
+          "source_sha256": "4e1ef4ec483c1b9b0d5c77e78a04afaa7c4b1acc83a62820f4c638d8d4d5698a",
+          "checks": [
+            {
+              "part": "SOLID_01",
+              "source_BOP": true,
+              "actual_t_mm": 1.0,
+              "hole_count": 0,
+              "fresh_native_bends": 0,
+              "actual_source_vs_unfold_STEP_area_mm2": 0.0,
+              "actual_unfold_STEP_vs_DXF_area_mm2": 0.0,
+              "actual_source_vs_DXF_area_mm2": 0.0,
+              "reported_area_values_not_used": true,
+              "status": "GEOMETRY_CHECKED_WITH_HOLD"
+            },
+            {
+              "part": "SOLID_02",
+              "source_BOP": true,
+              "actual_t_mm": 1.0,
+              "hole_count": 18,
+              "fresh_native_failed_roots": 3,
+              "status": "BLOCKED verified from actual attempts"
+            }
+          ],
+          "numeric_tolerance_mm": 1e-05,
+          "numeric_area_tolerance_mm2": 1e-05,
+          "production_release": false
+        },
+        "gate_scope": "complete audit evidence only; source manufacture may be BLOCKED",
+        "production_release": false
+      }
+    }
+  },
+  "readback_method": "Fresh actual source STEP, formed STEP, independently parsed/rebuilt DXF, actual unfold STEP and fresh native source re-unfold; stored area values not trusted",
+  "actual_generated_R04_original_run": {
+    "status": "PARTIAL_HOLD",
+    "AUDIT_RESULT_is_manifest_artifact": true,
+    "all_source_parts_present": true,
+    "material": null,
+    "manufacturing_K": null,
+    "failed_root_reason_in_summary": true
+  },
+  "candidate_geometry_changed": false,
+  "original_source_changed": false,
+  "R03_ZIP_changed": false,
+  "manufacturing_release": false,
+  "boundary": "The actual source input or a trusted expected source SHA is the anchor; not cryptographic protection against replacing all inputs and tools",
+  "actual_generated_supported_and_unknown": {
+    "supported": "AUDIT_COMPLETE_WITH_HOLD;3 actual bent parts",
+    "unknown_K": "PARTIAL_HOLD; no manufacturing K invented",
+    "negative_scope_and_artifact_tests_rejected": 8
+  }
+}

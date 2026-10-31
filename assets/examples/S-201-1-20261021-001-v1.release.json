@@ -1,0 +1,113 @@
+{
+  "release": "S-201-1-20261021-001-v1",
+  "structure": "u_endplates",
+  "structure_note": "user explicit spec for this job: U (bottom + 2 long walls) + 2 flat zero-bend OUTER cover end plates (seam 0, inset 0, top flush; user t42u/t16u) + removable 4-skirt lid with skill 03 corners (corner_gap 0, user t46u '不要有缝')",
+  "material_cn": "201不锈钢",
+  "density_kg_mm3": 7.93e-06,
+  "L": 400.0,
+  "W": 220.0,
+  "H": 150.0,
+  "dim_basis": "body_outer",
+  "height_basis": "total_incl_lid",
+  "t": 1.0,
+  "Ri": 0.8,
+  "K": 0.4,
+  "kr_source": "empirical",
+  "g": 0.5,
+  "q": null,
+  "skirt": 15.0,
+  "seam_gap": 0.0,
+  "end_inset": 0.0,
+  "end_top_flush": true,
+  "corner_scheme": "03",
+  "corner_gap": 0.0,
+  "corner_gap_source": "user",
+  "hole_z_below_lid_top": 7.5,
+  "d_body": 3.3,
+  "d_lid": 4.5,
+  "long_x": [
+    50.0,
+    200.0,
+    350.0
+  ],
+  "short_y": [
+    50.0,
+    170.0
+  ],
+  "handles": {
+    "profile": "handle-lid-top-riveted-v1",
+    "cx": [
+      80.0,
+      320.0
+    ],
+    "cy": null,
+    "reference_envelope": true,
+    "requested_by": "user 2026-10-26 10:21 (riveted, same pattern as prior jobs)"
+  },
+  "roof_ports": null,
+  "nest": {
+    "sheet": [
+      2440,
+      1220
+    ],
+    "margin": 10,
+    "gap": 10,
+    "order": [
+      "U",
+      "LID",
+      "END_L",
+      "END_R"
+    ]
+  },
+  "confirm": {
+    "material_cn": "201不锈钢",
+    "t": 1.0,
+    "dims": {
+      "L": 400,
+      "W": 220,
+      "H": 150
+    },
+    "dim_basis": "箱体外尺寸",
+    "height_basis": "含盖总高",
+    "structure_cn": "件1 U形底壳（底+两长侧壁，长398）+ 件2/3 外封端板（零折平板，盖住U端面，拼缝0、不退让、上边齐口）+ 件4 可拆上盖（四边裙15，03斜角折弯收口 缝0，M4螺钉10组）",
+    "features_cn": [
+      "长边每侧M4×3（X=50/200/350），短边每侧M4×2（Y=50/170），孔心距盖顶7.5",
+      "盖顶把手2只铆接：每只Ø6.6×4（85/62/排距30），中心X=80/320",
+      "盖单边间隙g0.5、顶隙q0.2、箱体高148.8"
+    ],
+    "not_requested_cn": [
+      "电源孔",
+      "百叶",
+      "PG7/PG9",
+      "线孔",
+      "盖顶出线孔"
+    ],
+    "assumptions_cn": [
+      "400×220为箱体外尺寸，150为含盖总高（已确认）",
+      "K0.4/R0.8为经验值",
+      "端板与U接合：箱内断续角焊或外侧激光焊（对接盖板无搭接，不能点焊；候选）"
+    ],
+    "pending_cn": [
+      "把手型号/底座外形（本版仅参考包络）",
+      "铆钉型号（孔Ø6.6=M6过孔，默认）",
+      "端板接合：内侧角焊或外侧激光焊",
+      "螺钉型号/长度/材质",
+      "公差、表面处理、去毛刺"
+    ],
+    "named_processes": [
+      "斜角03"
+    ],
+    "hole_refs": [
+      {
+        "what": "裙边M4孔",
+        "axis": "距盖顶",
+        "value": 7.5,
+        "diameter": 4.5,
+        "basis": "孔心"
+      }
+    ]
+  },
+  "extra_docs": [
+    "codex_review_400x220"
+  ]
+}

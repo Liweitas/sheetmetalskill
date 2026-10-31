@@ -1,0 +1,7 @@
+{
+  "first_attempt": "denied before execution; no output directory created",
+  "reason": "This runs seven new CAD regression/model-generation cases and writes substantial outputs, while the trusted request explicitly required read-only checking and prohibited starting another modeling run or generating a delivery package.",
+  "resolution": "Parent provided later explicit user general-process implementation/verification authorization; exactly one retry permitted and succeeded, session 58186",
+  "retry_output": "actual_R11_01/results.json",
+  "no_bypass": true
+}

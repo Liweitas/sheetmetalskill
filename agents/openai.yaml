@@ -1,0 +1,4 @@
+interface:
+  display_name: "STEP 钣金审核交付"
+  short_description: "按真实附件和明确范围生成钣金审核包，保留孔用途、加工阶段与首件边界"
+  default_prompt: "使用 $step-sheetmetal-delivery 先读完整技能；实际既有STEP先用audit_step.py保留原结构，真实partial/HOLD不能冒充制造完成；新支持矩形箱体使用build_package.py实际生成并完成逐件DXF和强制03门禁，既有STEP保留确认值，所有HOLD如实报告。"

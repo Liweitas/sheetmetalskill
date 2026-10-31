@@ -1,0 +1,26 @@
+{
+  "failure": "R09 publisher legacy R08 output default-dispatch erasure accepted",
+  "source_R09_published_root": "/Users/harryma/Documents/Codex/2026-10-21/task-6/acceptance_R09/published/customer_INDEPENDENT_R08/revisions/S-304_TEST_ONLY-1.2-20261020-0427-v1_R01",
+  "failure_root": "/Users/harryma/Documents/Codex/2026-10-21/task-6/acceptance_R09/named_negative_cases/remove_default_plan_from_R09_published_legacy/customer_INDEPENDENT_R08/revisions/S-304_TEST_ONLY-1.2-20261020-0427-v1_R01",
+  "exact_changed_files": [
+    "S-304_TEST_ONLY-1.2-20261020-0427-v1_交付封套_DELIVERY_ENVELOPE_正式.json"
+  ],
+  "deleted_envelope_fields": [
+    "final_message_plan",
+    "message_dispatch_contract"
+  ],
+  "other_envelope_values_changed": [],
+  "manufacturing_and_all_other_files_byte_identical": true,
+  "ZIP_SHA_unchanged": true,
+  "actual_returncode": 0,
+  "gate_result": {
+    "ok": true,
+    "validator_version": "2.7.2-R09",
+    "contract": "2.7.1-R08",
+    "message_dispatch": null,
+    "fresh_CAD_checks_executed": true,
+    "digital_deliverables_complete": true,
+    "production_release": false
+  },
+  "root_cause": "check_envelope requires dispatch fields only when manifest.delivery_contract == 2.7.2-R09; R09 publish_named_delivery preserves the source R08 contract. Naming record remains present."
+}

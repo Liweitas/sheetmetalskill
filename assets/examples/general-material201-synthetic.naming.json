@@ -1,0 +1,15 @@
+{
+  "channel": "S",
+  "material_code": "201",
+  "thickness": 1,
+  "date": "20261023",
+  "number": 423,
+  "factory_version": 1,
+  "source": "SYNTHETIC_FACTORY_TEST_ONLY_NOT_CUSTOMER_ALLOCATION",
+  "material_mapping": {
+    "source_description": "201 stainless steel",
+    "code": "201",
+    "confirmed": true,
+    "source": "SYNTHETIC EXPLICIT NAMING CONFIRMATION FOR TEST ONLY"
+  }
+}

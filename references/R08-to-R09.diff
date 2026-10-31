@@ -1,0 +1,462 @@
+--- R08/PRODUCT.md
++++ R09/PRODUCT.md
+@@ -1,6 +1,6 @@
+ # STEP钣金审核与可复现交付 / 完整技能
+ 
+-版本2.7.1 R08候选，独立前向复验待完成。保留原单人商业使用许可，见COMMERCIAL-LICENSE.md；本包不扩大第三方CAD许可或用户项目授权。
++版本2.7.2 R09候选，最终单包消息计划修复的独立复验待完成。R08在两项漏检及列明范围独立复验限定通过，历史冻结不改。保留原单人商业使用许可，见COMMERCIAL-LICENSE.md；本包不扩大第三方CAD许可或用户项目授权。
+ 
+ 本版为可独立解压的完整目录，不是增量包。包含实际两种矩形箱体的成形CAD、真实展开、逐件激光DXF、装配/爆炸STEP、三视折弯PDF、强制03回读、完整交付门禁、schema/模板、必要资产、回归及实际CAD作者自测脚本。使用范围及输入限制见references/box-generation.md。
+ 
+--- R08/QUICKSTART.md
++++ R09/QUICKSTART.md
+@@ -1,4 +1,4 @@
+-# 完整 v2.7.1 R08 候选：安装与最小调用
++# 完整 v2.7.2 R09 候选：安装与最小调用
+ 
+ 本版是可独立解压的完整技能，不是增量包。R07独立验收两项漏检保留为失败；R08作者验证与待进行的独立复验分开。不安装/替换全局旧版，不修改旧客户项目。
+ 
+@@ -25,10 +25,10 @@
+ .venv/bin/python scripts/build_package.py /ABS/current.job.json --output /ABS/customer_archive
+ ```
+ 
+---output现在是归档父目录，入口实际返回revision_root，例如`/ABS/customer_archive/requirement_REQ003/revisions/R03`。同修订已存在即阻断，不覆盖。每修订同版含确认PNG、成形分件/装配/爆炸STEP、逐件真展开CUT、每板集中套料CUT和预览PDF、完整三视/斜视/展开/材料数量及逐弯工艺PDF、BOM/参数/孔表/验收/哈希和ZIP。
++--output现在是归档父目录，入口实际返回revision_root，例如`/ABS/customer_archive/requirement_REQ003/revisions/CODE_R03`（CODE用实际返回主码替换；缺字段返回“未命名待确认”目录）。同修订已存在即阻断，不覆盖。每修订同版含确认PNG、成形分件/装配/爆炸STEP、逐件真展开CUT、每板集中套料CUT和预览PDF、完整三视/斜视/展开/材料数量及逐弯工艺PDF、BOM/参数/孔表/验收/哈希和ZIP。
+ 
+ ```bash
+-.venv/bin/python scripts/validate_delivery.py /ABS/customer_archive/requirement_REQ003/revisions/R03
++.venv/bin/python scripts/validate_delivery.py /ABS/customer_archive/requirement_REQ003/revisions/CODE_R03
+ ```
+ 
+ 只有完整交付门禁通过，DELIVERY_ENVELOPE的digital_deliverables_complete才为true。production_release始终false；图册仍须人工逐页目视，首件和独立复验分开。RI/g/q根部正干涉无本项目授权仍阻断；有授权保留真实体积、现场修配/试装待确认，不改几何求通过。record_site_fit.py仅记录已核实的本项目授权，见references/site-fit.md。
+@@ -56,3 +56,11 @@
+ FreeCAD: https://www.freecad.org/ ; SheetMetal: https://github.com/shaise/FreeCAD_SheetMetal ; Poppler: https://poppler.freedesktop.org/ 。包内许可不扩大第三方使用许可。
+ 
+ R08额外权威检查与同步篡改复现见references/R08-authority.md。只读兼容验证R07包不表示原R07独立验收通过；其两项失败已明确保留。
++
++## 最终投递（R09）
++
++完整生成后先看 `delivery.final_message_plan`：默认一条消息、一个本修订完整 ZIP。正式发送前运行 `python3 scripts/prepare_delivery_message.py /ABS/ENTITY/revisions/REV`。不要把包内 PDF/STEP/DXF 另列为默认附件。用户明确索要单件或先确认图的例外及整次消息计划格式见 references/message-delivery.md。计划文件放修订目录外，不破坏冻结清单；本脚本不会联系用户或代发附件。
++
++## 文件主码
++
++生成入口增加 `--naming /ABS/actual-factory-naming.json`，详见references/factory-naming.md和naming.schema.json。缺字段仍可形成带HOLD的齐套工程副本，但前缀明确“未命名待确认”、正式code为null；不得伪造渠道/工厂编号。已有包只更名副本用publish_named_delivery.py，不重建CAD。最终revision_root以生成返回为准，名称是主码_内部修订；旧示例路径仅说明归档层级。
+--- R08/SKILL.md
++++ R09/SKILL.md
+@@ -2,12 +2,22 @@
+ name: step-sheetmetal-delivery
+ description: 核验STEP与钣金要求；为两类矩形箱体生成分件/装配/爆炸STEP、真实展开激光DXF及三视折弯PDF，强制核验03盖角和完整交付；也用于既有项目审核及窄改，纯格式转换不适用。
+ metadata:
+-  version: "2.7.1"
++  version: "2.7.2"
+ ---
+ 
+ # STEP 钣金审核与可复现出图
+ 
+ 这是完整技能，包含实际CAD生成路径；FreeCAD、SheetMetal与PDF工具是公开外部依赖。安装、最小调用及依赖见[QUICKSTART](QUICKSTART.md)，支持范围和参数见[新箱体运行契约](references/box-generation.md)。参数、几何、首件与批量放行分别报告；不能把自测或HOLD候选称为生产放行。
++
++## 工厂编码命名
++
++新交付必须读[工厂命名规则](references/factory-naming.md)：`S或X-材质-板厚-YYYYMMDD-四位编号-vN`，每个文件（尤其套料DXF、完整折弯PDF和套料预览PDF）、修订主目录及唯一ZIP共享主码前缀，再加中文用途/零件后缀。工厂v不等于内部R修订；升版保留前五段。用独立`--naming`输入，不改原始设计job/专项授权。缺正式字段标“未命名待确认”，不猜渠道、编号或重置规则；示例Q235/0001不覆盖本项目材料或替工厂分号。执行默认命名发布入口后再核最终门禁，保留更名映射和CAD/DXF原字节。
++
++## 最终默认一个完整 ZIP
++
++发送前必须读[统一投递约定](references/message-delivery.md)。每客户/需求及修订只有一个统一主目录，最终默认仅附本修订完整 ZIP；不同时逐项附 PDF、STEP、DXF，不跨多条消息拆发同一套资料。先确认图是确认阶段，不等于最终可以散发。用户当前明确索要单件或要求先看确认图才例外，记录本次原文、来源、身份/修订/ZIP哈希及所选文件；旧“好了一个发一个”不能覆盖当前统一交付要求。用户新指令优先。
++
++生成入口返回的 `delivery.final_message_plan` 默认只有完整 ZIP；发前运行 `scripts/prepare_delivery_message.py REVISION_ROOT`，按已检查的整次消息计划发送。需要例外或校验拟发附件时，使用该脚本的 `--file/--user-request` 或 `--plan`。它检查文件和送检计划，**不发送消息，也不能保证智能体不绕过计划另发附件**。父/执行智能体仍对实际发送负责。用户索要更新技能时只交付一个完整新技能 ZIP，报告和补丁放包内，不自动再散发。
+ 
+ ## R07 强制齐套交付
+ 
+@@ -55,4 +65,4 @@
+ 
+ R07独立复验发现同步伪报PDF尺寸和最终套数两项漏检，原包不通过。R08针对权威交叉核验修复，见[修复契约](references/R08-authority.md)；新候选仍须独立复验，不能把作者自测称为独立通过。
+ 
+-本轮作者证据摘要见[作者验证记录](references/R08-author-validation.json)，原R07独立失败见[原报告副本](references/R07-INDEPENDENT-FAILURE.md)。
++R08冻结时作者证据摘要见[作者验证记录](references/R08-author-validation.json)，原R07独立失败见[原报告副本](references/R07-INDEPENDENT-FAILURE.md)。
+--- R08/VERSION
++++ R09/VERSION
+@@ -1 +1 @@
+-2.7.1
++2.7.2
+--- R08/references/delivery-contract.md
++++ R09/references/delivery-contract.md
+@@ -1,4 +1,6 @@
+-# v2.7.0 R07 齐套交付契约
++# v2.7.2 R09 齐套文件与单包投递契约
++
++R09沿用R08制造校验，新增最终默认一个完整ZIP消息计划。最终发送前必须读[统一投递约定](message-delivery.md)。下文R07字段/布局是历史起点，当前新生成契约为2.7.2-R09；只读兼容R07/R08，不改其冻结包。R08独立验收为限定通过，R09本次窄修复须另测。
+ 
+ 本契约针对受支持的新尺寸矩形钣金箱体。用户显式结构和参数优先，不修改旧客户模型。完整数字交付不等于生产放行。R07候选等待独立复验，不能宣称所有agent/模型/宿主必定成功。
+ 
+--- R08/scripts/build_package.py
++++ R09/scripts/build_package.py
+@@ -122,7 +122,7 @@
+   (cadout/name).rename(e/(Path(name).stem+"_"+version+".json"))
+  artifact(e/('projections_'+version+'.json'),'cad_projections')
+  cadout.rmdir()
+- result={"status":"GEOMETRY_CHECKED_WITH_HOLD","package_version":"2.7.1-R08","core_validation_contract":"2.6.1-R06","project":project_path.name,"manifest":manifest_path.name,"selected_method":resolved["method"],"sheet_parts":list(report["parts"]),"all_planned_DXFs_present":True,"CAD_executed":True,"native03_executed":bool(n),"native03":n,"pdf":str(master.relative_to(out)),"pdf_pages":mapping["total_pages"],"pdf_rendered_pages":len(images),"PDF_visual_review_required":True,"holds":report["holds"]+[x["code"] for x in cut_check["holds"]],"production_release":False,"source_job_sha256":sha(source)}
++ result={"status":"GEOMETRY_CHECKED_WITH_HOLD","package_version":"2.7.2-R09","core_validation_contract":"2.6.1-R06","project":project_path.name,"manifest":manifest_path.name,"selected_method":resolved["method"],"sheet_parts":list(report["parts"]),"all_planned_DXFs_present":True,"CAD_executed":True,"native03_executed":bool(n),"native03":n,"pdf":str(master.relative_to(out)),"pdf_pages":mapping["total_pages"],"pdf_rendered_pages":len(images),"PDF_visual_review_required":True,"holds":report["holds"]+[x["code"] for x in cut_check["holds"]],"production_release":False,"source_job_sha256":sha(source)}
+  result.update(candidate_resolutions=resolved.get('candidate_resolutions',[]),end_profile=report.get('end_profile'),fixing_pairs=report.get('fixing_pairs',[]),handle_geometry_reports={name:str(path.relative_to(out)) for name,path in handle_reports.items()},confirmation_images=[str(path.relative_to(out)) for path in image_paths],handle_body='not modeled; mounting reference only',manufacturing_profiles=[p['id'] for p in resolved.get('profiles',[])])
+  result.update(fit=resolved['fit'],site_fit_acceptance=resolved.get('site_fit_acceptance'),geometry_interference_eliminated=False,trial_assembly_confirmed=False)
+  if n:result['root_interference_measurement']=report['root_interference_measurement']
+@@ -142,7 +142,13 @@
+  return result
+ def execute(a):
+  from delivery_contract import revision_root,finalize
+- job=json.loads(Path(a.job).read_text());out,d=revision_root(a.output,job)
++ archive_base=Path(a.output).resolve()
++ job=json.loads(Path(a.job).read_text());out,d=revision_root(archive_base/'.R09-unpublished-engineering',job)
++ from factory_naming import resolve as naming_resolve
++ from publish_named_delivery import leaf
++ naming=json.loads(Path(a.naming).read_text()) if getattr(a,'naming',None) else None
++ identity=naming_resolve(naming,job,d)
++ if (archive_base/(d['namespace']+'_'+d['entity_id'])/'revisions'/leaf(identity,d)).exists():raise ValueError('NAMING_DUPLICATE_OUTPUT: choose explicitly authorized new revision or factory version, never auto renumber')
+  a.output=str(out);a._delivery=d
+  result=execute_core(a)
+  a._phase='complete_delivery_nest_BOM_ZIP_gate'
+@@ -152,9 +158,12 @@
+   for e in out.glob('DELIVERY_ENVELOPE_*.json'):e.rename(out/'evidence'/('UNACCEPTED_'+e.name))
+   for r in out.glob('RUN_RESULT_*.json'):r.rename(out/'evidence'/('GEOMETRY_ONLY_UNACCEPTED_'+r.name))
+   raise
+- print(json.dumps({'revision_root':str(out),'delivery':envelope,'engineering':result},ensure_ascii=False,indent=2));return envelope
++ from publish_named_delivery import publish
++ published=publish(out,archive_base,naming,runtime=a._runtime,source_already_checked=True)
++ published_root=Path(published['revision_root']);published_manifest=json.loads((published_root/published['delivery']['manifest']).read_text());published_result=json.loads((published_root/next(x['path'] for x in published_manifest['artifacts'] if x['kind']=='run_result')).read_text())
++ print(json.dumps({**published,'engineering':published_result},ensure_ascii=False,indent=2));return published['delivery']
+ def main():
+- ap=argparse.ArgumentParser(description=__doc__);ap.add_argument("job");ap.add_argument("--output",required=True);ap.add_argument("--cad-python");ap.add_argument("--freecad-lib");ap.add_argument("--sheetmetal-path");ap.add_argument("--pdf-renderer");a=ap.parse_args()
++ ap=argparse.ArgumentParser(description=__doc__);ap.add_argument("job");ap.add_argument("--output",required=True);ap.add_argument("--cad-python");ap.add_argument("--freecad-lib");ap.add_argument("--sheetmetal-path");ap.add_argument("--pdf-renderer");ap.add_argument("--naming",help="Factory naming JSON, independent of geometric job/authorization; missing fields remain unnamed pending");a=ap.parse_args()
+  try:execute(a)
+  except Exception as ex:
+   tentative=getattr(a,'_tentative_result',None)
+--- R08/scripts/delivery_contract.py
++++ R09/scripts/delivery_contract.py
+@@ -4,8 +4,8 @@
+ from datetime import datetime
+ from zoneinfo import ZoneInfo
+ from cut_dxf import parse_dxf
+-VERSION='2.7.1-R08'
+-CONTRACT_REVISIONS={'2.7.0-R07':'v2.7.0-R07',VERSION:'v2.7.1-R08'}
++VERSION='2.7.2-R09'
++CONTRACT_REVISIONS={'2.7.0-R07':'v2.7.0-R07','2.7.1-R08':'v2.7.1-R08',VERSION:'v2.7.2-R09'}
+ SCHEMA={'type':'object','additionalProperties':False,'properties':{
+  'namespace':{'enum':['customer','requirement']},'entity_id':{'type':'string','pattern':'^[A-Za-z0-9_-]+$'},'revision':{'type':'string','pattern':'^[A-Za-z0-9_-]+$'},
+  'sets':{'type':'integer','minimum':1,'maximum':100},
+@@ -154,8 +154,14 @@
+  if len({a['path'] for a in arts if a['kind']=='confirmation_png'})<2:raise ValueError('DELIVERY_CONFIRMATION_ASSEMBLY_EXPLODED_MISSING')
+  expected=resolved_delivery(job);expected['revision']=d['revision'];expected['contract']=m['delivery_contract']
+  if d!=expected or spec['job_sha256']!=sha(one('source_job')) or spec['contract']!=m['delivery_contract']:raise ValueError('DELIVERY_INPUT_BINDING')
+- suffix=(d['namespace']+'_'+d['entity_id'],'revisions',d['revision'])
+- if tuple(root.parts[-3:])!=suffix:raise ValueError('CUSTOMER_REQUIREMENT_REVISION_ROOT_NOT_ENFORCED')
++ named_envs=list(root.glob('*DELIVERY_ENVELOPE_*.json'))
++ named_envelope=json.loads(named_envs[0].read_text()) if len(named_envs)==1 else {}
++ if named_envelope.get('naming'):
++  from publish_named_delivery import check_named
++  check_named(root,named_envelope,m,d,job)
++ else:
++  suffix=(d['namespace']+'_'+d['entity_id'],'revisions',d['revision'])
++  if tuple(root.parts[-3:])!=suffix:raise ValueError('CUSTOMER_REQUIREMENT_REVISION_ROOT_NOT_ENFORCED')
+  if spec['version']!=ver:raise ValueError('DELIVERY_VERSION')
+  if value(project['requirements']['material'])!=job['material'] or value(project['requirements']['nominal_t'])!=job['thickness']*{'mm':1,'cm':10,'m':1000,'inch':25.4}[job.get('units','mm')]:raise ValueError('DELIVERY_MATERIAL_OR_THICKNESS_DIFFERS_SOURCE')
+  scale={'mm':1,'cm':10,'m':1000,'inch':25.4}[job.get('units','mm')]
+@@ -213,7 +219,10 @@
+   for p in sorted(root.rglob('*')):
+    if p.is_file() and p!=zp:z.write(p,archive_prefix+'/'+str(p.relative_to(root)))
+  envelope={'contract':VERSION,'revision_root':str(root),'manifest':mp.name,'inventory':inventory.name,'zip':zp.name,'zip_sha256':sha(zp),'digital_deliverables_complete':True,'production_release':False,'engineering_status':result['status'],'stock_status':d['stock']['status'],'required_stock_sheets':layout['required_sheets'],'sets':d['sets'],'PDF_visual_review_required':True,'independent_review':'PENDING'}
+- ep=root/f'DELIVERY_ENVELOPE_{ver}.json';ep.write_text(json.dumps(envelope,indent=2));check_envelope(root,envelope,check_cad=False)
++ from delivery_dispatch import CONTRACT as DISPATCH_CONTRACT,make_plan
++ envelope['message_dispatch_contract']=DISPATCH_CONTRACT;envelope['final_message_plan']=make_plan(root,envelope,d,m)
++ envelope['publication_stage']='ENGINEERING_STAGE_NOT_NAMED_FINAL'
++ ep=root/f'DELIVERY_ENVELOPE_{ver}.json';ep.write_text(json.dumps(envelope,indent=2));check_envelope(root,envelope,check_cad=False,allow_unpublished=True)
+  return envelope
+ def envelope_authority(envelope,project,spec,layout,final,bom):
+  from validate_project import value
+@@ -223,12 +232,12 @@
+  for key,expected in expected_fields.items():
+   if type(envelope.get(key)) is not type(expected) or envelope[key]!=expected:raise ValueError('ENVELOPE_SOURCE_QUANTITY_OR_STATE_MISMATCH: '+key+' receipt='+str(envelope.get(key))+' source='+str(expected))
+  return {'input_sets':sets,'canonical_sets':value(project['project']['quantity_sets']),'BOM_quantities':{row['part_id']:row['quantity'] for row in bom},'nest_sets':layout['sets'],'required_stock_sheets':layout['required_sheets'],'receipt_sets':envelope['sets']}
+-def check_envelope(root,envelope=None,check_cad=True,runtime=None):
++def check_envelope(root,envelope=None,check_cad=True,runtime=None,allow_unpublished=False):
+  root=Path(root).resolve()
+  if list(root.glob('SOURCE_DELIVERY_STATUS_*.json')):raise ValueError('SOURCE_AUDIT_ONLY_PARTIAL_HOLD: no complete manufacturing delivery supported by this source-audit mode')
+- envelope=envelope or json.loads(next(root.glob('DELIVERY_ENVELOPE_*.json')).read_text());m=json.loads((root/envelope['manifest']).read_text())
++ envelope=envelope or json.loads(next(root.glob('*DELIVERY_ENVELOPE_*.json')).read_text());m=json.loads((root/envelope['manifest']).read_text())
+  if envelope.get('contract') not in CONTRACT_REVISIONS or envelope.get('contract')!=m.get('delivery_contract') or envelope.get('production_release') is not False or envelope.get('digital_deliverables_complete') is not True:raise ValueError('DELIVERY_ENVELOPE_FALSE_STATE')
+- project=json.loads(next(root.glob('project_*.json')).read_text());manifest_contract_check(project,m,root)
++ project=json.loads(next(root.glob('*project_*.json')).read_text());manifest_contract_check(project,m,root)
+  def only(kind):
+   selected=[a for a in m['artifacts'] if a['kind']==kind]
+   if len(selected)!=1:raise ValueError('ENVELOPE_AUTHORITY_REQUIRED: '+kind)
+@@ -239,7 +248,7 @@
+   from validate_manifest import check
+   gate=check(project,m,root,runtime=runtime)
+   if not gate['ok']:raise ValueError('DELIVERY_CORE_GATE: '+str(gate['errors']))
+- inv=root/envelope['inventory'];items=json.loads(inv.read_text())['files'];expected={x['path']:x for x in items};excluded={inv.name,envelope['zip'],next(root.glob('DELIVERY_ENVELOPE_*.json')).name}
++ inv=root/envelope['inventory'];items=json.loads(inv.read_text())['files'];expected={x['path']:x for x in items};excluded={inv.name,envelope['zip'],next(root.glob('*DELIVERY_ENVELOPE_*.json')).name}
+  actual={str(p.relative_to(root)) for p in root.rglob('*') if p.is_file()}-excluded
+  if actual!=set(expected):raise ValueError('DELIVERY_INVENTORY_COVERAGE')
+  for name,r in expected.items():
+@@ -250,8 +259,16 @@
+  with zipfile.ZipFile(zp) as z:
+   if z.testzip():raise ValueError('DELIVERY_ZIP_CRC')
+   wanted=actual|{inv.name}
+-  prefix='/'.join(root.parts[-3:])
++  prefix=root.name if envelope.get('naming') else '/'.join(root.parts[-3:])
+   if set(z.namelist())!={prefix+'/'+s for s in wanted}:raise ValueError('DELIVERY_ZIP_COVERAGE')
+   for name in wanted:
+    if hashlib.sha256(z.read(prefix+'/'+name)).hexdigest()!=sha(root/name):raise ValueError('DELIVERY_ZIP_MEMBER_SHA')
+- return {'ok':True,'contract':m['delivery_contract'],'validator_version':VERSION,'digital_deliverables_complete':bool(check_cad),'fresh_CAD_checks_executed':bool(check_cad),'actual_STEP_dimension_readback':gate.get('actual_STEP_dimension_readback') if gate else None,'quantity_authority':quantities,'production_release':False,'checks':['required kinds','source material/thickness/dimensions/quantity','native CAD checks' if check_cad else 'transport/source checks only; final CAD gate not rerun','nest actual entity/qty/spacing','source-derived process PDF','source-derived envelope counts','revision directory','inventory','ZIP CRC/members']}
++ from delivery_dispatch import CONTRACT as DISPATCH_CONTRACT,check_plan
++ dispatch=None
++ if m['delivery_contract']==VERSION:
++  if not envelope.get('naming') and not allow_unpublished:raise ValueError('NAMING_R09_PUBLICATION_REQUIRED')
++  if envelope.get('message_dispatch_contract')!=DISPATCH_CONTRACT or 'final_message_plan' not in envelope:raise ValueError('DISPATCH_REQUIRED_R09')
++ if 'final_message_plan' in envelope:
++  dispatch=check_plan(root,envelope['final_message_plan'],envelope,d,m)
++  if dispatch['mode']!='DEFAULT_ONE_COMPLETE_ZIP':raise ValueError('DISPATCH_GENERATED_DEFAULT_MUST_BE_ONE_ZIP: keep explicit exceptions in a separate message plan')
++ return {'ok':True,'message_dispatch':dispatch,'contract':m['delivery_contract'],'validator_version':VERSION,'digital_deliverables_complete':bool(check_cad),'fresh_CAD_checks_executed':bool(check_cad),'actual_STEP_dimension_readback':gate.get('actual_STEP_dimension_readback') if gate else None,'quantity_authority':quantities,'production_release':False,'checks':['required kinds','source material/thickness/dimensions/quantity','native CAD checks' if check_cad else 'transport/source checks only; final CAD gate not rerun','nest actual entity/qty/spacing','source-derived process PDF','source-derived envelope counts','revision directory','inventory','ZIP CRC/members']}
+--- R08/scripts/design_job.py
++++ R09/scripts/design_job.py
+@@ -100,7 +100,7 @@
+  for profile_id in sorted(profile_ids):p['provenance'].append({'id':'profile-'+profile_id,'kind':'engineering_assumption','ref':'Explicitly selected bundled assets/profiles/'+profile_id+'.json; geometric trial reference, not supplier/factory qualification','message_at':None,'recorded_at':recorded_at})
+  def put(container,key,v,status="requested",source="job",note="Declared job requirement; not a claim of customer confirmation"):
+   container[key].update(value=v,status=status,source=[source],note=note)
+- for k,v in {"customer_id":resolved['delivery']['entity_id'] if resolved['delivery']['namespace']=='customer' else 'UNASSIGNED_CUSTOMER',"project_id":resolved["id"],"revision":"v2.7.1-R08","version":version,"recorded_at":recorded_at,"record_kind":resolved["record_kind"],"quantity_sets":resolved['delivery']['sets']}.items():put(p["project"],k,v)
++ for k,v in {"customer_id":resolved['delivery']['entity_id'] if resolved['delivery']['namespace']=='customer' else 'UNASSIGNED_CUSTOMER',"project_id":resolved["id"],"revision":"v2.7.2-R09","version":version,"recorded_at":recorded_at,"record_kind":resolved["record_kind"],"quantity_sets":resolved['delivery']['sets']}.items():put(p["project"],k,v)
+  data=Path(input_path).read_bytes()
+  for k,v in {"reference":Path(input_path).name,"filename":Path(input_path).name,"sha256":hashlib.sha256(data).hexdigest(),"bytes":len(data),"preserve_original":True}.items():put(p["attachment"],k,v)
+  req=p["requirements"]
+--- R08/scripts/drawing_pdf.py
++++ R09/scripts/drawing_pdf.py
+@@ -13,7 +13,7 @@
+  def text(x,y,s,size=10):
+   cv.setFont("Helvetica",size);cv.drawString(x,y,str(s))
+  def title(s):
+-  text(35,pageh-35,s,18);text(35,pageh-55,"v2.7.1 R08 | "+resolved["id"]+" | "+project["project"]["version"]["value"]+" | mm | REVIEW / TRIAL ONLY | production_release=false",10)
++  text(35,pageh-35,s,18);text(35,pageh-55,"v2.7.2 R09 | "+resolved["id"]+" | "+project["project"]["version"]["value"]+" | mm | REVIEW / TRIAL ONLY | production_release=false",10)
+  def finish(label):
+   text(35,20,"Nominal geometric dimensions. Verify tools, springback and first article. "+label,9)
+   cv.showPage();pages.append(label)
+@@ -123,7 +123,7 @@
+     xx,yy=s[label];cv.circle(tx+zoom*xx,ty+zoom*yy,2,stroke=1,fill=1);text(tx+zoom*xx+7,ty+zoom*yy+7,label,12)
+    rows(['Eight actual sloped outer segments: two per corner.','Current t='+str(resolved['t'])+' Ri='+str(resolved['Ri']),'Corner gap='+str(resolved['corner_gap'])+' mm','Short-skirt retreat t+gap='+str(s['short_skirt_retreat'])]+[label+' = '+str([round(v,9) for v in s[label]]) for label in ['P1','P2','P3']]+['Actual native STEP re-unfold and DXF area match.','Root interference and q reported separately.','No historical fixed coordinate template.'],610,650)
+    finish('LID actual03 corner')
+- cv.save();writer=PdfWriter();writer.append_pages_from_reader(PdfReader(first));writer.append_pages_from_reader(PdfReader(io.BytesIO(buf.getvalue())));writer.add_metadata({"/Title":resolved["id"]+" sheetmetal three views and bending HOLD","/Author":"step-sheetmetal-delivery2.7.1 R08"});writer.write(path);first.unlink()
++ cv.save();writer=PdfWriter();writer.append_pages_from_reader(PdfReader(first));writer.append_pages_from_reader(PdfReader(io.BytesIO(buf.getvalue())));writer.add_metadata({"/Title":resolved["id"]+" sheetmetal three views and bending HOLD","/Author":"step-sheetmetal-delivery2.7.2 R09"});writer.write(path);first.unlink()
+  from workshop_pdf import append_process_pages
+  process=append_process_pages(path,project,resolved,report,projections)
+  (Path(path).parents[1]/'evidence'/('PROCESS_PDF_'+project['project']['version']['value']+'.json')).write_text(json.dumps(process,ensure_ascii=False,indent=2))
+--- R08/scripts/native03_check.py
++++ R09/scripts/native03_check.py
+@@ -58,7 +58,7 @@
+   root_volume=None;measured_q=None;holds=[]
+   if body_path:
+    body=Part.read(str(body_path));require(body.isValid(),'body STEP invalid');root_volume=abs(body.common(formed).Volume);fresh_root_volume=root_volume;measured_q=getattr(formed.BoundBox,dim+'Max')-s['t']-getattr(body.BoundBox,dim+'Max')
+-   if doc['project']['revision']['value'] in ['v2.6.1-R06','v2.7.0-R07','v2.7.1-R08']:
++   if doc['project']['revision']['value'] in ['v2.6.1-R06','v2.7.0-R07','v2.7.1-R08','v2.7.2-R09']:
+     from interference_volume import require_same_measurement
+     authority=doc['lid']['root_overlap_volume']['value'];require_same_measurement(authority,root_volume);root_volume=authority
+    if s['q'] is None:holds.append('q requirement not specified; actual CAD seating measurement is not an automatic approval')
+@@ -72,7 +72,7 @@
+   sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest()
+   result={'ok':True,'CAD_executed':True,'method':'actual FreeCAD SheetMetal fresh unfold and geometric area difference','FreeCAD_version':F.Version()[:3],'parameter_hash':hashlib.sha256(json.dumps(apply_lid_defaults(doc),ensure_ascii=False,sort_keys=True,separators=(',',':'),allow_nan=False).encode()).hexdigest(),'input_sha256':{'formed_step':sha(formed_path),'unfold_step':sha(unfold_path),'dxf':sha(dxf_path)},'actual_bends':4,'native_sloped_edges':8,'DXF_sloped_edges':8,'fresh_vs_provided_unfold_area_mm2':delta,'native_vs_DXF_area_mm2':dxf_delta,'root_overlap_volume_mm3':root_volume,'actual_roof_q_mm':measured_q,'numeric_tolerance_mm':tol,'numeric_area_tolerance_mm2':area_tol,'holds':holds,'production_release':False}
+   result['thickness_measurement']=thickness_measurement
+-  if doc['project']['revision']['value'] in ['v2.6.1-R06','v2.7.0-R07','v2.7.1-R08']:
++  if doc['project']['revision']['value'] in ['v2.6.1-R06','v2.7.0-R07','v2.7.1-R08','v2.7.2-R09']:
+    from interference_volume import measurement
+    result.update(root_interference_measurement=measurement(root_volume),fresh_body_lid_common_volume_mm3=fresh_root_volume)
+   result.update(assembly_interference_free=root_volume<=VOLUME_TOL_MM3,fit_disposition=disposition,site_fit_acceptance=acceptance,geometry_interference_eliminated=False,trial_assembly_confirmed=False)
+--- R08/scripts/render_review_pdf.py
++++ R09/scripts/render_review_pdf.py
+@@ -25,7 +25,7 @@
+   from site_fit import acceptance_from_project
+   acceptance=acceptance_from_project(d)
+   if acceptance:
+-   if d['project']['revision']['value'] in ['v2.6.1-R06','v2.7.0-R07','v2.7.1-R08']:
++   if d['project']['revision']['value'] in ['v2.6.1-R06','v2.7.0-R07','v2.7.1-R08','v2.7.2-R09']:
+     from interference_volume import display_volume
+     root='现场修配：本项目已获用户授权，盖根干涉保留；待现场师傅修配、试装确认。未消除干涉，未确认试装。权威BODY/LID布尔体积='+display_volume(v(lid['root_overlap_volume']))+'mm^3（显示6位；CAD数值计算，不代表实测精度）；详见本图授权页。'
+    else:root='现场修配：本项目已获用户授权，盖根干涉保留；待现场师傅修配、试装确认。未消除干涉，未确认试装。实测逐件交叠合计='+str(v(lid['root_overlap_volume']))+'mm^3；详见本图授权页。'
+@@ -49,14 +49,14 @@
+   items=header_lines(doc,workshop_resolved)+[s['fit'],'顶部落座间距 q：'+s['q'],s['handle'],s['root'],'盖角方案：'+s['corner']+'；角缝：'+s['corner_gap'],'数字齐套、现场试折与生产放行分别确认；本版保留HOLD。']
+  for line in items:y=text(line,y,9 if workshop_resolved else 11)
+  if y<45:raise ValueError('WORKSHOP_FIRST_PAGE_OVERFLOW')
+- cv.setFont('STSong-Light',9);cv.drawString(50,35,'v2.7.1 R08 | 审核HOLD | 实际加工需首件验证');result={'first_page_summary':s,'pages':1}
++ cv.setFont('STSong-Light',9);cv.drawString(50,35,'v2.7.2 R09 | 审核HOLD | 实际加工需首件验证');result={'first_page_summary':s,'pages':1}
+  if s['site_fit_acceptance']:
+   from xml.sax.saxutils import escape
+   a=s['site_fit_acceptance'];cv.showPage();cv.setFont('STSong-Light',18);cv.drawString(50,786,'本项目现场修配授权及限制 / HOLD');y=745
+   for line in ['仅适用于当前项目 '+a['job_id']+'；本页不授权其它客户或变更后的参数。','授权来源：'+a['authorization_source'],'用户原文：'+a['authorization_quote'],'原始设计 SHA256：'+a['job_design_sha256'],s['root'],'保持本次 Ri/g/q、闭盖总高和物理孔位；未自动增顶隙、侧隙或删除交叠。','现场修配与试装尚未执行。几何干涉检测数值仍然有效；03/板厚/孔轴/DXF等其它门禁不得跳过。','材料、机床工装、首件和生产放行仍按各自证据确认；本授权不是生产放行。']:
+    y=text(escape(line),y,10)
+    if y<50:raise ValueError('SITE_FIT_PDF: authorization text exceeds one page; shorten reference without dropping evidence')
+-  cv.setFont('STSong-Light',9);cv.drawString(50,35,'v2.7.1 R08 | '+doc['project']['version']['value']+' | 本项目专项授权，不是生产放行')
++  cv.setFont('STSong-Light',9);cv.drawString(50,35,'v2.7.2 R09 | '+doc['project']['version']['value']+' | 本项目专项授权，不是生产放行')
+   result['pages']+=1
+  if dxf:
+   cv.showPage();cv.setFont('STSong-Light',17);cv.drawString(50,790,'已写DXF实际回读 / 展开几何核对')
+@@ -71,7 +71,7 @@
+    n=json.loads(Path(native_report).read_text());h=hashlib.sha256(Path(dxf).read_bytes()).hexdigest()
+    if n.get('ok') is not True or n.get('CAD_executed') is not True or n['input_sha256']['dxf']!=h or n.get('parameter_hash')!=__import__('handle_readback').parameter_hash(doc):raise ValueError('native report does not bind this actual DXF')
+    claim='实际STEP/DXF把手孔心回读报告已绑定；仅孔轴/孔距，不证明真实展开或生产放行。' if 'STEP' in n and 'DXF' in n else '实际CAD原生重展开报告已绑定该DXF；仍需逐页目视、根部干涉与首件验证。'
+-  text(claim,130,10);cv.setFont('STSong-Light',9);cv.drawString(50,35,'v2.7.1 R08 | 文件几何核对不构成生产放行');result.update(pdf_flat_page_index=result['pages'],pdf_flat_map=[scale,0,0,scale,ox,oy]);result['pages']+=1
++  text(claim,130,10);cv.setFont('STSong-Light',9);cv.drawString(50,35,'v2.7.2 R09 | 文件几何核对不构成生产放行');result.update(pdf_flat_page_index=result['pages'],pdf_flat_map=[scale,0,0,scale,ox,oy]);result['pages']+=1
+  cv.save();reader=PdfReader(io.BytesIO(buf.getvalue()));writer=PdfWriter();writer.append_pages_from_reader(reader);writer.add_metadata({'/Title':title,'/Author':'STEP sheetmetal workflow','/Producer':'ReportLab and pypdf'});writer.write(path);return result
+ 
+ def check_first_page(path,doc):
+--- R08/scripts/selftest_acceptance.py
++++ R09/scripts/selftest_acceptance.py
+@@ -19,8 +19,9 @@
+   dest=out/name;cmd=[sys.executable,'-B',str(ROOT/'scripts/build_package.py'),str(source),'--output',str(dest),*extra]
+   with (out/(name+'.log')).open('wb') as f:r=subprocess.run(cmd,stdout=f,stderr=subprocess.STDOUT,timeout=1200)
+   if r.returncode:raise RuntimeError(name+' failed; inspect '+str(out/(name+'.log')))
+-  dest=next(dest.rglob('RUN_RESULT_*.json')).parent
+-  result=json.loads(next(dest.glob('RUN_RESULT_*.json')).read_text());p=json.loads((dest/result['project']).read_text());m=json.loads((dest/result['manifest']).read_text());cad=json.loads(next((dest/'evidence').glob('cad_report_*.json')).read_text())
++  from factory_naming import published_root
++  dest=published_root(dest)
++  result=json.loads(next(dest.glob('*RUN_RESULT_*.json')).read_text());p=json.loads((dest/result['project']).read_text());m=json.loads((dest/result['manifest']).read_text());cad=json.loads(next((dest/'evidence').glob('*cad_report_*.json')).read_text())
+   if not check(p,m,dest)['ok'] or len(result['sheet_parts'])!=count or result['production_release']:raise RuntimeError('Final gate or structure failed '+name)
+   if result['pdf_pages']!=result['pdf_rendered_pages'] or len(result['confirmation_images'])!=2:raise RuntimeError('Incomplete drawings '+name)
+   if result['native03']['native_sloped_edges']!=8 or result['native03']['actual_roof_q_mm']!=0:raise RuntimeError('03/q check failed '+name)
+--- R08/scripts/selftest_cad.py
++++ R09/scripts/selftest_cad.py
+@@ -27,15 +27,16 @@
+   if a.pdf_renderer:cmd+=["--pdf-renderer",a.pdf_renderer]
+   with (out/(name+".log")).open("wb") as log:r=subprocess.run(cmd,stdout=log,stderr=subprocess.STDOUT,timeout=1200)
+   if r.returncode:raise RuntimeError("Author CAD case failed: "+name+"; see "+str(out/(name+".log")))
+-  dest=next(dest.rglob("RUN_RESULT_*.json")).parent
+-  result=json.loads(next(dest.glob("RUN_RESULT_*.json")).read_text());project=json.loads((dest/result["project"]).read_text());manifest=json.loads((dest/result["manifest"]).read_text())
++  from factory_naming import published_root
++  dest=published_root(dest)
++  result=json.loads(next(dest.glob("*RUN_RESULT_*.json")).read_text());project=json.loads((dest/result["project"]).read_text());manifest=json.loads((dest/result["manifest"]).read_text())
+   if not check(project,manifest,dest)["ok"]:raise RuntimeError("Completed run failed its own complete artifact gate")
+   expected=4 if name=="external" else 2 if name=="body_only" else 3
+   if len(result["sheet_parts"])!=expected or result["production_release"] or result["pdf_pages"]!=result["pdf_rendered_pages"]:raise RuntimeError("Sheet count/release/render selftest failed")
+   if name=="body_only" and ("LID" in result["sheet_parts"] or result["native03_executed"]):raise RuntimeError("No-lid scope expanded")
+   if name!="body_only" and (result["native03"]["native_sloped_edges"]!=8 or result["native03"]["actual_roof_q_mm"]!=0 or result["native03"]["root_overlap_volume_mm3"]<=0):raise RuntimeError("03/q0/interference preservation failed")
+   if name=='body_only':
+-   actual=json.loads(next((dest/'evidence').glob('cad_report_*.json')).read_text())['parts']['U']['bbox']
++   actual=json.loads(next((dest/'evidence').glob('*cad_report_*.json')).read_text())['parts']['U']['bbox']
+    if abs(actual[5]-actual[2]-job['dimensions']['height'])>1e-5:raise RuntimeError('No-lid bare height changed')
+   cases.append({"name":name,"directory":str(dest),"sheets":result["sheet_parts"],"pages":result["pdf_pages"],"native03":result["native03"],"production_release":False})
+   def rejected(label,m):
+--- R08/scripts/selftest_delivery_contract.py
++++ R09/scripts/selftest_delivery_contract.py
+@@ -16,14 +16,14 @@
+    src=ROOT/'assets/examples'/('delivery-'+name+'.job.json');job=json.loads(src.read_text());target=runs/(name+'.job.json');target.write_text(json.dumps(job,indent=2))
+    with (runs/(name+'.log')).open('wb') as log:r=subprocess.run([sys.executable,'-B',str(ROOT/'scripts/build_package.py'),str(target),'--output',str(runs/'deliveries')],stdout=log,stderr=subprocess.STDOUT,timeout=1500)
+    if r.returncode:raise RuntimeError(name+' generation failed; inspect raw log')
+-  first=next((runs/'deliveries/requirement_AUTHOR_EXTERNAL_380').rglob('DELIVERY_ENVELOPE_*.json')).parent;source=next((first/'STEP').glob('ASSEMBLY_*.step'))
++  first=next((runs/'deliveries/requirement_AUTHOR_EXTERNAL_380').rglob('*DELIVERY_ENVELOPE_*.json')).parent;source=next((first/'STEP').glob('*ASSEMBLY_*.step'))
+   with (runs/'source.log').open('wb') as log:r=subprocess.run([sys.executable,'-B',str(ROOT/'scripts/audit_step.py'),str(source),'--output',str(runs/'source_deliveries'),'--entity-id','AUTHOR_IMPORTED_NO_K','--revision','R01'],stdout=log,stderr=subprocess.STDOUT,timeout=1500)
+   if r.returncode!=2:raise RuntimeError('Source unknown-K case must exit2')
+  positives=[]
+  for key in ['requirement_AUTHOR_EXTERNAL_380','customer_AUTHOR_WRAP_185']:
+-  envs=sorted((runs/'deliveries'/key).rglob('DELIVERY_ENVELOPE_*.json'))
++  envs=sorted((runs/'deliveries'/key).rglob('*DELIVERY_ENVELOPE_*.json'))
+   if not envs:raise RuntimeError('No completed synthetic case '+key)
+-  root=envs[-1].parent;gate=check_envelope(root);env=json.loads(envs[-1].read_text());m=json.loads((root/env['manifest']).read_text());p=json.loads(next(root.glob('project_*.json')).read_text());positives.append((root,p,m));results['positive'].append({'root':str(root),'gate':gate,'envelope':env})
++  root=envs[-1].parent;gate=check_envelope(root);env=json.loads(envs[-1].read_text());m=json.loads((root/env['manifest']).read_text());p=json.loads(next(root.glob('*project_*.json')).read_text());positives.append((root,p,m));results['positive'].append({'root':str(root),'gate':gate,'envelope':env})
+  source=next((runs/'source_deliveries').rglob('SOURCE_DELIVERY_STATUS_*.json'));state=json.loads(source.read_text())
+  if state['digital_deliverables_complete'] or state['manufacturing_delivery_complete'] or state['production_release']:raise RuntimeError('False source completeness')
+  try:check_envelope(source.parent,check_cad=False)
+@@ -65,7 +65,7 @@
+    write_entities(dest/na['path'],es);na['sha256']=sha(dest/na['path'])
+  for mode in ['omit','overlap','scale']:reject('nest_'+mode+'_rebound_layout_DXF_SHA',lambda dest,p,m,mode=mode:layout_mutation(dest,m,mode))
+  def missing_zip(dest,p,m):
+-  e=json.loads(next(dest.glob('DELIVERY_ENVELOPE_*.json')).read_text());(dest/e['zip']).unlink()
++  e=json.loads(next(dest.glob('*DELIVERY_ENVELOPE_*.json')).read_text());(dest/e['zip']).unlink()
+  reject('missing_final_ZIP',missing_zip,True)
+  # The actual source CAD re-read must reject a synchronized JSON direction lie.
+  for root,p,m in positives:
+--- R08/scripts/selftest_existing_step.py
++++ R09/scripts/selftest_existing_step.py
+@@ -19,7 +19,8 @@
+  from record_site_fit import record
+  job=json.loads((ROOT/'assets/examples/box-wrap-l.job.json').read_text());job,_=record(job,'SYNTHETIC SELFTEST authorization for this fixture only','For this synthetic fixture retain lid-root interference for site fitting and trial assembly; not real customer consent.');fixture_job=out/'fixture.job.json';fixture_job.write_text(json.dumps(job,indent=2))
+  run('fixture',[str(ROOT/'scripts/build_package.py'),str(fixture_job),'--output',str(out/'fixture')],0)
+- source=next((out/'fixture').rglob('ASSEMBLY_*.step'));config=out/'explicit-trial.json';config.write_text(json.dumps({'K_ANSI':.4,'K_status':'assumed','K_source':'Synthetic algorithm regression candidate; not calibrated','material':None}))
++ from factory_naming import published_root
++ source=next((published_root(out/'fixture')/'STEP').glob('*ASSEMBLY_*.step'));config=out/'explicit-trial.json';config.write_text(json.dumps({'K_ANSI':.4,'K_status':'assumed','K_source':'Synthetic algorithm regression candidate; not calibrated','material':None}))
+  run('supported',[str(ROOT/'scripts/audit_step.py'),str(source),'--config',str(config),'--output',str(out/'supported')],2)
+  run('unknown',[str(ROOT/'scripts/audit_step.py'),str(source),'--output',str(out/'unknown')],2)
+  results={};negative=[]
+--- R08/scripts/selftest_receipt_authority.py
++++ R09/scripts/selftest_receipt_authority.py
+@@ -21,22 +21,28 @@
+  if count<1:raise ValueError('Counterexample did not actually change PDF text')
+  return count
+ def repack(root):
+- mp=next(root.glob('manifest_*.json'));m=json.loads(mp.read_text());ep=next(root.glob('DELIVERY_ENVELOPE_*.json'));e=json.loads(ep.read_text());pdf=root/next(a['path'] for a in m['artifacts'] if a['kind']=='pdf');iso=root/m['formed_isometric_report'];d=json.loads(iso.read_text());d['pdf_sha256']=sha(pdf);iso.write_text(json.dumps(d,indent=2))
++ mp=next(root.glob('*manifest_*.json'));m=json.loads(mp.read_text());ep=next(root.glob('*DELIVERY_ENVELOPE_*.json'));e=json.loads(ep.read_text());pdf=root/next(a['path'] for a in m['artifacts'] if a['kind']=='pdf');iso=root/m['formed_isometric_report'];d=json.loads(iso.read_text());d['pdf_sha256']=sha(pdf);iso.write_text(json.dumps(d,indent=2))
+  for a in m['artifacts']:a['sha256']=sha(root/a['path'])
+  mp.write_text(json.dumps(m,indent=2));inv=root/e['inventory'];zp=root/e['zip'];excludes={inv.name,zp.name,ep.name};files=[p for p in root.rglob('*') if p.is_file() and str(p.relative_to(root)) not in excludes];inv.write_text(json.dumps({'contract':e['contract'],'files':[{'path':str(p.relative_to(root)),'bytes':p.stat().st_size,'sha256':sha(p)} for p in sorted(files)]},indent=2))
+- prefix='/'.join(root.parts[-3:])
++ prefix=root.name if e.get('naming') else '/'.join(root.parts[-3:])
+  with zipfile.ZipFile(zp,'w',zipfile.ZIP_DEFLATED) as z:
+   for p in sorted(files+[inv]):z.write(p,prefix+'/'+str(p.relative_to(root)))
+- e['zip_sha256']=sha(zp);e['revision_root']=str(root);ep.write_text(json.dumps(e,indent=2))
++ e['zip_sha256']=sha(zp);e['revision_root']=str(root)
++ if 'final_message_plan' in e:
++  e['final_message_plan']['archive_sha256']=e['zip_sha256']
++  for message in e['final_message_plan']['messages']:
++   for attachment in message['attachments']:
++    if attachment['path']==e['zip']:attachment['sha256']=e['zip_sha256']
++ ep.write_text(json.dumps(e,indent=2))
+ def main():
+  p=argparse.ArgumentParser();p.add_argument('revision_root');p.add_argument('--output',required=True);a=p.parse_args();source=Path(a.revision_root).resolve();out=Path(a.output).resolve()
+  if out.exists():p.error('output must not exist')
+- out.mkdir(parents=True);m=json.loads(next(source.glob('manifest_*.json')).read_text());job=json.loads((source/next(x['path'] for x in m['artifacts'] if x['kind']=='source_job')).read_text());proj=json.loads((source/next(x['path'] for x in m['artifacts'] if x['kind']=='parameters')).read_text());L=proj['requirements']['dimensions']['X']['value'];W=proj['requirements']['dimensions']['Y']['value'];immutable={str(p.relative_to(source)):sha(p) for p in source.rglob('*') if p.is_file()};results=[]
++ out.mkdir(parents=True);m=json.loads(next(source.glob('*manifest_*.json')).read_text());job=json.loads((source/next(x['path'] for x in m['artifacts'] if x['kind']=='source_job')).read_text());proj=json.loads((source/next(x['path'] for x in m['artifacts'] if x['kind']=='parameters')).read_text());L=proj['requirements']['dimensions']['X']['value'];W=proj['requirements']['dimensions']['Y']['value'];immutable={str(p.relative_to(source)):sha(p) for p in source.rglob('*') if p.is_file()};results=[]
+  for name in ['legal_repacked','synchronized_PDF_dimensions','wrong_three_view_dimension_labels','false_envelope_sets','false_envelope_board_count']:
+-  root=out/name/Path(*source.parts[-3:]);shutil.copytree(source,root);mp=next(root.glob('manifest_*.json'));m2=json.loads(mp.read_text());pdf=root/next(x['path'] for x in m2['artifacts'] if x['kind']=='pdf');ep=next(root.glob('DELIVERY_ENVELOPE_*.json'));e=json.loads(ep.read_text());mutations=0
++  root=out/name/Path(*source.parts[-3:]);shutil.copytree(source,root);mp=next(root.glob('*manifest_*.json'));m2=json.loads(mp.read_text());pdf=root/next(x['path'] for x in m2['artifacts'] if x['kind']=='pdf');ep=next(root.glob('*DELIVERY_ENVELOPE_*.json'));e=json.loads(ep.read_text());mutations=0
+   if name=='synchronized_PDF_dimensions':
+    old=str(float(L))+' x '+str(float(W));new='999.0 x 888.0';mutations=patch_pdf(pdf,old,new)
+-   for path in [next(root.glob('DELIVERY_SPEC_*.json')),next((root/'evidence').glob('PROCESS_PDF_*.json'))]:
++   for path in [next(root.glob('*DELIVERY_SPEC_*.json')),next((root/'evidence').glob('*PROCESS_PDF_*.json'))]:
+     d=json.loads(path.read_text());holder=d['process_pdf'] if 'process_pdf' in d else d;holder['header']=[s.replace(old,new) for s in holder['header']];path.write_text(json.dumps(d,ensure_ascii=False,indent=2))
+   elif name=='wrong_three_view_dimension_labels':
+    page=next(p for p in PdfReader(pdf).pages if 'ASSEMBLY - ACTUAL EXPORTED STEP THREE VIEWS' in p.extract_text());old=next(s.strip() for s in page.extract_text().splitlines() if re.fullmatch(r'\d+\.\d{6} mm',s.strip()));mutations=patch_pdf(pdf,old,'999.000000 mm')
+@@ -51,5 +57,5 @@
+   if ok!=expected:raise RuntimeError('Receipt authority test failed '+name+': '+str(error))
+   results.append({'test':name,'expected_accepted':expected,'ok':ok,'error':error,'result':result,'fixture':str(root),'PDF_text_replacements':mutations,'authoritative_input_and_CAD_unchanged':True})
+  assert immutable=={str(p.relative_to(source)):sha(p) for p in source.rglob('*') if p.is_file()}
+- (out/'RECEIPT_AUTHORITY_RESULTS.json').write_text(json.dumps({'author_test_only':True,'validator':'2.7.1-R08','source_unchanged':True,'cases':results},ensure_ascii=False,indent=2));print(json.dumps({'positive':1,'semantic_negatives':4,'status':'PASS_AUTHOR_ONLY'},indent=2))
++ (out/'RECEIPT_AUTHORITY_RESULTS.json').write_text(json.dumps({'author_test_only':True,'validator':'2.7.2-R09','source_unchanged':True,'cases':results},ensure_ascii=False,indent=2));print(json.dumps({'positive':1,'semantic_negatives':4,'status':'PASS_AUTHOR_ONLY'},indent=2))
+ if __name__=='__main__':main()
+--- R08/scripts/selftest_site_fit.py
++++ R09/scripts/selftest_site_fit.py
+@@ -24,8 +24,9 @@
+   cmd=[sys.executable,'-B',str(ROOT/'scripts/build_package.py'),str(source),'--output',str(dest),*extra]
+   with (out/(name+'.log')).open('wb') as f:r=subprocess.run(cmd,stdout=f,stderr=subprocess.STDOUT,timeout=1200)
+   if r.returncode:raise RuntimeError(name+' failed: inspect '+str(out/(name+'.log')))
+-  dest=next(dest.rglob('RUN_RESULT_*.json')).parent
+-  result_path=next(dest.glob('RUN_RESULT_*.json'));result=json.loads(result_path.read_text());project=json.loads((dest/result['project']).read_text());manifest=json.loads((dest/result['manifest']).read_text());base=check(project,manifest,dest)
++  from factory_naming import published_root
++  dest=published_root(dest)
++  result_path=next(dest.glob('*RUN_RESULT_*.json'));result=json.loads(result_path.read_text());project=json.loads((dest/result['project']).read_text());manifest=json.loads((dest/result['manifest']).read_text());base=check(project,manifest,dest)
+   expected=['LID','U'] if name=='external' else ['L','LID','U']
+   if not base['ok'] or result['status']!='DELIVERED_FOR_AUTHORIZED_SITE_FIT_WITH_HOLD' or result['assembly_interference_free'] is not False or result['actual_root_overlap_volume_mm3']<=0 or result['formed_isometric_parts']!=expected or result['geometry_interference_eliminated'] or result['trial_assembly_confirmed'] or result['pdf_pages']!=result['pdf_rendered_pages']:raise RuntimeError('Actual retained geometry/status/isometric coverage failed '+name+': '+str(base['errors']))
+   tests={
+--- R08/scripts/validate_manifest.py
++++ R09/scripts/validate_manifest.py
+@@ -224,7 +224,7 @@
+      require_same_measurement(authority,measured['fresh_body_lid_common_volume_mm3'])
+   except (ValueError,KeyError,OSError,TypeError,StopIteration) as ex:errors.append('SITE_FIT_RESULT: '+str(ex))
+  delivery=None
+- if manifest.get('delivery_contract') or (value(project['project']['revision']) in ['v2.7.0-R07','v2.7.1-R08'] and not allow_geometry_only):
++ if manifest.get('delivery_contract') or (value(project['project']['revision']) in ['v2.7.0-R07','v2.7.1-R08','v2.7.2-R09'] and not allow_geometry_only):
+   try:
+    from delivery_contract import manifest_contract_check,CONTRACT_REVISIONS
+    if manifest.get('delivery_contract') not in CONTRACT_REVISIONS:raise ValueError('DELIVERY_CONTRACT_VERSION_REQUIRED_FOR_R07')
+--- R08/scripts/workshop_pdf.py
++++ R09/scripts/workshop_pdf.py
+@@ -48,7 +48,7 @@
+  style=ParagraphStyle('shop',fontName='STSong-Light',fontSize=11,leading=16,wordWrap='CJK')
+  def start(title):
+   nonlocal y
+-  cv.setFont('STSong-Light',18);cv.drawString(35,ph-35,title);cv.setFont('Helvetica',9);cv.drawString(35,ph-54,'v2.7.1 R08 | '+project['project']['version']['value']+' | mm | REVIEW / TRIAL HOLD');y=ph-86
++  cv.setFont('STSong-Light',18);cv.drawString(35,ph-35,title);cv.setFont('Helvetica',9);cv.drawString(35,ph-54,'v2.7.2 R09 | '+project['project']['version']['value']+' | mm | REVIEW / TRIAL HOLD');y=ph-86
+  def para(s):
+   nonlocal y
+   p=Paragraph(escape(s),style);_,h=p.wrap(pw-85,ph)

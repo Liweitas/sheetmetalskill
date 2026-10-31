@@ -1,0 +1,70 @@
+{
+  "version": "2.6.0-R05",
+  "author_selftest_only": true,
+  "independent_agent_acceptance": "PENDING fresh parent-arranged test",
+  "scope": [
+    "per-job authorized retained lid-root interference workflow",
+    "per-bent-part actual formed isometric + native B identifiers/directions + actual flat linkage"
+  ],
+  "unit_tests": {
+    "passed": 205,
+    "log_sha256": "35400bf8fe879b7b994cfa3fad399f4964957ec7d612ae2476116fe1034678bd"
+  },
+  "CAD_cases": {
+    "external": {
+      "parts": 4,
+      "PDF_pages": 17,
+      "actual_root_overlap_mm3": 8.275783240443062,
+      "isometric_parts": [
+        "U",
+        "LID"
+      ]
+    },
+    "wrap_l": {
+      "parts": 3,
+      "PDF_pages": 16,
+      "actual_root_overlap_mm3": 4.567095979809078,
+      "isometric_parts": [
+        "U",
+        "L",
+        "LID"
+      ]
+    }
+  },
+  "all_CAD_cases_keep_Ri_g_q": [
+    0.8,
+    0.5,
+    0
+  ],
+  "all_CAD_cases_status": "DELIVERED_FOR_AUTHORIZED_SITE_FIT_WITH_HOLD",
+  "actual_geometry_interference_eliminated": false,
+  "trial_assembly_confirmed": false,
+  "negative_tests": {
+    "new_box_site_fit_isometric_rejected": 20,
+    "existing_source_isometric_rebound_SHA_rejected": 3
+  },
+  "source_import": {
+    "synthetic_L": "actual STEP readback/native unfold;40mm fold linked correctly; source isometric + native direction",
+    "unknown_K": "PARTIAL_HOLD, native direction UNKNOWN, no invented manufacturing approval"
+  },
+  "author_found_defect_before_freeze": {
+    "native_BendInfo_frame": "incorrect initial flat B positions discovered; native sketch inverse now captured and matched to actual trimmed native fold lines",
+    "coordinate_table": "B table and flat labels now use one native record; actual PDF marker anchors and table IDs checked",
+    "evidence_preserved_outside_package": true
+  },
+  "last_PDF_only_regression": {
+    "CAD_and_DXF_bytes_unchanged": true,
+    "regenerated": "only drawing layout/table/typography from actual checked CAD reports",
+    "source_CAD_rerun_before_redraw": "final-site-fit-and-isometric-R02",
+    "final_PDFs": "final-drawings-R03; both final manifest checks passed"
+  },
+  "PDF_visual_review": {
+    "all_pages_rendered": true,
+    "contact_sheet_overview": true,
+    "full_size_reviewed": "new authorization/first page, per-part isometric and flat labels; source synthetic L isometric",
+    "limitation": "No second CAD kernel, machine/CAM or full factory proof; independent per-page visual acceptance remains pending"
+  },
+  "global_install_modified": false,
+  "customer_models_modified": false,
+  "production_release": false
+}

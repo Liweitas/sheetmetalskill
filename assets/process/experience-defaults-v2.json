@@ -1,0 +1,35 @@
+{
+  "id": "general-experience-v2-skirt15",
+  "scope": "new uniform-thickness rectangular boxes only; explicit current user parameters take precedence",
+  "source": "User-authorized cross-case process guidance; not a material standard, machine calibration or customer geometry template",
+  "Ri_mm": 0.8,
+  "g_each_side_mm": 0.5,
+  "external_end_contour_inset_mm": 0.0,
+  "external_end_contour_inset_source": "用户 t16u 2026-10-26：U+两个端板时端板盖U，不留缝隙，不退让0.2mm（旧值0.2作废）",
+  "butt_seam_candidate_mm": 0.0,
+  "corner_gap_candidate_mm": 0.2,
+  "K_ANSI_draft_candidate": 0.4,
+  "roof_round_reference_count": 2,
+  "roof_round_reference_diameter_mm": 18.0,
+  "fixing_profile": "perimeter-m4-experience-v2",
+  "fixing_max_spacing_reference_mm": 200.0,
+  "handle_profile": "handle-85-62-30-v1",
+  "production_release": false,
+  "holds": [
+    "Defaults are candidates, not customer confirmation",
+    "Unknown port function/handle physical envelope and load remain unverified",
+    "K/tooling/first article require actual factory evidence"
+  ],
+  "skirt_default_mm": 15.0,
+  "skirt_default_source": "User general default Sentinel_a06b1b0204b8819192a24d11cae4cdc4: 盖裙 默认都是15mm",
+  "skirt_conflict_policy": "Never raise default by thickness, size, holes or tooling. Report conflict and await explicit current override.",
+  "corner_relief_candidate_rule": {
+    "formula": "max(base candidate, t-2Ri), rounded up0.01mm",
+    "source": "Controlled R12 synthetic fold-sector regression; see R12 corner diagnostic evidence",
+    "requires_confirmation": true,
+    "minimum_necessary_gap_proven": false,
+    "actual_BRep_native03_required": true,
+    "explicit_corner_gap_never_changed": true,
+    "activation": "Separate explicitly derived candidate brief only; original/default never auto-replaced"
+  }
+}

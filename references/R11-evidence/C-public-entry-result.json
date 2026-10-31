@@ -1,0 +1,878 @@
+{
+  "revision_root": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.8.0-general-process/actual_R11_01/C/requirement_SYNTHETIC_R11_C/revisions/未命名待确认_requirement_SYNTHETIC_R11_C_20261023_152607_e14b8577",
+  "delivery": {
+    "contract": "2.8.0-R11",
+    "revision_root": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.8.0-general-process/actual_R11_01/C/requirement_SYNTHETIC_R11_C/revisions/未命名待确认_requirement_SYNTHETIC_R11_C_20261023_152607_e14b8577",
+    "manifest": "未命名待确认_requirement_SYNTHETIC_R11_C_20261023_152607_e14b8577_核验资料_确认稿候选_manifest_20261023_1526.json",
+    "inventory": "未命名待确认_requirement_SYNTHETIC_R11_C_20261023_152607_e14b8577_文件哈希_FILE_SHA256.json",
+    "zip": "未命名待确认_requirement_SYNTHETIC_R11_C_20261023_152607_e14b8577_完整资料.zip",
+    "zip_sha256": "d84e9335b379f920389a73bb67fa71fec401731e97d380752469dd2cbe712c61",
+    "digital_deliverables_complete": true,
+    "production_release": false,
+    "engineering_status": "GEOMETRY_CHECKED_WITH_HOLD",
+    "stock_status": "assumed",
+    "required_stock_sheets": 1,
+    "sets": 1,
+    "PDF_visual_review_required": true,
+    "independent_review": "PENDING",
+    "message_dispatch_contract": "single-zip-dispatch-v1",
+    "general_design_stage": "confirmation_draft",
+    "manufacturing_delivery_complete": false,
+    "naming": {
+      "status": "UNNAMED_PENDING_CONFIRMATION",
+      "code": null,
+      "prefix": "未命名待确认_requirement_SYNTHETIC_R11_C_20261023_152607_e14b8577",
+      "record": "未命名待确认_requirement_SYNTHETIC_R11_C_20261023_152607_e14b8577_文件更名与命名记录_FILE_NAMING.json"
+    },
+    "publication_contract": "named-single-zip-v2",
+    "publisher_release": "2.7.3-R10",
+    "final_message_plan": {
+      "dispatch_contract": "single-zip-dispatch-v1",
+      "namespace": "requirement",
+      "entity_id": "SYNTHETIC_R11_C",
+      "revision": "20261023_152607_e14b8577",
+      "archive_sha256": "d84e9335b379f920389a73bb67fa71fec401731e97d380752469dd2cbe712c61",
+      "phase": "final",
+      "messages": [
+        {
+          "attachments": [
+            {
+              "path": "未命名待确认_requirement_SYNTHETIC_R11_C_20261023_152607_e14b8577_完整资料.zip",
+              "kind": "complete_delivery_zip",
+              "sha256": "d84e9335b379f920389a73bb67fa71fec401731e97d380752469dd2cbe712c61"
+            }
+          ]
+        }
+      ],
+      "user_request": null,
+      "production_release": false
+    }
+  },
+  "checks": {
+    "ok": true,
+    "publication": {
+      "mode": "CURRENT_NAMED_PUBLICATION",
+      "publication_contract": "named-single-zip-v2",
+      "publisher_release": "2.7.3-R10",
+      "source_manufacturing_contract": "2.8.0-R11"
+    },
+    "general_design_stage": "confirmation_draft",
+    "manufacturing_delivery_complete": false,
+    "message_dispatch": {
+      "ok": true,
+      "dispatch_contract": "single-zip-dispatch-v1",
+      "mode": "DEFAULT_ONE_COMPLETE_ZIP",
+      "message_count": 1,
+      "attachment_count": 1,
+      "final_message_plan_checked": true,
+      "production_release": false,
+      "authorization_text_authenticity": "sender must verify actual current user history; JSON cannot prove consent",
+      "actual_messages_sent_or_controlled": false,
+      "scope": "declared messages only; no guarantee against sender bypass"
+    },
+    "contract": "2.8.0-R11",
+    "validator_version": "2.8.0-R11",
+    "digital_deliverables_complete": true,
+    "fresh_CAD_checks_executed": true,
+    "actual_STEP_dimension_readback": {
+      "ok": true,
+      "CAD_executed": true,
+      "actual_STEP_read": true,
+      "shapes": {
+        "U": {
+          "bbox_mm": [
+            1.5,
+            0.0,
+            0.0,
+            620.5,
+            308.0,
+            193.2
+          ],
+          "sha256": "adaffed8f7feffc7b46fa9a8207ed27f1b3e7b86f41db9052be264b63b5fc0f3",
+          "source": "fresh Part.read, no PDF or JSON bbox used"
+        },
+        "END_L": {
+          "bbox_mm": [
+            0.0,
+            0.19999999999998863,
+            0.2,
+            1.5,
+            307.8,
+            193.0
+          ],
+          "sha256": "b1dbc038b86504fa212e97fc5776877615713f7ee094feb9864dd79e7a55cfe8",
+          "source": "fresh Part.read, no PDF or JSON bbox used"
+        },
+        "END_R": {
+          "bbox_mm": [
+            620.5,
+            0.19999999999998863,
+            0.2,
+            622.0,
+            307.8,
+            193.0
+          ],
+          "sha256": "e75ad4921251c16899fbc7760b7d86e636a423f3c6027ff6824243364a1c9428",
+          "source": "fresh Part.read, no PDF or JSON bbox used"
+        },
+        "LID": {
+          "bbox_mm": [
+            -2.000000000009,
+            -2.000000000009,
+            175.5,
+            624.0,
+            310.0,
+            195.0
+          ],
+          "sha256": "b2aa2c02d9748cc03755c052e1999de72a5ec9718f7fb2c3854d2dd70981e36c",
+          "source": "fresh Part.read, no PDF or JSON bbox used"
+        },
+        "ASSEMBLY": {
+          "bbox_mm": [
+            -2.000000000009,
+            -2.000000000009,
+            0.0,
+            624.0,
+            310.0,
+            195.0
+          ],
+          "sha256": "640ce9cc3c537da623f38de6ef3f0b6c14abc3596683a105701de05bcc29f51c",
+          "source": "fresh Part.read, no PDF or JSON bbox used"
+        },
+        "EXPLODED": {
+          "bbox_mm": [
+            -237.7,
+            -2.000000000009,
+            0.0,
+            859.7,
+            310.0,
+            311.1
+          ],
+          "sha256": "50cfbd179c48d0e3ff6ca768f427ae0be76f54d9706df1eb397f7edec76d376a",
+          "source": "fresh Part.read, no PDF or JSON bbox used"
+        }
+      },
+      "body_bbox_mm": [
+        0.0,
+        0.0,
+        0.0,
+        622.0,
+        308.0,
+        193.2
+      ],
+      "translation_only_identity": {
+        "ASSEMBLY": [
+          {
+            "part_id": "U",
+            "translation_mm": [
+              0,
+              0,
+              0
+            ],
+            "symmetric_volume_difference_mm3": 0.0
+          },
+          {
+            "part_id": "END_L",
+            "translation_mm": [
+              0,
+              0,
+              0
+            ],
+            "symmetric_volume_difference_mm3": 0.0
+          },
+          {
+            "part_id": "END_R",
+            "translation_mm": [
+              0,
+              0,
+              0
+            ],
+            "symmetric_volume_difference_mm3": 0.0
+          },
+          {
+            "part_id": "LID",
+            "translation_mm": [
+              0,
+              0,
+              0
+            ],
+            "symmetric_volume_difference_mm3": 0.0
+          }
+        ],
+        "EXPLODED": [
+          {
+            "part_id": "U",
+            "translation_mm": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "symmetric_volume_difference_mm3": 0.0
+          },
+          {
+            "part_id": "END_L",
+            "translation_mm": [
+              -237.7,
+              0.0,
+              0.0
+            ],
+            "symmetric_volume_difference_mm3": 0.0
+          },
+          {
+            "part_id": "END_R",
+            "translation_mm": [
+              237.7,
+              0.0,
+              0.0
+            ],
+            "symmetric_volume_difference_mm3": 0.0
+          },
+          {
+            "part_id": "LID",
+            "translation_mm": [
+              0.0,
+              0.0,
+              116.1
+            ],
+            "symmetric_volume_difference_mm3": 0.0
+          }
+        ]
+      },
+      "production_release": false,
+      "printed_three_views": {
+        "U": {
+          "page_index": 4,
+          "printed_mm": [
+            619.0,
+            193.2,
+            308.0,
+            193.2,
+            619.0,
+            308.0
+          ],
+          "actual_STEP_extents_mm": [
+            619.0,
+            308.0,
+            193.2
+          ],
+          "label_order": "front X/Z, right Y/Z, top X/Y",
+          "numeric_readback_tolerance_mm": 1e-05
+        },
+        "END_L": {
+          "page_index": 8,
+          "printed_mm": [
+            1.5,
+            192.8,
+            307.6,
+            192.8,
+            1.5,
+            307.6
+          ],
+          "actual_STEP_extents_mm": [
+            1.5,
+            307.6,
+            192.8
+          ],
+          "label_order": "front X/Z, right Y/Z, top X/Y",
+          "numeric_readback_tolerance_mm": 1e-05
+        },
+        "END_R": {
+          "page_index": 11,
+          "printed_mm": [
+            1.5,
+            192.8,
+            307.6,
+            192.8,
+            1.5,
+            307.6
+          ],
+          "actual_STEP_extents_mm": [
+            1.5,
+            307.6,
+            192.8
+          ],
+          "label_order": "front X/Z, right Y/Z, top X/Y",
+          "numeric_readback_tolerance_mm": 1e-05
+        },
+        "LID": {
+          "page_index": 14,
+          "printed_mm": [
+            626.0,
+            19.5,
+            312.0,
+            19.5,
+            626.0,
+            312.0
+          ],
+          "actual_STEP_extents_mm": [
+            626.000000000009,
+            312.000000000009,
+            19.5
+          ],
+          "label_order": "front X/Z, right Y/Z, top X/Y",
+          "numeric_readback_tolerance_mm": 1e-05
+        },
+        "ASSEMBLY": {
+          "page_index": 2,
+          "printed_mm": [
+            626.0,
+            195.0,
+            312.0,
+            195.0,
+            626.0,
+            312.0
+          ],
+          "actual_STEP_extents_mm": [
+            626.000000000009,
+            312.000000000009,
+            195.0
+          ],
+          "label_order": "front X/Z, right Y/Z, top X/Y",
+          "numeric_readback_tolerance_mm": 1e-05
+        },
+        "EXPLODED": {
+          "page_index": 3,
+          "printed_mm": [
+            1097.4,
+            311.1,
+            312.0,
+            311.1,
+            1097.4,
+            312.0
+          ],
+          "actual_STEP_extents_mm": [
+            1097.4,
+            312.000000000009,
+            311.1
+          ],
+          "label_order": "front X/Z, right Y/Z, top X/Y",
+          "numeric_readback_tolerance_mm": 1e-05
+        }
+      }
+    },
+    "quantity_authority": {
+      "input_sets": 1,
+      "canonical_sets": 1,
+      "BOM_quantities": {
+        "U": 1,
+        "END_L": 1,
+        "END_R": 1,
+        "LID": 1
+      },
+      "nest_sets": 1,
+      "required_stock_sheets": 1,
+      "receipt_sets": 1
+    },
+    "production_release": false,
+    "checks": [
+      "required kinds",
+      "source material/thickness/dimensions/quantity",
+      "native CAD checks",
+      "nest actual entity/qty/spacing",
+      "source-derived process PDF",
+      "source-derived envelope counts",
+      "revision directory",
+      "inventory",
+      "ZIP CRC/members"
+    ]
+  },
+  "manufacturing_geometry_changed": false,
+  "original_source_unchanged": true,
+  "engineering": {
+    "status": "GEOMETRY_CHECKED_WITH_HOLD",
+    "package_version": "2.8.0-R11",
+    "core_validation_contract": "2.6.1-R06",
+    "project": "未命名待确认_requirement_SYNTHETIC_R11_C_20261023_152607_e14b8577_参数_确认稿候选_project_20261023_1526.json",
+    "manifest": "未命名待确认_requirement_SYNTHETIC_R11_C_20261023_152607_e14b8577_核验资料_确认稿候选_manifest_20261023_1526.json",
+    "selected_method": "u_external_ends",
+    "sheet_parts": [
+      "U",
+      "END_L",
+      "END_R",
+      "LID"
+    ],
+    "all_planned_DXFs_present": true,
+    "CAD_executed": true,
+    "native03_executed": true,
+    "native03": {
+      "ok": true,
+      "CAD_executed": true,
+      "method": "actual FreeCAD SheetMetal fresh unfold and geometric area difference",
+      "FreeCAD_version": [
+        "1",
+        "1",
+        "1"
+      ],
+      "parameter_hash": "e8280f2b21ac396fcc9cf394d95714665222d56e1eee5cfb826b128fdf87fe16",
+      "input_sha256": {
+        "formed_step": "b2aa2c02d9748cc03755c052e1999de72a5ec9718f7fb2c3854d2dd70981e36c",
+        "unfold_step": "26493b2b5de243ec52efb936073cc3d45bbf7cae735b5f52f114dff8790fef41",
+        "dxf": "72bfc2e666c46429103d67e7f9f25a182f4582bc217eb2cc9d9a6f7728039d78",
+        "body_step": "abf6d7d39ea063a5350605fcd7be67d880c1ec9d1cf7f681d275f39783732c70"
+      },
+      "actual_bends": 4,
+      "native_sloped_edges": 8,
+      "DXF_sloped_edges": 8,
+      "fresh_vs_provided_unfold_area_mm2": 0.0,
+      "native_vs_DXF_area_mm2": 0.0,
+      "root_overlap_volume_mm3": 0.0,
+      "actual_roof_q_mm": 0.30000000000001137,
+      "numeric_tolerance_mm": 1e-05,
+      "numeric_area_tolerance_mm2": 1e-05,
+      "holds": [],
+      "production_release": false,
+      "thickness_measurement": {
+        "measured_t_mm": 1.5,
+        "opposite_skin_face": 1,
+        "projected_skin_overlap_fraction": 1.0,
+        "concentric_bend_t_mm": 1.5,
+        "legacy_normal_edge_estimate_mm": 1.5,
+        "legacy_estimator_disagrees": false,
+        "method": "actual opposing planar skin distance corroborated by actual concentric bend radii",
+        "tolerance_mm": 1e-05
+      },
+      "root_interference_measurement": {
+        "authoritative_source": "Actual exported/read-back BODY STEP compound common with formed LID STEP",
+        "authoritative_volume_mm3": 0.0,
+        "display_decimal_places": 6,
+        "display_volume_mm3": "0.000000",
+        "pairwise_sum_mm3": null,
+        "pair_sum_minus_authority_mm3": null,
+        "numerical_comparison_absolute_mm3": 1e-06,
+        "numerical_comparison_relative": 1e-08,
+        "meaning": "CAD Boolean arithmetic only; raw digits are trace data, not physical accuracy. Pairwise sum is a separate diagnostic operation.",
+        "fit_intersection_threshold_unchanged_mm3": 1e-07
+      },
+      "fresh_body_lid_common_volume_mm3": 0.0,
+      "assembly_interference_free": true,
+      "fit_disposition": "NO_POSITIVE_INTERFERENCE_DETECTED",
+      "site_fit_acceptance": null,
+      "geometry_interference_eliminated": false,
+      "trial_assembly_confirmed": false
+    },
+    "pdf": "PDF/未命名待确认_requirement_SYNTHETIC_R11_C_20261023_152607_e14b8577_完整折弯工艺PDF_确认稿候选_SYNTHETIC_R11_C_THREE_VIEWS_BENDING_HOLD_20261023_1526.pdf",
+    "pdf_pages": 29,
+    "pdf_rendered_pages": 29,
+    "PDF_visual_review_required": true,
+    "holds": [
+      "NO_FACTORY_CALIBRATION",
+      "TOOLING_AND_FIRST_ARTICLE_NOT_VERIFIED",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "CANDIDATE",
+      "ACTUAL_T",
+      "TAP_PROCESS",
+      "TAP_PROCESS",
+      "TAP_PROCESS",
+      "TAP_PROCESS",
+      "TAP_PROCESS",
+      "TAP_PROCESS",
+      "TAP_PROCESS",
+      "TAP_PROCESS",
+      "TAP_PROCESS",
+      "TAP_PROCESS",
+      "TAP_PROCESS",
+      "TAP_PROCESS",
+      "TAP_PROCESS",
+      "TAP_PROCESS",
+      "BEND_CALIBRATION",
+      "TOOLING",
+      "ACTUAL_HANDLE_MODEL_AND_PHYSICAL_FIT_UNKNOWN",
+      "THIN_SHEET_M4_THREAD_STRENGTH",
+      "SHOP_TAP_AND_SCREW_FIT_NOT_VERIFIED"
+    ],
+    "production_release": false,
+    "source_job_sha256": "ed37d94f37cb67449961168798d99e5ee6f7a81b70ecae89c385278824bbc85f",
+    "candidate_resolutions": [],
+    "end_profile": {
+      "inset_yz_mm": 0.2,
+      "top_flush": false,
+      "concentric_with_U": true,
+      "axial_gaps_mm": [
+        0.0,
+        0.0
+      ],
+      "ends": [
+        {
+          "part_id": "END_L",
+          "actual_bbox": [
+            0.0,
+            0.19999999999998863,
+            0.2,
+            1.5,
+            307.8,
+            193.0
+          ],
+          "corner_radius_mm": 2.3,
+          "corner_centers_yz": [
+            [
+              2.5,
+              2.5
+            ],
+            [
+              2.5,
+              2.5
+            ],
+            [
+              305.5,
+              2.5
+            ],
+            [
+              305.5,
+              2.5
+            ]
+          ]
+        },
+        {
+          "part_id": "END_R",
+          "actual_bbox": [
+            620.5,
+            0.19999999999998863,
+            0.2,
+            622.0,
+            307.8,
+            193.0
+          ],
+          "corner_radius_mm": 2.3,
+          "corner_centers_yz": [
+            [
+              2.5,
+              2.5
+            ],
+            [
+              2.5,
+              2.5
+            ],
+            [
+              305.5,
+              2.5
+            ],
+            [
+              305.5,
+              2.5
+            ]
+          ]
+        }
+      ]
+    },
+    "fixing_pairs": [
+      {
+        "id": "F-front-1",
+        "body_hole_id": "F-front-1-B",
+        "lid_hole_id": "F-front-1-C",
+        "side": "front",
+        "actual_axis_offset_mm": 0.0,
+        "body_actual_D_mm": 3.3,
+        "lid_actual_D_mm": 4.5,
+        "thin_sheet_thread_strength": "HOLD"
+      },
+      {
+        "id": "F-front-2",
+        "body_hole_id": "F-front-2-B",
+        "lid_hole_id": "F-front-2-C",
+        "side": "front",
+        "actual_axis_offset_mm": 0.0,
+        "body_actual_D_mm": 3.3,
+        "lid_actual_D_mm": 4.5,
+        "thin_sheet_thread_strength": "HOLD"
+      },
+      {
+        "id": "F-front-3",
+        "body_hole_id": "F-front-3-B",
+        "lid_hole_id": "F-front-3-C",
+        "side": "front",
+        "actual_axis_offset_mm": 0.0,
+        "body_actual_D_mm": 3.3,
+        "lid_actual_D_mm": 4.5,
+        "thin_sheet_thread_strength": "HOLD"
+      },
+      {
+        "id": "F-front-4",
+        "body_hole_id": "F-front-4-B",
+        "lid_hole_id": "F-front-4-C",
+        "side": "front",
+        "actual_axis_offset_mm": 0.0,
+        "body_actual_D_mm": 3.3,
+        "lid_actual_D_mm": 4.5,
+        "thin_sheet_thread_strength": "HOLD"
+      },
+      {
+        "id": "F-back-1",
+        "body_hole_id": "F-back-1-B",
+        "lid_hole_id": "F-back-1-C",
+        "side": "back",
+        "actual_axis_offset_mm": 0.0,
+        "body_actual_D_mm": 3.3,
+        "lid_actual_D_mm": 4.5,
+        "thin_sheet_thread_strength": "HOLD"
+      },
+      {
+        "id": "F-back-2",
+        "body_hole_id": "F-back-2-B",
+        "lid_hole_id": "F-back-2-C",
+        "side": "back",
+        "actual_axis_offset_mm": 0.0,
+        "body_actual_D_mm": 3.3,
+        "lid_actual_D_mm": 4.5,
+        "thin_sheet_thread_strength": "HOLD"
+      },
+      {
+        "id": "F-back-3",
+        "body_hole_id": "F-back-3-B",
+        "lid_hole_id": "F-back-3-C",
+        "side": "back",
+        "actual_axis_offset_mm": 0.0,
+        "body_actual_D_mm": 3.3,
+        "lid_actual_D_mm": 4.5,
+        "thin_sheet_thread_strength": "HOLD"
+      },
+      {
+        "id": "F-back-4",
+        "body_hole_id": "F-back-4-B",
+        "lid_hole_id": "F-back-4-C",
+        "side": "back",
+        "actual_axis_offset_mm": 0.0,
+        "body_actual_D_mm": 3.3,
+        "lid_actual_D_mm": 4.5,
+        "thin_sheet_thread_strength": "HOLD"
+      },
+      {
+        "id": "F-left-1",
+        "body_hole_id": "F-left-1-B",
+        "lid_hole_id": "F-left-1-C",
+        "side": "left",
+        "actual_axis_offset_mm": 0.0,
+        "body_actual_D_mm": 3.3,
+        "lid_actual_D_mm": 4.5,
+        "thin_sheet_thread_strength": "HOLD"
+      },
+      {
+        "id": "F-left-2",
+        "body_hole_id": "F-left-2-B",
+        "lid_hole_id": "F-left-2-C",
+        "side": "left",
+        "actual_axis_offset_mm": 0.0,
+        "body_actual_D_mm": 3.3,
+        "lid_actual_D_mm": 4.5,
+        "thin_sheet_thread_strength": "HOLD"
+      },
+      {
+        "id": "F-left-3",
+        "body_hole_id": "F-left-3-B",
+        "lid_hole_id": "F-left-3-C",
+        "side": "left",
+        "actual_axis_offset_mm": 0.0,
+        "body_actual_D_mm": 3.3,
+        "lid_actual_D_mm": 4.5,
+        "thin_sheet_thread_strength": "HOLD"
+      },
+      {
+        "id": "F-right-1",
+        "body_hole_id": "F-right-1-B",
+        "lid_hole_id": "F-right-1-C",
+        "side": "right",
+        "actual_axis_offset_mm": 0.0,
+        "body_actual_D_mm": 3.3,
+        "lid_actual_D_mm": 4.5,
+        "thin_sheet_thread_strength": "HOLD"
+      },
+      {
+        "id": "F-right-2",
+        "body_hole_id": "F-right-2-B",
+        "lid_hole_id": "F-right-2-C",
+        "side": "right",
+        "actual_axis_offset_mm": 0.0,
+        "body_actual_D_mm": 3.3,
+        "lid_actual_D_mm": 4.5,
+        "thin_sheet_thread_strength": "HOLD"
+      },
+      {
+        "id": "F-right-3",
+        "body_hole_id": "F-right-3-B",
+        "lid_hole_id": "F-right-3-C",
+        "side": "right",
+        "actual_axis_offset_mm": 0.0,
+        "body_actual_D_mm": 3.3,
+        "lid_actual_D_mm": 4.5,
+        "thin_sheet_thread_strength": "HOLD"
+      }
+    ],
+    "handle_geometry_reports": {
+      "LID": "evidence/未命名待确认_requirement_SYNTHETIC_R11_C_20261023_152607_e14b8577_核验资料_确认稿候选_LID_handle_geometry_20261023_1526.json"
+    },
+    "confirmation_images": [
+      "未命名待确认_requirement_SYNTHETIC_R11_C_20261023_152607_e14b8577_确认图_确认稿候选_SYNTHETIC_R11_C_ASSEMBLED_CONFIRMATION_20261023_1526.png",
+      "未命名待确认_requirement_SYNTHETIC_R11_C_20261023_152607_e14b8577_确认图_确认稿候选_SYNTHETIC_R11_C_EXPLODED_CONFIRMATION_20261023_1526.png"
+    ],
+    "handle_body": "not modeled; mounting reference only",
+    "manufacturing_profiles": [
+      "handle-85-62-30-v1",
+      "perimeter-m4-experience-v2"
+    ],
+    "fit": {
+      "applicable": true,
+      "Ri_mm": 1.0,
+      "g_each_side_mm": 0.5,
+      "q_mm": 0.3,
+      "minimum_q_ideal_tangency_mm": 0.1339745962155614,
+      "analytic_feasible": true,
+      "closed_height_mm": 195.0,
+      "body_height_mm": 193.2,
+      "body_height_relative_to_zero_q_mm": -0.3,
+      "actual_geometry_verified": false,
+      "geometry_interference_eliminated": false,
+      "trial_assembly_confirmed": false,
+      "production_release": false,
+      "scope": "Necessary straight-edge envelope only; tangency is not manufacturing clearance; actual all-part CAD check required",
+      "disposition": "ACTUAL_GEOMETRY_CHECK_REQUIRED",
+      "authorization_source": null,
+      "q_source_status": "assumed"
+    },
+    "site_fit_acceptance": null,
+    "geometry_interference_eliminated": false,
+    "trial_assembly_confirmed": false,
+    "root_interference_measurement": {
+      "authoritative_source": "Actual exported/read-back BODY STEP compound common with formed LID STEP",
+      "authoritative_volume_mm3": 0.0,
+      "display_decimal_places": 6,
+      "display_volume_mm3": "0.000000",
+      "pairwise_sum_mm3": 0.0,
+      "pair_sum_minus_authority_mm3": 0.0,
+      "numerical_comparison_absolute_mm3": 1e-06,
+      "numerical_comparison_relative": 1e-08,
+      "meaning": "CAD Boolean arithmetic only; raw digits are trace data, not physical accuracy. Pairwise sum is a separate diagnostic operation.",
+      "fit_intersection_threshold_unchanged_mm3": 1e-07
+    },
+    "formed_isometric_parts": [
+      "LID",
+      "U"
+    ],
+    "formed_isometric_report": "evidence/未命名待确认_requirement_SYNTHETIC_R11_C_20261023_152607_e14b8577_成形斜视核验_确认稿候选_FORMED_ISOMETRIC_20261023_1526.json",
+    "actual_root_overlap_volume_mm3": 0.0,
+    "assembly_interference_free": true,
+    "fit_disposition": "NO_POSITIVE_INTERFERENCE_DETECTED"
+  },
+  "general_input_report": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.8.0-general-process/actual_R11_01/C/.general-process-inputs/brief-20ltueme/compilation.json"
+}

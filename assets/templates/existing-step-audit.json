@@ -1,0 +1,12 @@
+{
+  "material": null,
+  "material_source": null,
+  "K_ANSI": null,
+  "K_source": null,
+  "K_status": "unknown",
+  "diagnostic_K_ANSI": null,
+  "diagnose_invalid": false,
+  "try_non_design_repair": false,
+  "max_root_attempts": 3,
+  "part_roles": {}
+}

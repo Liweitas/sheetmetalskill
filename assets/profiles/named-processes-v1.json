@@ -1,0 +1,16 @@
+{
+  "id": "named-processes-v1",
+  "note": "Named processes the skill knows how to model. '斜角03' is the skill's 03 lid corner scheme (alias of '03'). Any name NOT listed here is UNKNOWN: ask for a reference picture / parameters and list it under 待确认; never guess.",
+  "known": {
+    "03": "skill lid corner scheme 03 = 斜角折弯收口 (references/lid-defaults03.md §03方案定义): long skirts keep the full outer length, short skirts set back t+corner_gap, sloped bend-root closure with per-corner P1=(B-Ro,A), P2=(B,B), P3=(A,B-(Ri-gap)), Ro=Ri+t, A=skirt-Ro, B=A+BA90; recompute per job; default for lidded new jobs; scripts/corner03.py + scripts/native03_check.py mandatory; corner_gap = user-explicit value or candidate 0.2 (labelled as candidate)",
+    "t7u": "lid corner closure (干画图3, box-203x570x133 t7u): long skirts cover the short-skirt ends, long skirt exposed end flush with the short-skirt outer face (setback 0 since 2026-10-26 user t16u; old 0.2 retired), zero seam in straight + bend zone, only a <=0.6 tooling notch at the R1.8 outer apex",
+    "L盖U退0.2": "RETIRED 2026-10-26 (user t16u): U+L body is now L盖U with NO gap and NO 0.2 setback; use a setback only if the user explicitly asks in this job",
+    "L盖U": "U+L body: L (front+bottom) covers U (left+back+right), flush, zero gap, zero setback (default since 2026-10-26, user t16u)",
+    "端板盖U": "U + two end plates: the end plates cover the U ends, flush, zero gap, zero setback (end_inset=0, seam_gap=0; default since 2026-10-26, user t16u)",
+    "Z形台阶": "stepped lid Z-bend (convex B4 DOWN + concave B5 UP) with 0.5 relief slots at both ends (codex-S-201-1-20261021-001-v1 tools/build_stepped.py)",
+    "斜角03": "alias of '03' (same scheme, same mandatory checks)"
+  },
+  "aliases": {
+    "斜角03": "03"
+  }
+}

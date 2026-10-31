@@ -1,0 +1,11 @@
+# R10：发布契约不由源制造版本决定
+
+R09独立验收不通过：公开命名发布旧R08包后，产物保留R08制造契约，删除封套的final_message_plan和message_dispatch_contract仍被完整校验接受。原R09包与失败证据保留，不重写为通过。
+
+R10将两种版本分开：manifest.delivery_contract和project/PDF版本仍描述原制造产物，不改CAD/DXF、PDF、原始job或现场专项授权。新发布副本另将publication_contract=`named-single-zip-v2`、publisher_release=`2.7.3-R10`同时写入封套、被清单/ZIP覆盖的manifest和命名记录；命名记录绑定source_manufacturing_contract。三处不一致、删除或降级都不能当作当前发布通过。
+
+完整门禁根据命名记录、正式码/待命名前缀的实际目录和artifact文件名、发布字段识别发布产物，而不是只看可删除的封套字段或manifest制造版本。凡发布产物必须有默认单ZIP计划，源制造契约即使是R08也不能免检。提交的散发计划仍拒绝；当前用户明确单件/确认优先仅用独立例外计划，不改封套默认计划，不跨客户继承。
+
+合法原始、未命名发布的R08包仍可用validate_delivery只读核制造完整性，返回LEGACY_UNPUBLISHED_READ_ONLY；这不是R10命名发布通过。完整新交付先经publish_named_delivery。旧R09合法命名副本可以作为该公开入口的升级源：仍完整核CAD/文件及已有默认计划，再出新副本升级发布契约；缺计划的失败副本在入口即拒绝，不静默补计划洗成通过。未升级R09命名副本不能直接声称R10发布通过。
+
+末端判定用scripts/validate_delivery.py及prepare_delivery_message.py；单跑参数/manifest几何审核不等于最终发布检查。脚本不会发送消息，不能证明用户原文真实性或控制执行方绕过计划的实际发送。所有干涉、工艺/首件HOLD、正式编号待确认与production_release=false保持原边界，软件通过不成为生产放行。

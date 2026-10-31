@@ -1,0 +1,21 @@
+{
+  "id": "FILL_CURRENT_PROJECT",
+  "units": "mm",
+  "dimensions": {
+    "length": null,
+    "width": null,
+    "height": null
+  },
+  "material": null,
+  "thickness": null,
+  "Ri": null,
+  "K_ANSI": null,
+  "seam_gap": null,
+  "lid_required": true,
+  "lid": {
+    "skirt_height": null,
+    "corner_gap": null,
+    "roof_gap": null
+  },
+  "holes": []
+}

@@ -1,0 +1,18 @@
+test_bend_table_uses_same_id_and_native_axis_as_flat_marker (test_formed_isometric.FormedIsometric.test_bend_table_uses_same_id_and_native_axis_as_flat_marker) ... FAIL
+test_flat_b_label_must_link_to_actual_native_line_not_claimed_coordinate (test_formed_isometric.FormedIsometric.test_flat_b_label_must_link_to_actual_native_line_not_claimed_coordinate) ... ok
+test_isometric_basis_preserves_three_axes_and_does_not_flatten_height (test_formed_isometric.FormedIsometric.test_isometric_basis_preserves_three_axes_and_does_not_flatten_height) ... ok
+test_missing_isometric_coverage_or_direction_is_rejected (test_formed_isometric.FormedIsometric.test_missing_isometric_coverage_or_direction_is_rejected) ... ok
+
+======================================================================
+FAIL: test_bend_table_uses_same_id_and_native_axis_as_flat_marker (test_formed_isometric.FormedIsometric.test_bend_table_uses_same_id_and_native_axis_as_flat_marker)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.6.0-root-fit-repair/dev/step-sheetmetal-delivery/tests/test_formed_isometric.py", line 24, in test_bend_table_uses_same_id_and_native_axis_as_flat_marker
+    self.assertTrue(hasattr(m,'bend_note'),'B table has a separate inconsistent numbering path')
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: False is not true : B table has a separate inconsistent numbering path
+
+----------------------------------------------------------------------
+Ran 4 tests in 0.005s
+
+FAILED (failures=1)

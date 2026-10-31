@@ -1,0 +1,46 @@
+{
+  "scope": "Historical independent R07 actual source audit evidence reused; R12 reran only complete-manufacturing rejection, not source CAD audit",
+  "historical_source_revision": "/Users/harryma/Documents/Codex/2026-10-21/task-6/acceptance_R07/archive/requirement_SOURCE_INDEPENDENT_R07/revisions/R01",
+  "status_file_sha256": "232d5f01c903245b98abc39bad81f481ec727abaa4436fb2893530e9a1c09a82",
+  "source_status": "SOURCE_AUDIT_ONLY_PARTIAL_HOLD",
+  "complete_gate_rejected": true,
+  "error": "SOURCE_AUDIT_ONLY_PARTIAL_HOLD: no complete manufacturing delivery supported by this source-audit mode",
+  "R07_vs_R12_source_chain": [
+    {
+      "file": "audit_step.py",
+      "unchanged": true,
+      "current_SHA256": "4ff017dbe95780a7e56201bbfccd4b9c789b125e080e3777811f3ca191e2cc94"
+    },
+    {
+      "file": "step_audit_cad.py",
+      "unchanged": true,
+      "current_SHA256": "375d4482f7b02d2999f4ee274172db29ddb0c2147a366669711a71559cc061ad"
+    },
+    {
+      "file": "source_contract.py",
+      "unchanged": true,
+      "current_SHA256": "7344f2e82fbe2af670bba5e324253ba22ae5fb9add2dc1000a58896a79d0817c"
+    },
+    {
+      "file": "source_delivery.py",
+      "unchanged": true,
+      "current_SHA256": "b69bbbd781410f77734f1632f63dd8a4d9341252fb32e5c9c7934b16a50d9131"
+    },
+    {
+      "file": "source_drawing_pdf.py",
+      "unchanged": true,
+      "current_SHA256": "eeff4d38c7fa7e5d3a58704df3691983cfa53c38b32e8717468402a0603c24eb"
+    },
+    {
+      "file": "source_confirmation.py",
+      "unchanged": true,
+      "current_SHA256": "83044660bb6d61b746e78609aa12d0a0727bbc56fe419c0c10a2a4448815059b"
+    },
+    {
+      "file": "validate_source_manifest.py",
+      "unchanged": true,
+      "current_SHA256": "d4875eae9626091d856a812391a85b00232e7a43243e8cca51c9dc8fc9f7b71d"
+    }
+  ],
+  "R12_fresh_source_CAD_rerun": false
+}

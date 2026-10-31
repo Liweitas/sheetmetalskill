@@ -1,0 +1,303 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Formed review only; unknown material/K retained, no manufacturing output",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "dimensions",
+    "material",
+    "thickness",
+    "Ri",
+    "K_ANSI",
+    "seam_gap",
+    "lid_required"
+  ],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]+$"
+    },
+    "units": {
+      "enum": [
+        "mm",
+        "cm",
+        "m",
+        "inch"
+      ]
+    },
+    "record_kind": {
+      "enum": [
+        "new",
+        "existing"
+      ]
+    },
+    "rebuild_existing_authorized": {
+      "type": "boolean"
+    },
+    "method": {
+      "enum": [
+        "u_external_ends",
+        "u_wrap_bottom_l"
+      ]
+    },
+    "dimensions": {
+      "type": "object",
+      "required": [
+        "length",
+        "width",
+        "height"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "length": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "width": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "height": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      }
+    },
+    "material": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "minLength": 1
+    },
+    "thickness": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "Ri": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "K_ANSI": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "minimum": 0,
+      "maximum": 1
+    },
+    "seam_gap": {
+      "type": "number",
+      "minimum": 0
+    },
+    "lid_required": {
+      "type": "boolean"
+    },
+    "lid": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "skirt_height",
+        "corner_gap",
+        "roof_gap"
+      ],
+      "properties": {
+        "g": {
+          "type": "number",
+          "minimum": 0
+        },
+        "corner_scheme": {
+          "type": "string"
+        },
+        "skirt_height": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "corner_gap": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0
+        },
+        "roof_gap": {
+          "type": "number",
+          "minimum": 0
+        }
+      }
+    },
+    "holes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "part_id",
+          "diameter",
+          "point",
+          "axis"
+        ],
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "part_id": {
+            "enum": [
+              "U",
+              "L",
+              "END_L",
+              "END_R",
+              "LID"
+            ]
+          },
+          "diameter": {
+            "type": "number",
+            "exclusiveMinimum": 0
+          },
+          "point": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3
+          },
+          "axis": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 3,
+            "maxItems": 3
+          }
+        }
+      }
+    },
+    "workflow_profile": {
+      "enum": [
+        "common_review_v1"
+      ]
+    },
+    "input_provenance": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "status",
+          "source"
+        ],
+        "properties": {
+          "status": {
+            "enum": [
+              "requested",
+              "confirmed",
+              "assumed",
+              "measured"
+            ]
+          },
+          "source": {
+            "type": "string",
+            "minLength": 1
+          },
+          "source_kind": {
+            "enum": [
+              "user",
+              "engineering_assumption",
+              "factory_measurement",
+              "manufacturer_drawing"
+            ]
+          },
+          "note": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "end_inset": {
+      "type": "number",
+      "minimum": 0
+    },
+    "end_top_flush": {
+      "type": "boolean"
+    },
+    "handles": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "profile",
+        "centers"
+      ],
+      "properties": {
+        "profile": {
+          "enum": [
+            "handle-85-62-30-v1"
+          ]
+        },
+        "centers": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "number"
+            },
+            "minItems": 2,
+            "maxItems": 2
+          }
+        },
+        "center_wide_towards": {
+          "enum": [
+            "positive_x",
+            "negative_x"
+          ]
+        }
+      }
+    },
+    "fixings": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "profile"
+      ],
+      "properties": {
+        "profile": {
+          "enum": [
+            "perimeter-m4-trial-v1"
+          ]
+        },
+        "edge_offset": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "max_spacing": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "distance_from_lid_top": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "lid_required": {
+            "const": true
+          }
+        }
+      },
+      "then": {
+        "required": [
+          "lid"
+        ]
+      }
+    }
+  ]
+}

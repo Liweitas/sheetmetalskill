@@ -1,0 +1,99 @@
+[
+  {
+    "case": "Q0",
+    "integrity": {
+      "ok": true,
+      "scope": "source and confirmation dossier integrity only; not independent geometry/manufacturing acceptance",
+      "manufacturing_delivery_complete": false,
+      "production_release": false,
+      "zip": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.8.0-general-process/actual_R11_01/Q0/requirement_SYNTHETIC_R11_Q0/revisions/未命名待确认_requirement_SYNTHETIC_R11_Q0_20261023_152844_b3e65541_CONFIRMATION/未命名待确认_requirement_SYNTHETIC_R11_Q0_20261023_152844_b3e65541_确认稿资料.zip",
+      "zip_sha256": "b175eb7279a92ff613de1f3659b6d259203e8e191bd69a63bd056123b704bfc3",
+      "artifacts": 22
+    },
+    "complete_manufacturing_gate_rejected": "GENERAL_CONFIRMATION_ONLY_HOLD: missing essential input or unresolved fit; not complete manufacturing delivery",
+    "actual_CAD": true,
+    "intersections": [
+      {
+        "parts": [
+          "U",
+          "END_L"
+        ],
+        "volume_mm3": 0.0
+      },
+      {
+        "parts": [
+          "U",
+          "END_R"
+        ],
+        "volume_mm3": 0.0
+      },
+      {
+        "parts": [
+          "U",
+          "LID"
+        ],
+        "volume_mm3": 2.0930199672198917,
+        "intersection_bbox": [
+          1.0,
+          -8.857359290459499e-13,
+          104.94161984870702,
+          183.0,
+          128.0,
+          105.0
+        ],
+        "fit_disposition": "REVIEW_ONLY_NOT_DELIVERY"
+      },
+      {
+        "parts": [
+          "END_L",
+          "END_R"
+        ],
+        "volume_mm3": 0.0
+      },
+      {
+        "parts": [
+          "END_L",
+          "LID"
+        ],
+        "volume_mm3": 0.0
+      },
+      {
+        "parts": [
+          "END_R",
+          "LID"
+        ],
+        "volume_mm3": 0.0
+      }
+    ]
+  },
+  {
+    "case": "MISSING",
+    "integrity": {
+      "ok": true,
+      "scope": "source and confirmation dossier integrity only; not independent geometry/manufacturing acceptance",
+      "manufacturing_delivery_complete": false,
+      "production_release": false,
+      "zip": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.8.0-general-process/actual_R11_01/MISSING/requirement_SYNTHETIC_R11_MISSING/revisions/未命名待确认_requirement_SYNTHETIC_R11_MISSING_20261023_152845_0c1d3870_CONFIRMATION/未命名待确认_requirement_SYNTHETIC_R11_MISSING_20261023_152845_0c1d3870_确认稿资料.zip",
+      "zip_sha256": "55a775a942dc20b8b4d38467f1af2cf37ab5c7cc923ef4863ce292eb978c0878",
+      "artifacts": 3
+    },
+    "complete_manufacturing_gate_rejected": "GENERAL_CONFIRMATION_ONLY_HOLD: missing essential input or unresolved fit; not complete manufacturing delivery",
+    "actual_CAD": false,
+    "intersections": []
+  },
+  {
+    "case": "IRREGULAR",
+    "integrity": {
+      "ok": true,
+      "scope": "source and confirmation dossier integrity only; not independent geometry/manufacturing acceptance",
+      "manufacturing_delivery_complete": false,
+      "production_release": false,
+      "zip": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.8.0-general-process/actual_R11_01/IRREGULAR/requirement_SYNTHETIC_R11_IRREGULAR/revisions/未命名待确认_requirement_SYNTHETIC_R11_IRREGULAR_20261023_152845_163d46f9_CONFIRMATION/未命名待确认_requirement_SYNTHETIC_R11_IRREGULAR_20261023_152845_163d46f9_确认稿资料.zip",
+      "zip_sha256": "7a1e40785ec5752bbe4507bf52e3087b029c3224e77444fa371f15492ba4df52",
+      "artifacts": 3
+    },
+    "complete_manufacturing_gate_rejected": "GENERAL_CONFIRMATION_ONLY_HOLD: missing essential input or unresolved fit; not complete manufacturing delivery",
+    "actual_CAD": false,
+    "intersections": []
+  }
+]

@@ -1,0 +1,24 @@
+{
+  "input_contract": "general-process-v1",
+  "id": "SYNTHETIC_R11_C",
+  "units": "mm",
+  "dimension_basis": "outer",
+  "height_basis": "including_lid",
+  "lid_required": true,
+  "material": "201",
+  "thickness": 1.5,
+  "dimensions": {
+    "length": 622,
+    "width": 308,
+    "height": 195
+  },
+  "handles": {
+    "mode": "auto"
+  },
+  "process": {
+    "Ri": 1.0
+  },
+  "roof_ports": {
+    "mode": "none"
+  }
+}

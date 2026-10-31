@@ -1,0 +1,16 @@
+{
+  "input_contract": "general-process-v1",
+  "id": "SYNTHETIC_R11_IRREGULAR",
+  "units": "mm",
+  "dimension_basis": "outer",
+  "height_basis": "including_lid",
+  "lid_required": true,
+  "material": "201",
+  "thickness": 1,
+  "dimensions": {
+    "length": 100,
+    "width": 90,
+    "height": 70
+  },
+  "shape": "irregular"
+}

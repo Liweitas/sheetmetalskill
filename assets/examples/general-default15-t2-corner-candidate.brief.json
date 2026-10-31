@@ -1,0 +1,33 @@
+{
+  "input_contract": "general-process-v1",
+  "id": "SYNTHETIC_R12_DEFAULT15_WRAP_T2",
+  "units": "mm",
+  "dimension_basis": "inner",
+  "height_basis": "bare_body",
+  "lid_required": true,
+  "material": "201 stainless steel",
+  "thickness": 2.0,
+  "dimensions": {
+    "length": 142,
+    "width": 120,
+    "height": 275
+  },
+  "roof_ports": {
+    "mode": "none"
+  },
+  "fixings": {
+    "mode": "none"
+  },
+  "handles": {
+    "mode": "none"
+  },
+  "process": {
+    "corner_relief_candidate": {
+      "baseline_brief_sha256": "0368f9f9dbef38f39b61081747677115ccca7e85241d001e1aee16f954b385c9",
+      "baseline_corner_gap_mm": 0.2,
+      "value_mm": 0.4,
+      "source": "Author actual baseline rejection policy15_B.stderr.log: LID corner solid self intersection at t2 Ri0.8 cg0.2, 0.000013208930772987389 mm3; separate empirical relief proposal, not machine release",
+      "needs_confirmation": true
+    }
+  }
+}

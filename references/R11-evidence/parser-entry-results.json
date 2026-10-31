@@ -1,0 +1,65 @@
+[
+  {
+    "case": "A",
+    "returncode": 0,
+    "status": "COMPILED_WITH_HOLD",
+    "route": "full_candidate_geometry",
+    "stage": "confirmation_draft",
+    "method": "u_external_ends",
+    "CAD_executed": false
+  },
+  {
+    "case": "B",
+    "returncode": 0,
+    "status": "COMPILED_WITH_HOLD",
+    "route": "full_candidate_geometry",
+    "stage": "evidence_based_trial",
+    "method": "u_wrap_bottom_l",
+    "CAD_executed": false
+  },
+  {
+    "case": "C",
+    "returncode": 0,
+    "status": "COMPILED_WITH_HOLD",
+    "route": "full_candidate_geometry",
+    "stage": "confirmation_draft",
+    "method": "u_external_ends",
+    "CAD_executed": false
+  },
+  {
+    "case": "D",
+    "returncode": 0,
+    "status": "COMPILED_WITH_HOLD",
+    "route": "full_candidate_geometry",
+    "stage": "confirmation_draft",
+    "method": "u_external_ends",
+    "CAD_executed": false
+  },
+  {
+    "case": "IRREGULAR",
+    "returncode": 0,
+    "status": "UNSUPPORTED_SHAPE_REQUIRES_ADAPTER",
+    "route": null,
+    "stage": null,
+    "method": null,
+    "CAD_executed": false
+  },
+  {
+    "case": "MISSING",
+    "returncode": 0,
+    "status": "NEEDS_ESSENTIAL_INPUT",
+    "route": null,
+    "stage": null,
+    "method": null,
+    "CAD_executed": false
+  },
+  {
+    "case": "Q0",
+    "returncode": 0,
+    "status": "COMPILED_WITH_HOLD",
+    "route": "formed_confirmation",
+    "stage": "confirmation_draft",
+    "method": "u_external_ends",
+    "CAD_executed": false
+  }
+]

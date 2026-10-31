@@ -1,0 +1,32 @@
+[
+  {
+    "path": "scripts/corner03.py",
+    "unchanged": true,
+    "sha256": "57743173d2b1b88820ea6ead73317fc143b86983d592e09944eedeccb070e4f3"
+  },
+  {
+    "path": "scripts/cut_dxf.py",
+    "unchanged": true,
+    "sha256": "96599acd6b1fc67409a788a24a2e0fa2e277978901abbd8367af121efc13c0d2"
+  },
+  {
+    "path": "scripts/native_direction_readback.py",
+    "unchanged": true,
+    "sha256": "b71befe0909077e662d7adf09ba141a164689e17824b6b950f9117a9c4ea9b40"
+  },
+  {
+    "path": "scripts/site_fit.py",
+    "unchanged": true,
+    "sha256": "80825a6667c8ec367e6e175ffaaf3cf2819901f8d5fec9c2d45ef4c7ec723a90"
+  },
+  {
+    "path": "scripts/record_site_fit.py",
+    "unchanged": true,
+    "sha256": "4cdb9e1a960828a4923234940b73bffd7156c75e288f2eca103808b8528492c0"
+  },
+  {
+    "path": "scripts/audit_step.py",
+    "unchanged": true,
+    "sha256": "4ff017dbe95780a7e56201bbfccd4b9c789b125e080e3777811f3ca191e2cc94"
+  }
+]

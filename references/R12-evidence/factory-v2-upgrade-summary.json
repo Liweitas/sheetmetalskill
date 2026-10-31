@@ -1,0 +1,29 @@
+{
+  "source_code": "S-201-1.0-20261023-0423-v1",
+  "target_code": "S-201-1.0-20261023-0423-v2",
+  "original_source_unchanged": true,
+  "manufacturing_geometry_changed": false,
+  "current_workshop_requirements_complete": true,
+  "single_message": {
+    "dispatch_contract": "single-zip-dispatch-v1",
+    "namespace": "requirement",
+    "entity_id": "SYNTHETIC_R12_CN_DEFAULT15",
+    "revision": "20261023_182501_d1d16562",
+    "archive_sha256": "a1292fb4abce5adb971fb9ffe71b4961b8510f95722389ce436cbe29dfa120dd",
+    "phase": "final",
+    "messages": [
+      {
+        "attachments": [
+          {
+            "path": "S-201-1.0-20261023-0423-v2_完整资料.zip",
+            "kind": "complete_delivery_zip",
+            "sha256": "a1292fb4abce5adb971fb9ffe71b4961b8510f95722389ce436cbe29dfa120dd"
+          }
+        ]
+      }
+    ],
+    "user_request": null,
+    "production_release": false
+  },
+  "production_release": false
+}

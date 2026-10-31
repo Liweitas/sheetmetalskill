@@ -1,0 +1,30 @@
+{
+  "case": "Actual independent wrap input regenerated without parameter changes",
+  "authority_values_exactly_same_saved_value": {
+    "canonical": 2.0190650778320265,
+    "native": 2.0190650778320265,
+    "final": 2.0190650778320265,
+    "worker_authority": 2.0190650778320265
+  },
+  "PDF_display_mm3": "2.019065",
+  "PDF_first_page_declares_authority_and_6_digits": true,
+  "pair_sum_diagnostic": {
+    "authoritative_source": "Actual exported/read-back BODY STEP compound common with formed LID STEP",
+    "authoritative_volume_mm3": 2.0190650778320265,
+    "display_decimal_places": 6,
+    "display_volume_mm3": "2.019065",
+    "pairwise_sum_mm3": 2.019099125183112,
+    "pair_sum_minus_authority_mm3": 3.404735108558654e-05,
+    "numerical_comparison_absolute_mm3": 1e-06,
+    "numerical_comparison_relative": 1e-08,
+    "meaning": "CAD Boolean arithmetic only; raw digits are trace data, not physical accuracy. Pairwise sum is a separate diagnostic operation.",
+    "fit_intersection_threshold_unchanged_mm3": 1e-07
+  },
+  "native_recomputed_raw_mm3": 2.0190650778320265,
+  "source_job_SHA256": "e453df23889743705ebf9c8267289b14179da5b8a3ebdbca7a536c2550e2454e",
+  "status": "DELIVERED_FOR_AUTHORIZED_SITE_FIT_WITH_HOLD",
+  "production_release": false,
+  "all_other_formats_present": true,
+  "pages": 18,
+  "actual_direction_gate": true
+}

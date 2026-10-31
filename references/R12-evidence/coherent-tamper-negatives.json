@@ -1,0 +1,34 @@
+[
+  {
+    "case": "false_part_dimensions",
+    "error": "DELIVERY_CORE_GATE: ['ACTUAL_DIMENSION_AUTHORITY: CN_ACTUAL_STEP_DIMENSION_LABEL_MISMATCH: END_L/Y']",
+    "repacked_all_hashes": true,
+    "ZIP_CRC_member_SHA_checked": true,
+    "CAD_reexecuted": true,
+    "rejected": true
+  },
+  {
+    "case": "false_native_directions",
+    "error": "DELIVERY_CORE_GATE: ['NATIVE_DIRECTION: B1 actual DOWN/-90.0 deg differs from claimed UP/90.0']",
+    "repacked_all_hashes": true,
+    "ZIP_CRC_member_SHA_checked": true,
+    "CAD_reexecuted": true,
+    "rejected": true
+  },
+  {
+    "case": "false_sets",
+    "error": "ENVELOPE_SOURCE_QUANTITY_OR_STATE_MISMATCH: sets receipt=999 source=1",
+    "repacked_all_hashes": true,
+    "ZIP_CRC_member_SHA_checked": true,
+    "CAD_reexecuted": false,
+    "rejected": true
+  },
+  {
+    "case": "erase_current_workshop_protocol",
+    "error": "CURRENT_WORKSHOP_PROTOCOL_REQUIRED: manifest and actual process PDF receipt",
+    "repacked_all_hashes": true,
+    "ZIP_CRC_member_SHA_checked": true,
+    "CAD_reexecuted": false,
+    "rejected": true
+  }
+]

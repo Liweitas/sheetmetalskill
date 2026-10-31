@@ -1,0 +1,777 @@
+{
+  "schema_version": "2.2.0",
+  "policies": {
+    "lid_gap_single_side": {
+      "value": 0.5,
+      "unit": "mm",
+      "source": [
+        "workflow-defaults-2.1"
+      ],
+      "status": "default",
+      "note": "Conditional on an applicable new lid project; explicit customer values override"
+    },
+    "lid_corner_scheme": {
+      "value": "03",
+      "unit": "1",
+      "source": [
+        "workflow-defaults-2.1"
+      ],
+      "status": "default",
+      "note": "Conditional on an applicable new lid project; explicit customer values override"
+    },
+    "handle_trapezoid_wide_pitch": {
+      "value": 85.0,
+      "unit": "mm",
+      "source": [
+        "workflow-handle85-2.2"
+      ],
+      "status": "default",
+      "note": "Only applicable new four-hole trapezoid handles; explicit project overrides retain provenance; old orders not redesigned"
+    }
+  },
+  "project": {
+    "record_kind": {
+      "value": "new",
+      "unit": "1",
+      "source": [
+        "policy-timezone"
+      ],
+      "status": "confirmed",
+      "note": "Explicit new-project resolution"
+    },
+    "customer_id": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "project_id": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "revision": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "version": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "version_timezone": {
+      "value": "Asia/Shanghai",
+      "unit": "1",
+      "source": [
+        "policy-timezone"
+      ],
+      "status": "confirmed",
+      "note": "Explicit project numbering rule, not a design default"
+    },
+    "recorded_at": {
+      "value": null,
+      "unit": "ISO8601",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "quantity_sets": {
+      "value": null,
+      "unit": "set",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    }
+  },
+  "attachment": {
+    "reference": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "filename": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "sha256": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "bytes": {
+      "value": null,
+      "unit": "byte",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "preserve_original": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    }
+  },
+  "step_facts": {
+    "declared_unit": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "scale_to_mm": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "audit_passed": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "solid_count": {
+      "value": null,
+      "unit": "count",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "source_material": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "source_thickness": {
+      "value": null,
+      "unit": "mm",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "outer_dimensions": {
+      "X": {
+        "value": null,
+        "unit": "mm",
+        "source": [],
+        "status": "unknown",
+        "note": null
+      },
+      "Y": {
+        "value": null,
+        "unit": "mm",
+        "source": [],
+        "status": "unknown",
+        "note": null
+      },
+      "Z": {
+        "value": null,
+        "unit": "mm",
+        "source": [],
+        "status": "unknown",
+        "note": null
+      }
+    },
+    "source_lid_present": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "physical_hole_count": {
+      "value": null,
+      "unit": "count",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "inner_radius": {
+      "value": null,
+      "unit": "mm",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    }
+  },
+  "requirements": {
+    "scope": {
+      "value": "body_and_lid",
+      "unit": "1",
+      "source": [
+        "intake-scope"
+      ],
+      "status": "confirmed",
+      "note": "Explicit intake scope selection"
+    },
+    "body_only": {
+      "value": false,
+      "unit": "1",
+      "source": [
+        "intake-scope"
+      ],
+      "status": "confirmed",
+      "note": "Explicit intake scope selection"
+    },
+    "lid_required": {
+      "value": true,
+      "unit": "1",
+      "source": [
+        "intake-scope"
+      ],
+      "status": "confirmed",
+      "note": "Explicit intake scope selection"
+    },
+    "nuts_required": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "material": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "nominal_t": {
+      "value": null,
+      "unit": "mm",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "measured_t": {
+      "value": null,
+      "unit": "mm",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "measured_hardness_HRB": {
+      "value": null,
+      "unit": "HRB",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "dimension_basis": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "height_basis": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "dimensions": {
+      "X": {
+        "value": null,
+        "unit": "mm",
+        "source": [],
+        "status": "unknown",
+        "note": null
+      },
+      "Y": {
+        "value": null,
+        "unit": "mm",
+        "source": [],
+        "status": "unknown",
+        "note": null
+      },
+      "Z": {
+        "value": null,
+        "unit": "mm",
+        "source": [],
+        "status": "unknown",
+        "note": null
+      }
+    },
+    "length_axis": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "width_axis": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "height_axis": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "origin_and_datums": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "preserve_outer_dimensions": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "preserve_hole_axes": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    }
+  },
+  "lid": {
+    "style": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "gap": {
+      "value": 0.5,
+      "unit": "mm",
+      "source": [
+        "workflow-defaults-2.1"
+      ],
+      "status": "default",
+      "note": "Default four-wall clearance: g0.5 per side; delta length/width1.0; q and root radius separate"
+    },
+    "gap_basis": {
+      "value": "single_side",
+      "unit": "1",
+      "source": [
+        "workflow-defaults-2.1"
+      ],
+      "status": "default",
+      "note": "Default g is per side, never a total0.5"
+    },
+    "gap_datum": {
+      "value": "lid inner straight wall to body outer straight wall, four sides",
+      "unit": "1",
+      "source": [
+        "workflow-defaults-2.1"
+      ],
+      "status": "default",
+      "note": "Straight walls only; not roof seating or bend-root clearance"
+    },
+    "skirt_height": {
+      "value": null,
+      "unit": "mm",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "roof_gap": {
+      "value": null,
+      "unit": "mm",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "seating_datum": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "whole_height": {
+      "value": null,
+      "unit": "mm",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "corner_reference": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "corner_scheme": {
+      "value": "03",
+      "unit": "1",
+      "source": [
+        "workflow-defaults-2.1"
+      ],
+      "status": "default",
+      "note": "03 sloped bend-root closure; recalculate actual t,Ri,seam; no fixed seam/Ri"
+    },
+    "corner_gap": {
+      "value": null,
+      "unit": "mm",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "root_check_passed": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "root_overlap_volume": {
+      "value": null,
+      "unit": "mm^3",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "root_check_ref": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "geometry_evidence_ref": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    }
+  },
+  "fabrication": {
+    "method": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "external_end_count": {
+      "value": null,
+      "unit": "count",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "seam_gap": {
+      "value": null,
+      "unit": "mm",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "end_inset": {
+      "value": null,
+      "unit": "mm",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "weld_requirement": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "geometry_difference_ref": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "parts": []
+  },
+  "handles": {
+    "layout": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "wide_row_pitch": {
+      "value": null,
+      "unit": "mm",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "narrow_row_pitch": {
+      "value": null,
+      "unit": "mm",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "row_spacing": {
+      "value": null,
+      "unit": "mm",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "patterns": [],
+    "enabled": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "quantity": {
+      "value": null,
+      "unit": "count",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "hardware_ref": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "holes_per_handle": {
+      "value": null,
+      "unit": "count",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "hole_group_ids": [],
+    "position_and_orientation": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    }
+  },
+  "connectors": [],
+  "hardware": [],
+  "hole_groups": [],
+  "bending": {
+    "Ri": {
+      "value": null,
+      "unit": "mm",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "compensation_mode": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "K_value": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "K_definition": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "BD90": {
+      "value": null,
+      "unit": "mm",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "calibrated": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "calibration_material": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "calibration_t": {
+      "value": null,
+      "unit": "mm",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "calibration_ref": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "machine_backgauge": {
+      "value": null,
+      "unit": "mm",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "backgauge_machine_and_datum": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "tool_clearance_verified": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    }
+  },
+  "delivery": {
+    "formats": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "units": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "acceptance_criteria": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    }
+  },
+  "review": {
+    "digital_checks_passed": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "first_article_passed": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "production_release": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "approver": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "approval_scope": {
+      "value": null,
+      "unit": "1",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    },
+    "approval_at": {
+      "value": null,
+      "unit": "ISO8601",
+      "source": [],
+      "status": "unknown",
+      "note": null
+    }
+  },
+  "exceptions": [],
+  "provenance": [
+    {
+      "id": "policy-timezone",
+      "kind": "policy",
+      "ref": "project versioning uses Asia/Shanghai per workflow",
+      "message_at": null,
+      "recorded_at": null
+    },
+    {
+      "id": "workflow-defaults-2.1",
+      "kind": "default_policy",
+      "ref": "User-approved workflow policy: four straight walls g0.5mm per side; default corner scheme03; no q/Ri/corner-gap default",
+      "message_at": null,
+      "recorded_at": null
+    },
+    {
+      "id": "intake-scope",
+      "kind": "user",
+      "ref": "Caller explicitly selected lid scope while creating a new intake",
+      "message_at": null,
+      "recorded_at": null
+    },
+    {
+      "id": "workflow-handle85-2.2",
+      "kind": "default_policy",
+      "ref": "User-approved workflow policy: applicable four-hole trapezoid handle wider row center distance85.00mm; not84; no other hole layout dimensions supplied",
+      "message_at": null,
+      "recorded_at": null
+    }
+  ],
+  "notes": ""
+}

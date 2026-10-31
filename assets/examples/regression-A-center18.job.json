@@ -1,0 +1,55 @@
+{
+  "id": "R02_A_CENTER18",
+  "units": "mm",
+  "dimensions": {
+    "length": 460,
+    "width": 260,
+    "height": 170
+  },
+  "material": "201 stainless steel",
+  "thickness": 1.2,
+  "Ri": 0.8,
+  "K_ANSI": 0.5,
+  "seam_gap": 0,
+  "lid_required": true,
+  "lid": {
+    "skirt_height": 16,
+    "corner_gap": 0,
+    "roof_gap": 0,
+    "g": 0.5
+  },
+  "holes": [
+    {
+      "id": "LID_CENTER_D18",
+      "part_id": "LID",
+      "diameter": 18,
+      "point": [
+        230.0,
+        130.0,
+        169.4
+      ],
+      "axis": [
+        0,
+        0,
+        1
+      ]
+    }
+  ],
+  "input_provenance": {
+    "K_ANSI": {
+      "status": "assumed",
+      "source_kind": "engineering_assumption",
+      "source": "Independent diagnostic neutral-layer midpoint candidate, not calibrated"
+    },
+    "seam_gap": {
+      "status": "assumed",
+      "source_kind": "engineering_assumption",
+      "source": "Independent nominal butt-seam diagnostic candidate, shop confirmation required"
+    },
+    "lid.corner_gap": {
+      "status": "assumed",
+      "source_kind": "engineering_assumption",
+      "source": "Independent zero nominal corner-clearance diagnostic candidate"
+    }
+  }
+}

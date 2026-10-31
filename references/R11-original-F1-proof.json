@@ -1,0 +1,41 @@
+{
+  "failure": "Explicit user skirt_height rounded up without confirmation and labeled user",
+  "source_brief_mm": 12.34,
+  "compiled_job_mm": 12.4,
+  "parameter_source_row": {
+    "parameter": "lid.skirt_height",
+    "value": 12.4,
+    "unit": "mm",
+    "origin": "user",
+    "source": "general-experience-v1",
+    "note": "Candidate clipped by adapter validity; no machine sequence or load guarantee",
+    "needs_confirmation": false
+  },
+  "actual_STEP_skirt_mm": 12.400000000000006,
+  "build_returncode": 0,
+  "revision_root": "/Users/harryma/Documents/Codex/2026-10-21/task-6/acceptance_R11/archive/requirement_SYNTH_R11_DECIMAL/revisions/未命名待确认_requirement_SYNTH_R11_DECIMAL_20261023_154350_f69c9b79",
+  "PDF_readback": {
+    "PDF": "/Users/harryma/Documents/Codex/2026-10-21/task-6/acceptance_R11/archive/requirement_SYNTH_R11_DECIMAL/revisions/未命名待确认_requirement_SYNTH_R11_DECIMAL_20261023_154350_f69c9b79/PDF/未命名待确认_requirement_SYNTH_R11_DECIMAL_20261023_154350_f69c9b79_完整折弯工艺PDF_确认稿候选_SYNTH_R11_DECIMAL_THREE_VIEWS_BENDING_HOLD_20261023_1543.pdf",
+    "pages": 23,
+    "lines": [
+      {
+        "page": 14,
+        "line": "Skirt center from each own free straight edge:"
+      },
+      {
+        "page": 15,
+        "line": "Short-skirt retreat t+gap=1.38"
+      },
+      {
+        "page": 22,
+        "line": "盖裙外高 12.4mm；自由直边至弯带 10.100000 .. 12.525310mm；至弯中心 11.312655mm。03角缝 0.18mm；不是0.3缝，不是机床BG。"
+      },
+      {
+        "page": 23,
+        "line": "lid.skirt_height = 12.4 mm | 用户指定 | general-experience-v1 | Candidate clipped by adapter validity; no machine sequence or load guarantee"
+      }
+    ]
+  },
+  "source_code_location": "scripts/general_process.py: skirt=math.ceil(skirt*10)/10 is unconditional, including explicit skirt_height",
+  "frozen_code_modified": false
+}

@@ -1,0 +1,5 @@
+jsonschema>=4.18,<5
+reportlab>=4,<5
+pypdf>=5,<7
+Pillow>=10.1,<13
+numpy>=1.26,<3

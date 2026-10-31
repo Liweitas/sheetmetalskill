@@ -1,0 +1,25 @@
+{
+  "id": "general-experience-v1",
+  "scope": "new uniform-thickness rectangular boxes only; explicit current user parameters take precedence",
+  "source": "User-authorized cross-case process guidance; not a material standard, machine calibration or customer geometry template",
+  "Ri_mm": 0.8,
+  "g_each_side_mm": 0.5,
+  "external_end_contour_inset_mm": 0.2,
+  "butt_seam_candidate_mm": 0.0,
+  "corner_gap_candidate_mm": 0.2,
+  "K_ANSI_draft_candidate": 0.4,
+  "skirt_min_mm": 12.0,
+  "skirt_max_reference_mm": 20.0,
+  "skirt_thickness_multiple": 8.0,
+  "roof_round_reference_count": 2,
+  "roof_round_reference_diameter_mm": 18.0,
+  "fixing_profile": "perimeter-m4-experience-v2",
+  "fixing_max_spacing_reference_mm": 200.0,
+  "handle_profile": "handle-85-62-30-v1",
+  "production_release": false,
+  "holds": [
+    "Defaults are candidates, not customer confirmation",
+    "Unknown port function/handle physical envelope and load remain unverified",
+    "K/tooling/first article require actual factory evidence"
+  ]
+}

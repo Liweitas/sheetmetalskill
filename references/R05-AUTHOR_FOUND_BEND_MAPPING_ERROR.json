@@ -1,0 +1,9 @@
+{
+  "status": "CONFIRMED_AUTHOR_FOUND_DEFECT_BEFORE_FREEZE",
+  "affected_run": "final-site-fit-and-isometric-R01",
+  "isometric_BRep_projection": "vector match passed; not the defect",
+  "defect": "BendInfo.line is transformed by native SketchExtraction.move_to_origin while returned solid/trimmed bend lines are inverse-transformed to original root-face coordinates. Applying only canonical flat matrix double-rotated/offset BendInfo lines; some collapsed to zero XY length. Prior tests did not check flat B identifiers against trimmed native bend lines.",
+  "fix_plan": "capture actual native sketch inverse in the isolated unfold call, inverse-transform BendInfo before canonical flatten; bind each B to actual trimmed native line fragments and verify complete unique coverage",
+  "prior_results_preserved": true,
+  "freeze_blocked_until_corrected": true
+}

@@ -1,0 +1,16 @@
+{
+  "id": "anderson-50a-v1",
+  "version": 1,
+  "kind": "panel_cutout",
+  "description_cn": "安德森50A 面板安装开口",
+  "cutout_mm": {"w": 41.4, "h": 21.1, "corner_r": 0},
+  "mount_holes": {"count": 4, "process": "tap", "thread": "M4", "tap_drill_mm": 3.3, "diameter_mm": 3.3, "datasheet_clearance_mm": 4.5, "pattern_mm": [46.3, 26.8], "centred_on_cutout": true,
+    "pdf_hole_table_cn": "4×Φ3.3 攻M4（安德森50A安装螺钉孔）",
+    "rule": "用户 t16u 2026-10-26：线孔/品字口等接口的螺钉孔需要攻丝，并在PDF中说明。M4 由原Ø4.5过孔推定，须按规格书/实物确认"},
+  "flange_envelope_mm": {"w": 65.9, "h": 50.0, "h_incl_hinge": 51.9},
+  "clearance_rules": ["flange envelope must stay >= 3 mm from bend tangents, skirt/lid edges and other holes", "check rear connector depth vs. lid skirt / internal parts"],
+  "status": "engineering_reference_candidate",
+  "source": "box-200x350x210/ref/anderson50A_datasheet.png (user-sent datasheet, readout in ref/sketch_readout.md); used in S-201-20261024-002-v1 addendum-tools/build_main.py L78",
+  "only_when_requested": true,
+  "manufacturing_released": false
+}

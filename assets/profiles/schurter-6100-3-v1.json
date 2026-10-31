@@ -1,0 +1,32 @@
+{
+  "id": "schurter-6100-3-v1",
+  "version": 1,
+  "kind": "panel_cutout",
+  "description_cn": "Schurter 6100-3 电源插座开口",
+  "cutout_mm": {
+    "w": 20.0,
+    "h": 28.0,
+    "corner_r": 3.0
+  },
+  "mount_holes": {
+    "count": 2,
+    "process": "tap",
+    "thread": "M3",
+    "tap_drill_mm": 2.5,
+    "diameter_mm": 2.5,
+    "datasheet_clearance_mm": 3.5,
+    "pdf_hole_table_cn": "2×Φ2.5 攻M3（品字口安装螺钉孔）",
+    "rule": "用户 t16u 2026-10-26：线孔/品字口等接口的螺钉孔需要攻丝，并在PDF中说明。M3 由原Ø3.5过孔推定，须按规格书/实物确认",
+    "pitch_mm": 40.0,
+    "axis": "along the 28 side (S-201-1-20261024-005-v1: 28 side along W/Y, centre 30 from short edge)",
+    "centred_on_cutout": true
+  },
+  "clearance_rules": [
+    "cutout and holes >= 3 mm from bend tangents",
+    "R3 line-arc tangency: validate closure at 1e-6 (dxf_topology 1e-7 tangent test too strict, see build_main write_dxf_ext)"
+  ],
+  "status": "engineering_reference_candidate",
+  "source": "box-155x320x105/named_release/S-201-1-20261024-005-v1/README.txt (cutout 20x28 R3, O3.5x2 @40); addendum-tools/build_main.py L77-78",
+  "only_when_requested": true,
+  "manufacturing_released": false
+}

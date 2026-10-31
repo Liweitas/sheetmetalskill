@@ -1,0 +1,36 @@
+{
+  "input_contract": "general-process-v1",
+  "id": "SYNTH_R11_DECIMAL",
+  "units": "mm",
+  "dimension_basis": "outer",
+  "height_basis": "including_lid",
+  "lid_required": true,
+  "material": "201",
+  "thickness": 1.2,
+  "dimensions": {
+    "length": 245,
+    "width": 163,
+    "height": 109
+  },
+  "roof_ports": {
+    "mode": "none"
+  },
+  "fixings": {
+    "mode": "none"
+  },
+  "handles": {
+    "mode": "none"
+  },
+  "process": {
+    "Ri": 1.1,
+    "K_ANSI": 0.37,
+    "end_inset": 0.35,
+    "seam_gap": 0.12
+  },
+  "lid": {
+    "g": 0.7,
+    "roof_gap": 0.3,
+    "skirt_height": 12.34,
+    "corner_gap": 0.18
+  }
+}

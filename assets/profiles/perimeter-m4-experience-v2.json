@@ -1,0 +1,18 @@
+{
+  "id": "perimeter-m4-experience-v2",
+  "version": 2,
+  "scope": "New-box conditional M4 interface candidate; no customer dimensions or coordinates",
+  "body_laser_diameter_mm": 3.3,
+  "lid_laser_diameter_mm": 4.5,
+  "nominal_body_process": "candidate tap M4 only; sheet strength and actual fit require factory verification",
+  "edge_offset_mm": 20,
+  "max_spacing_mm": 200,
+  "height_datum": "current lid skirt midpoint; actual straight overlap required",
+  "status": "engineering_reference_candidate",
+  "source": "User-authorized cross-case mounting interface; actual margins/number/positions calculated per current geometry",
+  "holds": [
+    "THIN_SHEET_M4_THREAD_STRENGTH",
+    "SHOP_TAP_AND_FIT_NOT_VERIFIED"
+  ],
+  "manufacturing_released": false
+}

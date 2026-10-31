@@ -1,0 +1,31 @@
+{
+  "input_contract": "general-process-v1",
+  "id": "SYNTHETIC_R11_B",
+  "units": "mm",
+  "dimension_basis": "inner",
+  "height_basis": "bare_body",
+  "lid_required": true,
+  "material": "201",
+  "thickness": 1.0,
+  "dimensions": {
+    "length": 142,
+    "width": 120,
+    "height": 275
+  },
+  "roof_ports": {
+    "mode": "none"
+  },
+  "process": {
+    "requested_stage": "trial",
+    "K_ANSI": 0.42,
+    "K_evidence": {
+      "kind": "documented_trial",
+      "reference": "SYNTHETIC software trial fixture, NOT real factory qualification",
+      "material": "201",
+      "thickness_mm": 1.0,
+      "Ri_mm": 0.8,
+      "K_ANSI": 0.42,
+      "tool_reference": "SYNTHETIC test tooling"
+    }
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "input_contract": "general-process-v1",
+  "id": "SYNTHETIC_R11_A",
+  "units": "mm",
+  "dimension_basis": "outer",
+  "height_basis": "including_lid",
+  "lid_required": true,
+  "material": "201",
+  "thickness": 1.2,
+  "dimensions": {
+    "length": 376,
+    "width": 224,
+    "height": 142
+  }
+}

@@ -1,0 +1,184 @@
+{
+  "ok": false,
+  "errors": [
+    "NATIVE_DIRECTION: B1 actual DOWN/-90.0 deg differs from claimed UP/90.0"
+  ],
+  "checks": [
+    {
+      "path": "DXF/U_20261022_1018.dxf",
+      "sha_match": true,
+      "version_match": true,
+      "nonempty": true,
+      "closed_outer": true,
+      "circle_diameter_counts": {
+        "5.0": 1
+      },
+      "only_CUT": true,
+      "planar_checked": true,
+      "boundary_guard_mm": 0.002,
+      "arc_winding_max_sag_mm": 0.001
+    },
+    {
+      "path": "STEP/U_20261022_1018.step",
+      "sha_match": true,
+      "version_match": true
+    },
+    {
+      "path": "evidence/U_UNFOLD_20261022_1018.step",
+      "sha_match": true,
+      "version_match": true
+    },
+    {
+      "path": "evidence/U_geometry_20261022_1018.json",
+      "sha_match": true,
+      "version_match": true
+    },
+    {
+      "path": "DXF/END_L_20261022_1018.dxf",
+      "sha_match": true,
+      "version_match": true,
+      "nonempty": true,
+      "closed_outer": true,
+      "circle_diameter_counts": {
+        "4.0": 1
+      },
+      "only_CUT": true,
+      "planar_checked": true,
+      "boundary_guard_mm": 0.002,
+      "arc_winding_max_sag_mm": 0.001
+    },
+    {
+      "path": "STEP/END_L_20261022_1018.step",
+      "sha_match": true,
+      "version_match": true
+    },
+    {
+      "path": "evidence/END_L_UNFOLD_20261022_1018.step",
+      "sha_match": true,
+      "version_match": true
+    },
+    {
+      "path": "evidence/END_L_geometry_20261022_1018.json",
+      "sha_match": true,
+      "version_match": true
+    },
+    {
+      "path": "DXF/END_R_20261022_1018.dxf",
+      "sha_match": true,
+      "version_match": true,
+      "nonempty": true,
+      "closed_outer": true,
+      "circle_diameter_counts": {},
+      "only_CUT": true,
+      "planar_checked": true,
+      "boundary_guard_mm": 0.002,
+      "arc_winding_max_sag_mm": 0.001
+    },
+    {
+      "path": "STEP/END_R_20261022_1018.step",
+      "sha_match": true,
+      "version_match": true
+    },
+    {
+      "path": "evidence/END_R_UNFOLD_20261022_1018.step",
+      "sha_match": true,
+      "version_match": true
+    },
+    {
+      "path": "evidence/END_R_geometry_20261022_1018.json",
+      "sha_match": true,
+      "version_match": true
+    },
+    {
+      "path": "DXF/LID_20261022_1018.dxf",
+      "sha_match": true,
+      "version_match": true,
+      "native_CAD_report_bound": true,
+      "PDF_vectors_match_actual_DXF": true,
+      "root_HOLDs": [
+        "AUTHORIZED_SITE_FIT_TRIAL_REQUIRED: positive interference retained; no geometric elimination or trial confirmation"
+      ],
+      "nonempty": true,
+      "closed_outer": true,
+      "circle_diameter_counts": {
+        "7.0": 1
+      },
+      "only_CUT": true,
+      "planar_checked": true,
+      "boundary_guard_mm": 0.002,
+      "arc_winding_max_sag_mm": 0.001
+    },
+    {
+      "path": "STEP/LID_20261022_1018.step",
+      "sha_match": true,
+      "version_match": true
+    },
+    {
+      "path": "evidence/LID_UNFOLD_20261022_1018.step",
+      "sha_match": true,
+      "version_match": true
+    },
+    {
+      "path": "evidence/LID_geometry_20261022_1018.json",
+      "sha_match": true,
+      "version_match": true
+    },
+    {
+      "path": "STEP/ASSEMBLY_20261022_1018.step",
+      "sha_match": true,
+      "version_match": true
+    },
+    {
+      "path": "STEP/EXPLODED_20261022_1018.step",
+      "sha_match": true,
+      "version_match": true
+    },
+    {
+      "path": "PDF/SYNTHETIC_INDEPENDENT_R05_EXTERNAL_THREE_VIEWS_BENDING_HOLD_20261022_1018.pdf",
+      "sha_match": true,
+      "version_match": true
+    },
+    {
+      "path": "evidence/FORMED_ISOMETRIC_20261022_1018.json",
+      "sha_match": true,
+      "version_match": true
+    },
+    {
+      "path": "evidence/LID_native03_20261022_1018.json",
+      "sha_match": true,
+      "version_match": true
+    },
+    {
+      "path": "SYNTHETIC_INDEPENDENT_R05_EXTERNAL_ASSEMBLED_CONFIRMATION_20261022_1018.png",
+      "sha_match": true,
+      "version_match": true,
+      "confirmation_png_readback": true
+    },
+    {
+      "path": "SYNTHETIC_INDEPENDENT_R05_EXTERNAL_EXPLODED_CONFIRMATION_20261022_1018.png",
+      "sha_match": true,
+      "version_match": true,
+      "confirmation_png_readback": true
+    },
+    {
+      "path": "evidence/projections_20261022_1018.json",
+      "sha_match": true,
+      "version_match": true
+    },
+    {
+      "path": "RUN_RESULT_20261022_1018.json",
+      "sha_match": true,
+      "version_match": true
+    }
+  ],
+  "actual_native_direction_readback": {
+    "ok": false,
+    "CAD_executed": true,
+    "errors": [
+      "NATIVE_DIRECTION: B1 actual DOWN/-90.0 deg differs from claimed UP/90.0"
+    ],
+    "production_release": false
+  },
+  "certifies_manufacture": false,
+  "scope": "artifact/PDF/DXF checks plus actual STEP native signed-angle/root/axis/flat linkage; no CAM or production certification"
+}

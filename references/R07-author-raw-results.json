@@ -1,0 +1,361 @@
+{
+  "author_selftest_only": true,
+  "independent_acceptance": "PENDING",
+  "production_release": false,
+  "positive": [
+    {
+      "root": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.7.0-delivery-contract/author_release_R07/runs/deliveries/requirement_AUTHOR_EXTERNAL_380/revisions/R02",
+      "gate": {
+        "ok": true,
+        "contract": "2.7.0-R07",
+        "digital_deliverables_complete": true,
+        "production_release": false,
+        "checks": [
+          "required kinds",
+          "source material/thickness",
+          "actual native CAD direction inherited",
+          "nest actual entity/qty/spacing",
+          "process PDF",
+          "revision directory",
+          "inventory",
+          "ZIP CRC/members"
+        ]
+      },
+      "envelope": {
+        "contract": "2.7.0-R07",
+        "revision_root": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.7.0-delivery-contract/author_release_R07/runs/deliveries/requirement_AUTHOR_EXTERNAL_380/revisions/R02",
+        "manifest": "manifest_20261022_1953.json",
+        "inventory": "FILE_SHA256_20261022_1953.json",
+        "zip": "requirement_AUTHOR_EXTERNAL_380_R02_DELIVERY_20261022_1953.zip",
+        "zip_sha256": "1411f153aa68f3a1ec134a51d6f310205267dc28d022d52c3aa79418f64e4241",
+        "digital_deliverables_complete": true,
+        "production_release": false,
+        "engineering_status": "GEOMETRY_CHECKED_WITH_HOLD",
+        "stock_status": "assumed",
+        "required_stock_sheets": 1,
+        "sets": 2,
+        "PDF_visual_review_required": true,
+        "independent_review": "PENDING"
+      }
+    },
+    {
+      "root": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.7.0-delivery-contract/author_release_R07/runs/deliveries/customer_AUTHOR_WRAP_185/revisions/R01",
+      "gate": {
+        "ok": true,
+        "contract": "2.7.0-R07",
+        "digital_deliverables_complete": true,
+        "production_release": false,
+        "checks": [
+          "required kinds",
+          "source material/thickness",
+          "actual native CAD direction inherited",
+          "nest actual entity/qty/spacing",
+          "process PDF",
+          "revision directory",
+          "inventory",
+          "ZIP CRC/members"
+        ]
+      },
+      "envelope": {
+        "contract": "2.7.0-R07",
+        "revision_root": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.7.0-delivery-contract/author_release_R07/runs/deliveries/customer_AUTHOR_WRAP_185/revisions/R01",
+        "manifest": "manifest_20261022_1954.json",
+        "inventory": "FILE_SHA256_20261022_1954.json",
+        "zip": "customer_AUTHOR_WRAP_185_R01_DELIVERY_20261022_1954.zip",
+        "zip_sha256": "5aa1e8feeed6ffce01b262ef495b9b17f92f73db88476352ef633da33ca25582",
+        "digital_deliverables_complete": true,
+        "production_release": false,
+        "engineering_status": "DELIVERED_FOR_AUTHORIZED_SITE_FIT_WITH_HOLD",
+        "stock_status": "assumed",
+        "required_stock_sheets": 1,
+        "sets": 2,
+        "PDF_visual_review_required": true,
+        "independent_review": "PENDING"
+      }
+    }
+  ],
+  "negative": [
+    {
+      "case": "source unknown material/K",
+      "test": "promote source audit to full manufacturing",
+      "rejected": true,
+      "error": "SOURCE_AUDIT_ONLY_PARTIAL_HOLD: no complete manufacturing delivery supported by this source-audit mode"
+    },
+    {
+      "test": "missing_step_assembly",
+      "rejected": true,
+      "error": "DELIVERY_MISSING_OR_DUPLICATE: step_assembly",
+      "fixture": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.7.0-delivery-contract/author_release_R07/negative_fixtures/missing_step_assembly/requirement_AUTHOR_EXTERNAL_380/revisions/R02"
+    },
+    {
+      "test": "missing_step_exploded",
+      "rejected": true,
+      "error": "DELIVERY_MISSING_OR_DUPLICATE: step_exploded",
+      "fixture": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.7.0-delivery-contract/author_release_R07/negative_fixtures/missing_step_exploded/requirement_AUTHOR_EXTERNAL_380/revisions/R02"
+    },
+    {
+      "test": "missing_step_part",
+      "rejected": true,
+      "error": "DELIVERY_REQUIRED_PART_FORMAT: step_part",
+      "fixture": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.7.0-delivery-contract/author_release_R07/negative_fixtures/missing_step_part/requirement_AUTHOR_EXTERNAL_380/revisions/R02"
+    },
+    {
+      "test": "missing_unfold_step",
+      "rejected": true,
+      "error": "DELIVERY_REQUIRED_PART_FORMAT: unfold_step",
+      "fixture": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.7.0-delivery-contract/author_release_R07/negative_fixtures/missing_unfold_step/requirement_AUTHOR_EXTERNAL_380/revisions/R02"
+    },
+    {
+      "test": "missing_dxf",
+      "rejected": true,
+      "error": "DELIVERY_REQUIRED_PART_FORMAT: dxf",
+      "fixture": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.7.0-delivery-contract/author_release_R07/negative_fixtures/missing_dxf/requirement_AUTHOR_EXTERNAL_380/revisions/R02"
+    },
+    {
+      "test": "missing_confirmation_png",
+      "rejected": true,
+      "error": "DELIVERY_CONFIRMATION_ASSEMBLY_EXPLODED_MISSING",
+      "fixture": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.7.0-delivery-contract/author_release_R07/negative_fixtures/missing_confirmation_png/requirement_AUTHOR_EXTERNAL_380/revisions/R02"
+    },
+    {
+      "test": "missing_pdf",
+      "rejected": true,
+      "error": "DELIVERY_MISSING_OR_DUPLICATE: pdf",
+      "fixture": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.7.0-delivery-contract/author_release_R07/negative_fixtures/missing_pdf/requirement_AUTHOR_EXTERNAL_380/revisions/R02"
+    },
+    {
+      "test": "missing_formed_isometric_report",
+      "rejected": true,
+      "error": "DELIVERY_MISSING_OR_DUPLICATE: formed_isometric_report",
+      "fixture": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.7.0-delivery-contract/author_release_R07/negative_fixtures/missing_formed_isometric_report/requirement_AUTHOR_EXTERNAL_380/revisions/R02"
+    },
+    {
+      "test": "missing_cad_projections",
+      "rejected": true,
+      "error": "DELIVERY_MISSING_OR_DUPLICATE: cad_projections",
+      "fixture": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.7.0-delivery-contract/author_release_R07/negative_fixtures/missing_cad_projections/requirement_AUTHOR_EXTERNAL_380/revisions/R02"
+    },
+    {
+      "test": "missing_source_job",
+      "rejected": true,
+      "error": "DELIVERY_MISSING_OR_DUPLICATE: source_job",
+      "fixture": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.7.0-delivery-contract/author_release_R07/negative_fixtures/missing_source_job/requirement_AUTHOR_EXTERNAL_380/revisions/R02"
+    },
+    {
+      "test": "missing_parameters",
+      "rejected": true,
+      "error": "DELIVERY_MISSING_OR_DUPLICATE: parameters",
+      "fixture": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.7.0-delivery-contract/author_release_R07/negative_fixtures/missing_parameters/requirement_AUTHOR_EXTERNAL_380/revisions/R02"
+    },
+    {
+      "test": "missing_hole_table",
+      "rejected": true,
+      "error": "DELIVERY_MISSING_OR_DUPLICATE: hole_table",
+      "fixture": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.7.0-delivery-contract/author_release_R07/negative_fixtures/missing_hole_table/requirement_AUTHOR_EXTERNAL_380/revisions/R02"
+    },
+    {
+      "test": "missing_cad_report",
+      "rejected": true,
+      "error": "DELIVERY_MISSING_OR_DUPLICATE: cad_report",
+      "fixture": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.7.0-delivery-contract/author_release_R07/negative_fixtures/missing_cad_report/requirement_AUTHOR_EXTERNAL_380/revisions/R02"
+    },
+    {
+      "test": "missing_delivery_spec",
+      "rejected": true,
+      "error": "DELIVERY_MISSING_OR_DUPLICATE: delivery_spec",
+      "fixture": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.7.0-delivery-contract/author_release_R07/negative_fixtures/missing_delivery_spec/requirement_AUTHOR_EXTERNAL_380/revisions/R02"
+    },
+    {
+      "test": "missing_bom_json",
+      "rejected": true,
+      "error": "DELIVERY_MISSING_OR_DUPLICATE: bom_json",
+      "fixture": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.7.0-delivery-contract/author_release_R07/negative_fixtures/missing_bom_json/requirement_AUTHOR_EXTERNAL_380/revisions/R02"
+    },
+    {
+      "test": "missing_bom_csv",
+      "rejected": true,
+      "error": "DELIVERY_MISSING_OR_DUPLICATE: bom_csv",
+      "fixture": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.7.0-delivery-contract/author_release_R07/negative_fixtures/missing_bom_csv/requirement_AUTHOR_EXTERNAL_380/revisions/R02"
+    },
+    {
+      "test": "missing_nest_layout",
+      "rejected": true,
+      "error": "DELIVERY_MISSING_OR_DUPLICATE: nest_layout",
+      "fixture": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.7.0-delivery-contract/author_release_R07/negative_fixtures/missing_nest_layout/requirement_AUTHOR_EXTERNAL_380/revisions/R02"
+    },
+    {
+      "test": "missing_nest_dxf",
+      "rejected": true,
+      "error": "NEST_SHEET_COVERAGE",
+      "fixture": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.7.0-delivery-contract/author_release_R07/negative_fixtures/missing_nest_dxf/requirement_AUTHOR_EXTERNAL_380/revisions/R02"
+    },
+    {
+      "test": "missing_nest_preview_pdf",
+      "rejected": true,
+      "error": "DELIVERY_MISSING_OR_DUPLICATE: nest_preview_pdf",
+      "fixture": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.7.0-delivery-contract/author_release_R07/negative_fixtures/missing_nest_preview_pdf/requirement_AUTHOR_EXTERNAL_380/revisions/R02"
+    },
+    {
+      "test": "missing_acceptance_report",
+      "rejected": true,
+      "error": "DELIVERY_MISSING_OR_DUPLICATE: acceptance_report",
+      "fixture": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.7.0-delivery-contract/author_release_R07/negative_fixtures/missing_acceptance_report/requirement_AUTHOR_EXTERNAL_380/revisions/R02"
+    },
+    {
+      "test": "removed_R07_contract_no_silent_core_downgrade",
+      "rejected": true,
+      "error": "DELIVERY_CORE_CONTRACT_OR_REVISION_DOWNGRADE",
+      "fixture": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.7.0-delivery-contract/author_release_R07/negative_fixtures/removed_R07_contract_no_silent_core_downgrade/requirement_AUTHOR_EXTERNAL_380/revisions/R02"
+    },
+    {
+      "test": "wrong_version_rebound_SHA",
+      "rejected": true,
+      "error": "DELIVERY_VERSION",
+      "fixture": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.7.0-delivery-contract/author_release_R07/negative_fixtures/wrong_version_rebound_SHA/requirement_AUTHOR_EXTERNAL_380/revisions/R02"
+    },
+    {
+      "test": "wrong_material_rebound_SHA",
+      "rejected": true,
+      "error": "BOM_MATERIAL_THICKNESS_QUANTITY_OR_PARTS",
+      "fixture": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.7.0-delivery-contract/author_release_R07/negative_fixtures/wrong_material_rebound_SHA/requirement_AUTHOR_EXTERNAL_380/revisions/R02"
+    },
+    {
+      "test": "wrong_actual_thickness_rebound_SHA",
+      "rejected": true,
+      "error": "DELIVERY_ACTUAL_SHEET_THICKNESS",
+      "fixture": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.7.0-delivery-contract/author_release_R07/negative_fixtures/wrong_actual_thickness_rebound_SHA/requirement_AUTHOR_EXTERNAL_380/revisions/R02"
+    },
+    {
+      "test": "nest_omit_rebound_layout_DXF_SHA",
+      "rejected": true,
+      "error": "NEST_PART_QUANTITY_COVERAGE",
+      "fixture": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.7.0-delivery-contract/author_release_R07/negative_fixtures/nest_omit_rebound_layout_DXF_SHA/requirement_AUTHOR_EXTERNAL_380/revisions/R02"
+    },
+    {
+      "test": "nest_overlap_rebound_layout_DXF_SHA",
+      "rejected": true,
+      "error": "NEST_OVERLAP_OR_PART_GAP",
+      "fixture": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.7.0-delivery-contract/author_release_R07/negative_fixtures/nest_overlap_rebound_layout_DXF_SHA/requirement_AUTHOR_EXTERNAL_380/revisions/R02"
+    },
+    {
+      "test": "nest_scale_rebound_layout_DXF_SHA",
+      "rejected": true,
+      "error": "NEST_GEOMETRY_SCALE_OR_QUANTITY_DIFFERS_FROM_PART_DXFS",
+      "fixture": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.7.0-delivery-contract/author_release_R07/negative_fixtures/nest_scale_rebound_layout_DXF_SHA/requirement_AUTHOR_EXTERNAL_380/revisions/R02"
+    },
+    {
+      "test": "missing_final_ZIP",
+      "rejected": true,
+      "error": "[Errno 2] No such file or directory: '/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.7.0-delivery-contract/author_release_R07/negative_fixtures/missing_final_ZIP/requirement_AUTHOR_EXTERNAL_380/revisions/R02/requirement_AUTHOR_EXTERNAL_380_R02_DELIVERY_20261022_1953.zip'",
+      "fixture": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.7.0-delivery-contract/author_release_R07/negative_fixtures/missing_final_ZIP/requirement_AUTHOR_EXTERNAL_380/revisions/R02"
+    },
+    {
+      "test": "inherited_R06_actual_DOWN_vs_synchronized_UP_json",
+      "case": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.7.0-delivery-contract/author_release_R07/runs/deliveries/requirement_AUTHOR_EXTERNAL_380/revisions/R02",
+      "rejected": true,
+      "evidence": {
+        "ok": false,
+        "CAD_executed": true,
+        "errors": [
+          "NATIVE_DIRECTION: B1 actual DOWN/-90.0 deg differs from claimed UP/90.0"
+        ],
+        "production_release": false
+      }
+    },
+    {
+      "test": "inherited_R06_actual_DOWN_vs_synchronized_UP_json",
+      "case": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.7.0-delivery-contract/author_release_R07/runs/deliveries/customer_AUTHOR_WRAP_185/revisions/R01",
+      "rejected": true,
+      "evidence": {
+        "ok": false,
+        "CAD_executed": true,
+        "errors": [
+          "NATIVE_DIRECTION: B1 actual DOWN/-89.99999999999909 deg differs from claimed UP/90.0"
+        ],
+        "production_release": false
+      }
+    }
+  ],
+  "source_partial": {
+    "contract": "2.7.0-R07",
+    "version": "R01",
+    "namespace": "requirement",
+    "entity_id": "AUTHOR_IMPORTED_NO_K",
+    "revision": "R01",
+    "status": "SOURCE_AUDIT_ONLY_PARTIAL_HOLD",
+    "digital_deliverables_complete": false,
+    "manufacturing_delivery_complete": false,
+    "production_release": false,
+    "source_sha256": "20fd84c4f87d718793b95ca28a40cffa2bbab610914280e19fa0f46331759bdc",
+    "audit_status": "PARTIAL_HOLD",
+    "required_output_slots": {
+      "original_STEP": {
+        "status": "PRESENT",
+        "path": "source_original.step"
+      },
+      "confirmation": {
+        "status": "AUDIT_ONLY",
+        "paths": [
+          "SOURCE_REVIEW_ASSEMBLED_CONFIRMATION_HOLD.png",
+          "SOURCE_REVIEW_EXPLODED_CONFIRMATION_HOLD.png"
+        ]
+      },
+      "formed_parts_assembly_exploded": {
+        "status": "AUDIT_ONLY",
+        "reason": "Actual exported source solids/rigid assembly; no structural change or manufacturing split approval inferred"
+      },
+      "per_part_true_unfold_DXF": {
+        "status": "PARTIAL_OR_AUDIT_ONLY",
+        "parts": {
+          "SOLID_01": "BLOCKED",
+          "SOLID_02": "GEOMETRY_CHECKED_WITH_HOLD",
+          "SOLID_03": "GEOMETRY_CHECKED_WITH_HOLD",
+          "SOLID_04": "BLOCKED"
+        }
+      },
+      "central_stock_nest_DXF": {
+        "status": "BLOCKED_UNSUPPORTED",
+        "reason": "Not all source parts necessarily have manufacturing flats/confirmed material/K/stock; no guessed nest"
+      },
+      "stock_preview_PDF": {
+        "status": "BLOCKED_UNSUPPORTED",
+        "reason": "No accepted source manufacturing nesting set"
+      },
+      "full_workshop_bending_PDF": {
+        "status": "AUDIT_ONLY",
+        "path": "SOURCE_REVIEW_BENDING_PARTIAL_HOLD.pdf",
+        "reason": "All source pieces shown, but manufacturing datum/sequence/tool access and complete drawing contract unsupported"
+      },
+      "BOM_parameters_acceptance": {
+        "status": "AUDIT_ONLY",
+        "path": "SOURCE_BOM_R01.json"
+      },
+      "hashes_and_ZIP": {
+        "status": "AUDIT_ONLY",
+        "reason": "Transport completeness only, not manufacturing completeness"
+      }
+    },
+    "holds": [
+      "SOURCE_AUDIT_ADAPTER_NOT_COMPLETE_MANUFACTURING_DELIVERY",
+      "Actual source may have invalid topology, unknown compensation, unsupported splits/features; do not substitute new-box generator",
+      "Manufacturing stock/quantity/sequence/datum/tooling not yet confirmed; source audit PDF is not the new-box full process contract",
+      {
+        "part": "SOLID_01",
+        "code": "UNFOLD_BLOCKED",
+        "reason": "COMPENSATION_UNKNOWN"
+      },
+      {
+        "part": "SOLID_04",
+        "code": "UNFOLD_BLOCKED",
+        "reason": "COMPENSATION_UNKNOWN"
+      },
+      {
+        "code": "MATERIAL_UNKNOWN"
+      },
+      {
+        "code": "MANUFACTURING_K_UNKNOWN"
+      }
+    ]
+  },
+  "status": "AUTHOR_CONTROLLED_VALIDATION_PASS_PENDING_INDEPENDENT_REVIEW"
+}

@@ -1,0 +1,16 @@
+{
+  "id": "handle-85-62-30-v1",
+  "version": 1,
+  "wide_pitch_mm": 85,
+  "narrow_pitch_mm": 62,
+  "row_spacing_mm": 30,
+  "laser_diameter_mm": 6.6,
+  "nominal_fastener": "M6",
+  "pitch_axis": "Y",
+  "spacing_axis": "X",
+  "wide_row_toward": "box_center_x",
+  "status": "engineering_reference_candidate",
+  "source": "User-approved project mounting reference: 85/62/30 and reference M6 clearance6.6; not a manufacturer drawing",
+  "body_envelope": "unknown; do not generate a handle body",
+  "manufacturing_released": false
+}

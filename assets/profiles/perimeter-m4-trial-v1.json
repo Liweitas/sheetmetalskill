@@ -1,0 +1,17 @@
+{
+  "id": "perimeter-m4-trial-v1",
+  "version": 1,
+  "body_laser_diameter_mm": 3.3,
+  "lid_laser_diameter_mm": 4.5,
+  "nominal_body_process": "candidate tap M4; no modeled thread or strength certification",
+  "edge_offset_mm": 40,
+  "max_spacing_mm": 200,
+  "height_datum": "midpoint of lid skirt measured down from lid outer top",
+  "status": "engineering_reference_candidate",
+  "source": "User-authorized reusable candidate fixing scheme; 460x260 gives long X40/230/420 and short Y40/220,10 coaxial pairs",
+  "holds": [
+    "THIN_SHEET_M4_THREAD_STRENGTH",
+    "SHOP_TAP_AND_FIT_NOT_VERIFIED"
+  ],
+  "manufacturing_released": false
+}

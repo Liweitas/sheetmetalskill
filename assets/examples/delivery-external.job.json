@@ -1,0 +1,50 @@
+{
+  "id": "R07_EXTERNAL_380",
+  "dimensions": {
+    "length": 380,
+    "width": 230,
+    "height": 145
+  },
+  "material": "201",
+  "thickness": 1.2,
+  "Ri": 0.8,
+  "K_ANSI": 0.4,
+  "seam_gap": 0.1,
+  "lid_required": true,
+  "lid": {
+    "skirt_height": 16,
+    "corner_gap": 0.2,
+    "roof_gap": 0.2
+  },
+  "delivery": {
+    "namespace": "requirement",
+    "entity_id": "AUTHOR_EXTERNAL_380",
+    "revision": "R02",
+    "sets": 2,
+    "stock": {
+      "length_mm": 2440,
+      "width_mm": 1220,
+      "edge_margin_mm": 10,
+      "part_gap_mm": 10,
+      "status": "assumed",
+      "source": "SYNTHETIC AUTHOR TEST candidate stock, not customer confirmation"
+    }
+  },
+  "holes": [
+    {
+      "id": "HC",
+      "part_id": "LID",
+      "diameter": 18,
+      "point": [
+        190,
+        115,
+        145
+      ],
+      "axis": [
+        0,
+        0,
+        1
+      ]
+    }
+  ]
+}

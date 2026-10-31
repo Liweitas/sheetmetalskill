@@ -1,0 +1,10 @@
+{
+  "contract":"explicit-material-code-v1",
+  "purpose":"Naming aliases only; no material certificate, properties or supplier qualification inferred",
+  "aliases":{
+    "201":["201","201 stainless steel","stainless steel 201","SUS201","201不锈钢","不锈钢201"],
+    "304":["304","304 stainless steel","stainless steel 304","SUS304","304不锈钢","不锈钢304"],
+    "Q235":["Q235","Q235 carbon steel","carbon steel Q235","Q235碳钢","碳钢Q235"]
+  },
+  "unknown_policy":"No substring/grade-number inference; unlisted descriptions require clarification, not replacement by an example material"
+}

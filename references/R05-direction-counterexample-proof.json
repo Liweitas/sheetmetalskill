@@ -1,0 +1,116 @@
+[
+  {
+    "case": "external",
+    "formed_STEP_sha256_unchanged": true,
+    "actual_native_bends": [
+      {
+        "id": "B1",
+        "direction": "DOWN",
+        "signed_angle": -90.0,
+        "formed_point_error_mm": 0.0,
+        "point_to_actual_shape_mm": 0.0,
+        "actual_axis": [
+          -1.0,
+          -0.0,
+          -0.0
+        ],
+        "actual_native_fragments": [
+          [
+            [
+              0.0,
+              83.80530964914875
+            ],
+            [
+              193.4,
+              83.80530964914874
+            ]
+          ]
+        ],
+        "raw_fifth_return_matches_without_inverse": false
+      },
+      {
+        "id": "B2",
+        "direction": "DOWN",
+        "signed_angle": -90.0,
+        "formed_point_error_mm": 0.0,
+        "point_to_actual_shape_mm": 1.3322676295501878e-15,
+        "actual_axis": [
+          -1.0,
+          -0.0,
+          -0.0
+        ],
+        "actual_native_fragments": [
+          [
+            [
+              193.4,
+              207.81592894744622
+            ],
+            [
+              2.842170943040401e-14,
+              207.81592894744622
+            ]
+          ]
+        ],
+        "raw_fifth_return_matches_without_inverse": false
+      }
+    ],
+    "mutated_direction_records": [
+      {
+        "id": "B1",
+        "direction": "UP",
+        "angle_signed_deg": 90.0
+      },
+      {
+        "id": "B2",
+        "direction": "UP",
+        "angle_signed_deg": 90.0
+      }
+    ],
+    "mutated_PDF_has_B1_UP": true,
+    "new_gate_ok": true,
+    "new_gate_actual_CAD_executed": null,
+    "source_interference_or_K_not_changed": true
+  },
+  {
+    "case": "source_L_supported",
+    "formed_STEP_sha256_unchanged": true,
+    "actual_native_bends": [
+      {
+        "id": "B1",
+        "direction": "DOWN",
+        "signed_angle": -90.0,
+        "formed_point_error_mm": 0.0,
+        "point_to_actual_shape_mm": 0.0,
+        "actual_axis": [
+          -1.0,
+          -0.0,
+          -0.0
+        ],
+        "actual_native_fragments": [
+          [
+            [
+              0.0,
+              19.099557428756427
+            ],
+            [
+              40.0,
+              19.099557428756427
+            ]
+          ]
+        ],
+        "raw_fifth_return_matches_without_inverse": false
+      }
+    ],
+    "mutated_direction_records": [
+      {
+        "id": "B1",
+        "direction": "UP",
+        "angle_signed_deg": 90.0
+      }
+    ],
+    "mutated_PDF_has_B1_UP": true,
+    "new_gate_ok": true,
+    "new_gate_actual_CAD_executed": true,
+    "source_interference_or_K_not_changed": true
+  }
+]

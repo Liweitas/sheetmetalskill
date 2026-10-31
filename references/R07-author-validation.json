@@ -1,0 +1,91 @@
+{
+  "version": "2.7.0-R07",
+  "scope": "forced coherent digital delivery, not production approval",
+  "author_selftest_only": true,
+  "independent_acceptance": "PENDING",
+  "unit_tests": 222,
+  "actual_positive_cases": [
+    {
+      "revision_root": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.7.0-delivery-contract/author_release_R07/runs/deliveries/requirement_AUTHOR_EXTERNAL_380/revisions/R02",
+      "selected_mode": "GEOMETRY_CHECKED_WITH_HOLD",
+      "required_stock_sheets": 1,
+      "sets": 2,
+      "production_release": false
+    },
+    {
+      "revision_root": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.7.0-delivery-contract/author_release_R07/runs/deliveries/customer_AUTHOR_WRAP_185/revisions/R01",
+      "selected_mode": "DELIVERED_FOR_AUTHORIZED_SITE_FIT_WITH_HOLD",
+      "required_stock_sheets": 1,
+      "sets": 2,
+      "production_release": false
+    }
+  ],
+  "negative_cases": 31,
+  "source_mode": "SOURCE_AUDIT_ONLY_PARTIAL_HOLD",
+  "source_full_manufacturing_supported": false,
+  "native_CAD_direction_and_root_authority_inherited": true,
+  "pdf_visual_review": {
+    "review_completed": true,
+    "final_cases": 2,
+    "scope": "Author visual inspection only, not independent acceptance or shop approval",
+    "method": "All23+20process pages reviewed in contact sheets for layout/coverage; final covers, lid process datum pages and both nesting previews viewed enlarged. Numeric/native-direction/geometry checks are separate automatic CAD gates.",
+    "cases": [
+      {
+        "case": "external",
+        "pdf": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.7.0-delivery-contract/author_release_R07/runs/deliveries/requirement_AUTHOR_EXTERNAL_380/revisions/R02/PDF/R07_EXTERNAL_380_THREE_VIEWS_BENDING_HOLD_20261022_1953.pdf",
+        "pdf_sha256": "eae43f48edf093c019e3969ab7dabfaa9d566f24f207c6f0399eecc654628c01",
+        "pages": 23,
+        "nest_pdf": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.7.0-delivery-contract/author_release_R07/runs/deliveries/requirement_AUTHOR_EXTERNAL_380/revisions/R02/PDF/NEST_PREVIEW_20261022_1953.pdf",
+        "nest_sha256": "793af1d8b381187638526df7633ef166d8e20d69dba82c4cc21d42348dcd3d25"
+      },
+      {
+        "case": "wrap",
+        "pdf": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.7.0-delivery-contract/author_release_R07/runs/deliveries/customer_AUTHOR_WRAP_185/revisions/R01/PDF/R07_WRAP_185_THREE_VIEWS_BENDING_HOLD_20261022_1954.pdf",
+        "pdf_sha256": "8a274a675c129e65ce69e26f5e771f743d96880a71f191145aa80f1f3b752c65",
+        "pages": 20,
+        "nest_pdf": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.7.0-delivery-contract/author_release_R07/runs/deliveries/customer_AUTHOR_WRAP_185/revisions/R01/PDF/NEST_PREVIEW_20261022_1954.pdf",
+        "nest_sha256": "fc21a0a5e3bb6767e1a89ae3b8c3a24d141101623b327a7fc863d1bf4db03ad5"
+      }
+    ],
+    "page_counts": [
+      23,
+      20
+    ],
+    "nest_preview_pages": [
+      1,
+      1
+    ],
+    "checks": [
+      "CJK glyphs present",
+      "material/t/identity/revision/HOLD visible on page1",
+      "actual three-views/isometric/unfold present",
+      "zero-bend endplate actual isometrics present",
+      "UP/DOWN and signed angles labelled",
+      "Chinese process rows readable without raw JSON",
+      "lid baseline excludes corner stubs and agrees with skirt center",
+      "nest plate/quantity/status labels and separate contours visible",
+      "no visible clipping/overlap of main notes"
+    ],
+    "limitations": [
+      "Not every coordinate manually remeasured; native CAD and vector readback supply numerical verification",
+      "Tooling/BG/order/springback/first article not verified",
+      "Source review-only PDF not certified as full manufacturing process PDF",
+      "Independent reviewer still required"
+    ]
+  },
+  "raw_result_ref": "references/R07-author-raw-results.json",
+  "retained_development_failures": [
+    "R01 authority version dispatch omitted",
+    "R02 Bezier count boundary",
+    "R03 missing authorization-page version footer",
+    "visual audit: short corner relief selected as gauging edge, now excluded"
+  ],
+  "old_R06_global_and_customer_files_unchanged": true,
+  "limitations": [
+    "stock/kerf/grain/tooling not factory-confirmed",
+    "conservative shelf nest, 0deg only; not optimized",
+    "source audit-only contract, not arbitrary existing-STEP complete manufacturing",
+    "machine bend order/BG/tooling and first article remain HOLD",
+    "no claim all agents/environments/files universally pass"
+  ]
+}

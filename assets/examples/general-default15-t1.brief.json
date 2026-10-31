@@ -1,0 +1,15 @@
+{
+  "input_contract": "general-process-v1",
+  "id": "SYNTHETIC_R12_CN_DEFAULT15",
+  "units": "mm",
+  "dimension_basis": "outer",
+  "height_basis": "including_lid",
+  "lid_required": true,
+  "material": "201 stainless steel",
+  "thickness": 1.0,
+  "dimensions": {
+    "length": 160,
+    "width": 100,
+    "height": 75
+  }
+}

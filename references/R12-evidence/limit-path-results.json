@@ -1,0 +1,116 @@
+[
+  {
+    "case": "Q0",
+    "confirmation_integrity": {
+      "ok": true,
+      "scope": "source and confirmation dossier integrity only; not independent geometry/manufacturing acceptance",
+      "manufacturing_delivery_complete": false,
+      "production_release": false,
+      "zip": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.8.1-material-code-repair/CN03_final_Q0/requirement_SYNTHETIC_R12_Q0/revisions/未命名待确认_requirement_SYNTHETIC_R12_Q0_20261023_183028_737443fc_CONFIRMATION/未命名待确认_requirement_SYNTHETIC_R12_Q0_20261023_183028_737443fc_确认稿资料.zip",
+      "zip_sha256": "9dbd67a256b0bc8269f43518d35c012b2aa8e39a5a18ad727594fefc3a63c411",
+      "artifacts": 22
+    },
+    "complete_gate_rejected": true,
+    "error": "GENERAL_CONFIRMATION_ONLY_HOLD: missing essential input or unresolved fit; not complete manufacturing delivery",
+    "CAD_executed": true,
+    "review_status": "FORMED_CONFIRMATION_ONLY_HOLD",
+    "manufacturing_delivery_complete": false,
+    "root": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.8.1-material-code-repair/CN03_final_Q0/requirement_SYNTHETIC_R12_Q0/revisions/未命名待确认_requirement_SYNTHETIC_R12_Q0_20261023_183028_737443fc_CONFIRMATION",
+    "zip_sha256": "9dbd67a256b0bc8269f43518d35c012b2aa8e39a5a18ad727594fefc3a63c411"
+  },
+  {
+    "case": "UNKNOWN",
+    "confirmation_integrity": {
+      "ok": true,
+      "scope": "source and confirmation dossier integrity only; not independent geometry/manufacturing acceptance",
+      "manufacturing_delivery_complete": false,
+      "production_release": false,
+      "zip": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.8.1-material-code-repair/CN03_final_UNKNOWN/requirement_SYNTHETIC_R12_UNKNOWN/revisions/未命名待确认_requirement_SYNTHETIC_R12_UNKNOWN_20261023_183121_fed3756a_CONFIRMATION/未命名待确认_requirement_SYNTHETIC_R12_UNKNOWN_20261023_183121_fed3756a_确认稿资料.zip",
+      "zip_sha256": "c538d89bc436c76aacb3f9b2579aef9f468e4ef6069b7433af7776b089d8cf26",
+      "artifacts": 22
+    },
+    "complete_gate_rejected": true,
+    "error": "GENERAL_CONFIRMATION_ONLY_HOLD: missing essential input or unresolved fit; not complete manufacturing delivery",
+    "CAD_executed": true,
+    "review_status": "FORMED_CONFIRMATION_ONLY_HOLD",
+    "manufacturing_delivery_complete": false,
+    "root": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.8.1-material-code-repair/CN03_final_UNKNOWN/requirement_SYNTHETIC_R12_UNKNOWN/revisions/未命名待确认_requirement_SYNTHETIC_R12_UNKNOWN_20261023_183121_fed3756a_CONFIRMATION",
+    "zip_sha256": "c538d89bc436c76aacb3f9b2579aef9f468e4ef6069b7433af7776b089d8cf26"
+  },
+  {
+    "case": "MISSING",
+    "confirmation_integrity": {
+      "ok": true,
+      "scope": "source and confirmation dossier integrity only; not independent geometry/manufacturing acceptance",
+      "manufacturing_delivery_complete": false,
+      "production_release": false,
+      "zip": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.8.1-material-code-repair/CN03_final_MISSING/requirement_SYNTHETIC_R12_MISSING/revisions/未命名待确认_requirement_SYNTHETIC_R12_MISSING_20261023_183121_a9b80660_CONFIRMATION/未命名待确认_requirement_SYNTHETIC_R12_MISSING_20261023_183121_a9b80660_确认稿资料.zip",
+      "zip_sha256": "1ebba170c309adc514abfeba5e0d97d5372e2faf9d09c1c7448ab1396b7b08eb",
+      "artifacts": 3
+    },
+    "complete_gate_rejected": true,
+    "error": "GENERAL_CONFIRMATION_ONLY_HOLD: missing essential input or unresolved fit; not complete manufacturing delivery",
+    "CAD_executed": false,
+    "review_status": "NEEDS_ESSENTIAL_INPUT",
+    "manufacturing_delivery_complete": false,
+    "root": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.8.1-material-code-repair/CN03_final_MISSING/requirement_SYNTHETIC_R12_MISSING/revisions/未命名待确认_requirement_SYNTHETIC_R12_MISSING_20261023_183121_a9b80660_CONFIRMATION",
+    "zip_sha256": "1ebba170c309adc514abfeba5e0d97d5372e2faf9d09c1c7448ab1396b7b08eb"
+  },
+  {
+    "case": "IRREGULAR",
+    "confirmation_integrity": {
+      "ok": true,
+      "scope": "source and confirmation dossier integrity only; not independent geometry/manufacturing acceptance",
+      "manufacturing_delivery_complete": false,
+      "production_release": false,
+      "zip": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.8.1-material-code-repair/CN03_final_IRREGULAR/requirement_SYNTHETIC_R12_IRREGULAR/revisions/未命名待确认_requirement_SYNTHETIC_R12_IRREGULAR_20261023_183121_b04614e3_CONFIRMATION/未命名待确认_requirement_SYNTHETIC_R12_IRREGULAR_20261023_183121_b04614e3_确认稿资料.zip",
+      "zip_sha256": "69055fe663254ad1646e9d2c95a875334babf4db0623f9b81be88e7c621b6a75",
+      "artifacts": 3
+    },
+    "complete_gate_rejected": true,
+    "error": "GENERAL_CONFIRMATION_ONLY_HOLD: missing essential input or unresolved fit; not complete manufacturing delivery",
+    "CAD_executed": false,
+    "review_status": "UNSUPPORTED_SHAPE_REQUIRES_ADAPTER",
+    "manufacturing_delivery_complete": false,
+    "root": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.8.1-material-code-repair/CN03_final_IRREGULAR/requirement_SYNTHETIC_R12_IRREGULAR/revisions/未命名待确认_requirement_SYNTHETIC_R12_IRREGULAR_20261023_183121_b04614e3_CONFIRMATION",
+    "zip_sha256": "69055fe663254ad1646e9d2c95a875334babf4db0623f9b81be88e7c621b6a75"
+  },
+  {
+    "case": "DEFAULT_CONFLICT",
+    "confirmation_integrity": {
+      "ok": true,
+      "scope": "source and confirmation dossier integrity only; not independent geometry/manufacturing acceptance",
+      "manufacturing_delivery_complete": false,
+      "production_release": false,
+      "zip": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.8.1-material-code-repair/CN03_final_DEFAULT_CONFLICT/requirement_SYNTHETIC_R12_DEFAULT15_GEOMETRY_CONFLICT/revisions/未命名待确认_requirement_SYNTHETIC_R12_DEFAULT15_GEOMETRY_CONFLICT_20261023_183121_b01e950c_CONFIRMATION/未命名待确认_requirement_SYNTHETIC_R12_DEFAULT15_GEOMETRY_CONFLICT_20261023_183121_b01e950c_确认稿资料.zip",
+      "zip_sha256": "d93a0dd8adc0443b8ed30e47489a619432888daed1d62f10a559a6fa046bcc6c",
+      "artifacts": 3
+    },
+    "complete_gate_rejected": true,
+    "error": "GENERAL_CONFIRMATION_ONLY_HOLD: missing essential input or unresolved fit; not complete manufacturing delivery",
+    "CAD_executed": false,
+    "review_status": "NEEDS_PROCESS_DECISION",
+    "manufacturing_delivery_complete": false,
+    "root": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.8.1-material-code-repair/CN03_final_DEFAULT_CONFLICT/requirement_SYNTHETIC_R12_DEFAULT15_GEOMETRY_CONFLICT/revisions/未命名待确认_requirement_SYNTHETIC_R12_DEFAULT15_GEOMETRY_CONFLICT_20261023_183121_b01e950c_CONFIRMATION",
+    "zip_sha256": "d93a0dd8adc0443b8ed30e47489a619432888daed1d62f10a559a6fa046bcc6c"
+  },
+  {
+    "case": "FIXING_CONFLICT",
+    "confirmation_integrity": {
+      "ok": true,
+      "scope": "source and confirmation dossier integrity only; not independent geometry/manufacturing acceptance",
+      "manufacturing_delivery_complete": false,
+      "production_release": false,
+      "zip": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.8.1-material-code-repair/CN03_final_FIXING_CONFLICT/requirement_SYNTHETIC_R12_DEFAULT15_FIXING_CONFLICT/revisions/未命名待确认_requirement_SYNTHETIC_R12_DEFAULT15_FIXING_CONFLICT_20261023_183122_045b0d0c_CONFIRMATION/未命名待确认_requirement_SYNTHETIC_R12_DEFAULT15_FIXING_CONFLICT_20261023_183122_045b0d0c_确认稿资料.zip",
+      "zip_sha256": "b16ebe295cc2993e84b025e1ec6c878526d87fdeb107302d2ea1c177037d77b4",
+      "artifacts": 3
+    },
+    "complete_gate_rejected": true,
+    "error": "GENERAL_CONFIRMATION_ONLY_HOLD: missing essential input or unresolved fit; not complete manufacturing delivery",
+    "CAD_executed": false,
+    "review_status": "NEEDS_PROCESS_DECISION",
+    "manufacturing_delivery_complete": false,
+    "root": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.8.1-material-code-repair/CN03_final_FIXING_CONFLICT/requirement_SYNTHETIC_R12_DEFAULT15_FIXING_CONFLICT/revisions/未命名待确认_requirement_SYNTHETIC_R12_DEFAULT15_FIXING_CONFLICT_20261023_183122_045b0d0c_CONFIRMATION",
+    "zip_sha256": "b16ebe295cc2993e84b025e1ec6c878526d87fdeb107302d2ea1c177037d77b4"
+  }
+]

@@ -1,0 +1,42 @@
+{
+  "id": "handle-lid-top-riveted-v1",
+  "version": 1,
+  "kind": "hole_pattern",
+  "extends": "handle-85-62-30-v1",
+  "description_cn": "盖顶把手（铆接/螺钉）孔型：每只 Ø6.6×4，宽排85 / 窄排62 / 排距30，宽排朝盖中心",
+  "laser_diameter_mm": 6.6,
+  "per_handle": {
+    "wide_pitch_mm": 85,
+    "narrow_pitch_mm": 62,
+    "row_spacing_mm": 30
+  },
+  "placement_default": "no default - placement comes from the brief. Seen: 2 handles mirrored, wide rows facing each other (S-201-1-20261021-001-v1: centres X=80/320,Y=110 on 400x220); 1 handle centred, grip along long side (S-201-1-20261024-005-v1: centre (160,77.5) on 320x155)",
+  "reference_envelope_mm": {
+    "base": [
+      50,
+      105,
+      3
+    ],
+    "posts": [
+      10,
+      10,
+      35
+    ],
+    "bar": [
+      10,
+      100,
+      8
+    ],
+    "note": "reference only, not supplier geometry"
+  },
+  "checks": [
+    "hole edge >= 3 mm to bend tangent",
+    "screwdriver access cones of skirt screws vs handle envelope",
+    "rivet tail envelope O12x12 under lid vs body"
+  ],
+  "status": "engineering_reference_candidate",
+  "source": "box-155x320x105 S-201-1-20261024-005-v1 README L18-19; box-200x350x210 S-201-20261024-002-v1 README L24; box-400x220x150 tools/cfg.py",
+  "only_when_requested": true,
+  "final_hole_size": "Ø6.6 = M6 clearance (default; 用户 t16u 2026-10-26: 默认把手=原技能默认尺寸 handle-85-62-30-v1, M6孔; other fasteners only if the user asks)",
+  "manufacturing_released": false
+}

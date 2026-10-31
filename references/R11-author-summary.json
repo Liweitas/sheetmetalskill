@@ -1,0 +1,20 @@
+{
+  "version": "2.8.0-R11",
+  "status": "AUTHOR_VALIDATED_CANDIDATE_PENDING_INDEPENDENT_REVIEW",
+  "unit_tests": 293,
+  "public_resolve_only_cases": 7,
+  "actual_public_entry_cases": 7,
+  "actual_complete_geometry_cases": 4,
+  "actual_complete_PDF_pages": 98,
+  "actual_confirmation_flow_cases": 3,
+  "negative_integrity_tests": 11,
+  "integrity_positive_tests": 1,
+  "R10_exact_original_failure_rejected": true,
+  "independent_R11_acceptance": "PENDING",
+  "production_release": false,
+  "all_current_runtime_scripts_match_executed_snapshot_02": true,
+  "global_install_changed": false,
+  "original_customer_geometry_changed": false,
+  "R10_frozen_sha256": "19fc86d331e2f863d57e764f27b8a42a678c994223e601109baa7e86ef4e8cdf",
+  "visual_review": "All 98 complete-PDF pages rendered and layout contact sheets viewed; selected full pages/source/provenance/isometric and three confirmation first pages viewed. Not independent shop approval."
+}

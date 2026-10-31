@@ -1,0 +1,111 @@
+{
+  "R01": {
+    "version": "2.4.0",
+    "independent_overall": "FAILED",
+    "frozen_zip_sha256": "56a29d7c32d61f9625af75c8c1bb0890a2a24551bfa968604fbb0e6c753c7210",
+    "reports": [
+      {
+        "preserved_evidence_name": "R01_INDEPENDENT_ACCEPTANCE_FAILED.md",
+        "sha256": "1466634c2d8f744d200b80beaccd368de39f08cb5c073976ccaf15da8e6cd4a6",
+        "bytes": 5687
+      },
+      {
+        "preserved_evidence_name": "R01_INDEPENDENT_RUNS.json",
+        "sha256": "2cc66042c6645423e3112369f56ec103e6a00d6b3b3e56723e207e0bf71d7544",
+        "bytes": 2187
+      },
+      {
+        "preserved_evidence_name": "R01_DUAL_STRUCTURE_ACCEPTANCE.md",
+        "sha256": "ec8f4b08c7f87c9c027df2d4ae48a0dc8b005cd40bff43d132ae46e8da30f57c",
+        "bytes": 16854
+      },
+      {
+        "preserved_evidence_name": "R01_DUAL_STRUCTURE_COMMANDS.json",
+        "sha256": "fb66d6ae1537e1c9182fb44aeaa809a5a09b1b9c5eb9a04da86a47ede13e4f42",
+        "bytes": 3967
+      },
+      {
+        "preserved_evidence_name": "R01_A_FAILURE_SOURCE_JOB.json",
+        "sha256": "27d0c6544cce8698684b6ddbce618d12c8bfe557c6f7ba72e4e13aa2d91cf1ef",
+        "bytes": 564
+      },
+      {
+        "preserved_evidence_name": "R01_B_SOURCE_JOB.json",
+        "sha256": "0292db4ba4bb315b9ea94a610d6d867b91f3bf1241c20b482d862433c379fe06",
+        "bytes": 563
+      },
+      {
+        "preserved_evidence_name": "R01_DUAL_STRUCTURE_ASSUMPTIONS.json",
+        "sha256": "b4a318b2b38e9e0443b5447e5a328d231271b5afd97acf9c8d411c9cdd934a9b",
+        "bytes": 866
+      }
+    ],
+    "confirmed_failures": [
+      "N02 two unified-entry runs blocked before CAD: unsupported end_inset, missing complete common handle/fixing profiles and runtime versioned addon discovery",
+      "A460x260x170t1.2 centralD18: normal-edge estimate1.194733 blocks lidDXF and fullPDF",
+      "Job engineering assumptions incorrectly marked confirmed"
+    ],
+    "B_independent_result": {
+      "sheets": 3,
+      "DXFs": 3,
+      "PDF_pages": 12,
+      "root_overlap_HOLD_mm3": 4.5670959798
+    }
+  },
+  "R02": {
+    "version": "2.4.1",
+    "author_tests": "see author-validation.json",
+    "independent_acceptance": "pending",
+    "no_manufacturing_release": true,
+    "real_STEP_blind_acceptance": {
+      "result": "FAILED full manufacturing delivery; partial audit only",
+      "source_sha256": "4e1ef4ec483c1b9b0d5c77e78a04afaa7c4b1acc83a62820f4c638d8d4d5698a",
+      "independent_report_sha256": "132ef584efdcacdb4193b81cd12c5ee79e7e2650178e61fe26a27670b7bde20d",
+      "failures": [
+        "Source lid strict BOP fails although isValid=true",
+        "Closed frame native Wire is not closed",
+        "Source8 diagonals match only4/8 current03 hypothesis",
+        "Raw native DXFs lack mm/CUT normalization linkage",
+        "Existing STEP lacks complete all-source review/bending partial pipeline"
+      ],
+      "not_all_failures_are_bad_source_geometry": true
+    }
+  },
+  "R03": {
+    "version": "2.5.0",
+    "independent_acceptance": "Not unconditionally passed: three validator leaks confirmed",
+    "author_tests": "author-validation.json",
+    "source_model_not_bundled": true,
+    "manufacturing_release": false,
+    "independent_leaks": [
+      "contradictory geometry-complete/coverage fields",
+      "tampered final AUDIT_RESULT",
+      "two-times-scale DXF after SHA rebinding"
+    ]
+  },
+  "R04": {
+    "version": "2.5.1",
+    "independent_acceptance": "pending",
+    "author_replay": "4 positives and11 negatives all expected",
+    "source_and_reconstruction_preserved": true
+  },
+  "R05": {
+    "version": "2.6.0",
+    "author_only": true,
+    "independent": "PARTIAL; coherent direction UP/+90 false claims accepted in both gates; separate overlap volume sources",
+    "changes": [
+      "scoped user site fitting acceptance; geometry/interference retained",
+      "default per-part formed isometric and native B direction/flat linkage"
+    ],
+    "original_root_interference_not_geometrically_eliminated": true,
+    "author_found_mapping_defect": "Preserved R05-AUTHOR_FOUND_BEND_MAPPING_ERROR.json; corrected before freeze; not rewritten as prior pass",
+    "independent_report": "R05-INDEPENDENT-PARTIAL-FAILURE.md",
+    "independent_report_sha256": "4be69b90400801f6cf9d39bb905004300e4031ace8d52ba295f3b2f451da71fa"
+  },
+  "R06": {
+    "version": "2.6.1",
+    "author_replay": "two actual direction failures rejected; three legal positives accepted; authoritative wrap volume unified",
+    "independent": "PENDING",
+    "scope": "two explicit R05 issues only"
+  }
+}

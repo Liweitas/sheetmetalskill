@@ -1,0 +1,40 @@
+{
+  "id": "N02_COMMON_REVIEW",
+  "units": "mm",
+  "workflow_profile": "common_review_v1",
+  "dimensions": {
+    "length": 460,
+    "width": 260,
+    "height": 170
+  },
+  "material": "201 stainless steel",
+  "thickness": 1.2,
+  "Ri": 0.8,
+  "K_ANSI": null,
+  "seam_gap": 0,
+  "end_inset": 0.0,
+  "lid_required": true,
+  "lid": {
+    "g": 0.5,
+    "skirt_height": 20,
+    "corner_gap": null,
+    "roof_gap": 0
+  },
+  "handles": {
+    "profile": "handle-85-62-30-v1",
+    "centers": [
+      [
+        118,
+        130
+      ],
+      [
+        342,
+        130
+      ]
+    ]
+  },
+  "fixings": {
+    "profile": "perimeter-m4-trial-v1"
+  },
+  "holes": []
+}

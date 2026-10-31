@@ -1,0 +1,104 @@
+test_canonical_acceptance_is_scoped_and_preserves_positive_measurement (test_lid_root_fit.LidRootFit.test_canonical_acceptance_is_scoped_and_preserves_positive_measurement) ... ERROR
+test_explicit_scoped_acceptance_does_not_change_q_g_or_height (test_lid_root_fit.LidRootFit.test_explicit_scoped_acceptance_does_not_change_q_g_or_height) ... ERROR
+test_minimum_q_is_reported_as_tangency_only_not_auto_applied (test_lid_root_fit.LidRootFit.test_minimum_q_is_reported_as_tangency_only_not_auto_applied) ... FAIL
+test_missing_authorization_source_is_not_defaulted (test_lid_root_fit.LidRootFit.test_missing_authorization_source_is_not_defaulted) ... ok
+test_no_false_claim_of_elimination_or_trial (test_lid_root_fit.LidRootFit.test_no_false_claim_of_elimination_or_trial) ... ok
+test_no_lid_has_no_acceptance_and_no_fit_requirement (test_lid_root_fit.LidRootFit.test_no_lid_has_no_acceptance_and_no_fit_requirement) ... FAIL
+test_nonintersecting_parameter_pair_needs_no_exception (test_lid_root_fit.LidRootFit.test_nonintersecting_parameter_pair_needs_no_exception) ... FAIL
+test_parameter_or_hole_change_invalidates_acceptance (test_lid_root_fit.LidRootFit.test_parameter_or_hole_change_invalidates_acceptance) ... FAIL
+test_scope_cannot_transfer_to_new_customer (test_lid_root_fit.LidRootFit.test_scope_cannot_transfer_to_new_customer) ... FAIL
+test_unaccepted_conflict_is_diagnostic_and_delivery_blocked_without_mutation (test_lid_root_fit.LidRootFit.test_unaccepted_conflict_is_diagnostic_and_delivery_blocked_without_mutation) ... FAIL
+
+======================================================================
+ERROR: test_canonical_acceptance_is_scoped_and_preserves_positive_measurement (test_lid_root_fit.LidRootFit.test_canonical_acceptance_is_scoped_and_preserves_positive_measurement)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.6.0-root-fit-repair/dev/step-sheetmetal-delivery/tests/test_lid_root_fit.py", line 46, in test_canonical_acceptance_is_scoped_and_preserves_positive_measurement
+    j=authorize_fixture(self.job());p=self.project(j)
+                                      ~~~~~~~~~~~~^^^
+  File "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.6.0-root-fit-repair/dev/step-sheetmetal-delivery/tests/test_lid_root_fit.py", line 16, in project
+    f=Path(d)/'job.json';f.write_text(json.dumps(j));return project_for(j,resolve_job(j),f,'20261022_1200','2026-10-22T12:00:00+08:00')
+                                                                          ~~~~~~~~~~~^^^
+  File "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.6.0-root-fit-repair/dev/step-sheetmetal-delivery/scripts/design_job.py", line 49, in resolve_job
+    if errors:raise ValueError("JOB_SCHEMA: "+"; ".join("/".join(map(str,e.absolute_path))+": "+e.message for e in errors))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: JOB_SCHEMA: : Additional properties are not allowed ('site_fit_acceptance' was unexpected)
+
+======================================================================
+ERROR: test_explicit_scoped_acceptance_does_not_change_q_g_or_height (test_lid_root_fit.LidRootFit.test_explicit_scoped_acceptance_does_not_change_q_g_or_height)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.6.0-root-fit-repair/dev/step-sheetmetal-delivery/tests/test_lid_root_fit.py", line 25, in test_explicit_scoped_acceptance_does_not_change_q_g_or_height
+    j=authorize_fixture(self.job());r=resolve_job(j);self.assertIn('fit',r)
+                                      ~~~~~~~~~~~^^^
+  File "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.6.0-root-fit-repair/dev/step-sheetmetal-delivery/scripts/design_job.py", line 49, in resolve_job
+    if errors:raise ValueError("JOB_SCHEMA: "+"; ".join("/".join(map(str,e.absolute_path))+": "+e.message for e in errors))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: JOB_SCHEMA: : Additional properties are not allowed ('site_fit_acceptance' was unexpected)
+
+======================================================================
+FAIL: test_minimum_q_is_reported_as_tangency_only_not_auto_applied (test_lid_root_fit.LidRootFit.test_minimum_q_is_reported_as_tangency_only_not_auto_applied)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.6.0-root-fit-repair/dev/step-sheetmetal-delivery/tests/test_lid_root_fit.py", line 54, in test_minimum_q_is_reported_as_tangency_only_not_auto_applied
+    r=resolve_job(self.job());self.assertIn('fit',r);self.assertAlmostEqual(r['fit']['minimum_q_ideal_tangency_mm'],.058380151290433724);self.assertEqual(r['q'],0)
+                              ~~~~~~~~~~~~~^^^^^^^^^
+AssertionError: 'fit' not found in {'id': 'EXTERNAL', 'L': 240.0, 'W': 150.0, 'H': 100.0, 't': 1.2, 'Ri': 0.8, 'g': 0.5, 'q': 0.0, 'skirt': 16.0, 'corner_gap': 0.2, 'K_ANSI': 0.4, 'seam_gap': 0.1, 'method': 'u_external_ends', 'lid_required': True, 'holes': [], 'roles': {'U': 'u_body', 'END_L': 'endplate', 'END_R': 'endplate', 'LID': 'lid'}, 'selection': {'dimensions_mm': [240.0, 150.0, 100.0], 'comparison': '>=', 'default_recommendation': 'u_external_ends', 'selected_method': 'u_external_ends', 'source': 'workflow_structure_2.4.0', 'body_sheet_parts': 3, 'sheet_parts_with_requested_lid': 4, 'lid_required': True, 'manufacturability': 'not_evaluated', 'production_released': False, 'note': 'Equality belongs to U floor + two external ends. Existing projects and explicit choices are preserved. Counts exclude handles/hardware. U direction, seams, radii, holes and tooling require project design.'}, 'record_kind': 'new', 'end_inset': 0.0, 'end_top_flush': False, 'candidate_resolutions': [], 'mounting_patterns': [], 'fixing_pairs': [], 'profiles': []}
+
+======================================================================
+FAIL: test_no_lid_has_no_acceptance_and_no_fit_requirement (test_lid_root_fit.LidRootFit.test_no_lid_has_no_acceptance_and_no_fit_requirement)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.6.0-root-fit-repair/dev/step-sheetmetal-delivery/tests/test_lid_root_fit.py", line 56, in test_no_lid_has_no_acceptance_and_no_fit_requirement
+    j=self.job();j['lid_required']=False;j.pop('lid');self.assertEqual(resolve_job(j).get('fit'),{'applicable':False})
+                                                      ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: None != {'applicable': False}
+
+======================================================================
+FAIL: test_nonintersecting_parameter_pair_needs_no_exception (test_lid_root_fit.LidRootFit.test_nonintersecting_parameter_pair_needs_no_exception)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.6.0-root-fit-repair/dev/step-sheetmetal-delivery/tests/test_lid_root_fit.py", line 60, in test_nonintersecting_parameter_pair_needs_no_exception
+    j=self.job();j['lid']['roof_gap']=.2;r=resolve_job(j);self.assertIn('fit',r);self.assertTrue(r['fit']['analytic_feasible']);self.assertEqual(r['fit']['disposition'],'ACTUAL_GEOMETRY_CHECK_REQUIRED')
+                                                          ~~~~~~~~~~~~~^^^^^^^^^
+AssertionError: 'fit' not found in {'id': 'EXTERNAL', 'L': 240.0, 'W': 150.0, 'H': 100.0, 't': 1.2, 'Ri': 0.8, 'g': 0.5, 'q': 0.2, 'skirt': 16.0, 'corner_gap': 0.2, 'K_ANSI': 0.4, 'seam_gap': 0.1, 'method': 'u_external_ends', 'lid_required': True, 'holes': [], 'roles': {'U': 'u_body', 'END_L': 'endplate', 'END_R': 'endplate', 'LID': 'lid'}, 'selection': {'dimensions_mm': [240.0, 150.0, 100.0], 'comparison': '>=', 'default_recommendation': 'u_external_ends', 'selected_method': 'u_external_ends', 'source': 'workflow_structure_2.4.0', 'body_sheet_parts': 3, 'sheet_parts_with_requested_lid': 4, 'lid_required': True, 'manufacturability': 'not_evaluated', 'production_released': False, 'note': 'Equality belongs to U floor + two external ends. Existing projects and explicit choices are preserved. Counts exclude handles/hardware. U direction, seams, radii, holes and tooling require project design.'}, 'record_kind': 'new', 'end_inset': 0.0, 'end_top_flush': False, 'candidate_resolutions': [], 'mounting_patterns': [], 'fixing_pairs': [], 'profiles': []}
+
+======================================================================
+FAIL: test_parameter_or_hole_change_invalidates_acceptance (test_lid_root_fit.LidRootFit.test_parameter_or_hole_change_invalidates_acceptance)
+----------------------------------------------------------------------
+ValueError: JOB_SCHEMA: : Additional properties are not allowed ('site_fit_acceptance' was unexpected)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.6.0-root-fit-repair/dev/step-sheetmetal-delivery/tests/test_lid_root_fit.py", line 37, in test_parameter_or_hole_change_invalidates_acceptance
+    with self.assertRaisesRegex(ValueError,'SITE_FIT'):resolve_job(j)
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "SITE_FIT" does not match "JOB_SCHEMA: : Additional properties are not allowed ('site_fit_acceptance' was unexpected)"
+
+======================================================================
+FAIL: test_scope_cannot_transfer_to_new_customer (test_lid_root_fit.LidRootFit.test_scope_cannot_transfer_to_new_customer)
+----------------------------------------------------------------------
+ValueError: JOB_SCHEMA: : Additional properties are not allowed ('site_fit_acceptance' was unexpected)
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.6.0-root-fit-repair/dev/step-sheetmetal-delivery/tests/test_lid_root_fit.py", line 30, in test_scope_cannot_transfer_to_new_customer
+    with self.assertRaisesRegex(ValueError,'SITE_FIT'):resolve_job(j)
+         ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError: "SITE_FIT" does not match "JOB_SCHEMA: : Additional properties are not allowed ('site_fit_acceptance' was unexpected)"
+
+======================================================================
+FAIL: test_unaccepted_conflict_is_diagnostic_and_delivery_blocked_without_mutation (test_lid_root_fit.LidRootFit.test_unaccepted_conflict_is_diagnostic_and_delivery_blocked_without_mutation)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.6.0-root-fit-repair/dev/step-sheetmetal-delivery/tests/test_lid_root_fit.py", line 20, in test_unaccepted_conflict_is_diagnostic_and_delivery_blocked_without_mutation
+    self.assertIn('fit',r);self.assertEqual(r['fit']['disposition'],'USER_REVIEW_REQUIRED')
+    ~~~~~~~~~~~~~^^^^^^^^^
+AssertionError: 'fit' not found in {'id': 'EXTERNAL', 'L': 240.0, 'W': 150.0, 'H': 100.0, 't': 1.2, 'Ri': 0.8, 'g': 0.5, 'q': 0.0, 'skirt': 16.0, 'corner_gap': 0.2, 'K_ANSI': 0.4, 'seam_gap': 0.1, 'method': 'u_external_ends', 'lid_required': True, 'holes': [], 'roles': {'U': 'u_body', 'END_L': 'endplate', 'END_R': 'endplate', 'LID': 'lid'}, 'selection': {'dimensions_mm': [240.0, 150.0, 100.0], 'comparison': '>=', 'default_recommendation': 'u_external_ends', 'selected_method': 'u_external_ends', 'source': 'workflow_structure_2.4.0', 'body_sheet_parts': 3, 'sheet_parts_with_requested_lid': 4, 'lid_required': True, 'manufacturability': 'not_evaluated', 'production_released': False, 'note': 'Equality belongs to U floor + two external ends. Existing projects and explicit choices are preserved. Counts exclude handles/hardware. U direction, seams, radii, holes and tooling require project design.'}, 'record_kind': 'new', 'end_inset': 0.0, 'end_top_flush': False, 'candidate_resolutions': [], 'mounting_patterns': [], 'fixing_pairs': [], 'profiles': []}
+
+----------------------------------------------------------------------
+Ran 10 tests in 0.005s
+
+FAILED (failures=6, errors=2)

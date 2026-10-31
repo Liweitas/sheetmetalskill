@@ -1,0 +1,732 @@
+--- R09/PRODUCT.md
++++ R10/PRODUCT.md
+@@ -1,6 +1,6 @@
+ # STEP钣金审核与可复现交付 / 完整技能
+ 
+-版本2.7.2 R09候选，最终单包消息计划修复的独立复验待完成。R08在两项漏检及列明范围独立复验限定通过，历史冻结不改。保留原单人商业使用许可，见COMMERCIAL-LICENSE.md；本包不扩大第三方CAD许可或用户项目授权。
++版本2.7.3 R10候选，独立复验待完成。R09独立验收因发布旧包删计划漏检不通过，历史冻结与失败证据保留。R08在两项漏检及列明范围独立复验限定通过，历史冻结不改。保留原单人商业使用许可，见COMMERCIAL-LICENSE.md；本包不扩大第三方CAD许可或用户项目授权。
+ 
+ 本版为可独立解压的完整目录，不是增量包。包含实际两种矩形箱体的成形CAD、真实展开、逐件激光DXF、装配/爆炸STEP、三视折弯PDF、强制03回读、完整交付门禁、schema/模板、必要资产、回归及实际CAD作者自测脚本。使用范围及输入限制见references/box-generation.md。
+ 
+--- R09/QUICKSTART.md
++++ R10/QUICKSTART.md
+@@ -1,4 +1,4 @@
+-# 完整 v2.7.2 R09 候选：安装与最小调用
++# 完整 v2.7.3 R10 候选：安装与最小调用
+ 
+ 本版是可独立解压的完整技能，不是增量包。R07独立验收两项漏检保留为失败；R08作者验证与待进行的独立复验分开。不安装/替换全局旧版，不修改旧客户项目。
+ 
+@@ -64,3 +64,7 @@
+ ## 文件主码
+ 
+ 生成入口增加 `--naming /ABS/actual-factory-naming.json`，详见references/factory-naming.md和naming.schema.json。缺字段仍可形成带HOLD的齐套工程副本，但前缀明确“未命名待确认”、正式code为null；不得伪造渠道/工厂编号。已有包只更名副本用publish_named_delivery.py，不重建CAD。最终revision_root以生成返回为准，名称是主码_内部修订；旧示例路径仅说明归档层级。
++
++## R10 发布版本与兼容
++
++必读references/R10-publication.md。新发布将named-single-zip-v2和2.7.3-R10绑定封套/manifest/命名记录；源制造契约和PDF/CAD版本保留原值。原始R08只读检查可通过，不等于已做R10命名发布。旧R09合法命名包经publish_named_delivery升级；缺默认计划或发布字段降级拒绝，不能靠旧制造版本免检。原R09独立失败仍为失败，R10作者验证与独立复验分开。
+--- R09/SKILL.md
++++ R10/SKILL.md
+@@ -2,12 +2,16 @@
+ name: step-sheetmetal-delivery
+ description: 核验STEP与钣金要求；为两类矩形箱体生成分件/装配/爆炸STEP、真实展开激光DXF及三视折弯PDF，强制核验03盖角和完整交付；也用于既有项目审核及窄改，纯格式转换不适用。
+ metadata:
+-  version: "2.7.2"
++  version: "2.7.3"
+ ---
+ 
+ # STEP 钣金审核与可复现出图
+ 
+ 这是完整技能，包含实际CAD生成路径；FreeCAD、SheetMetal与PDF工具是公开外部依赖。安装、最小调用及依赖见[QUICKSTART](QUICKSTART.md)，支持范围和参数见[新箱体运行契约](references/box-generation.md)。参数、几何、首件与批量放行分别报告；不能把自测或HOLD候选称为生产放行。
++
++## 当前发布契约（R10）
++
++发布和最终投递前读[R10发布契约](references/R10-publication.md)。R09曾漏检旧R08命名发布副本删默认计划，本轮不得沿用其不通过结论冒充完成。新发布独立绑定封套/manifest/命名记录的发布契约与默认单ZIP计划，不能因源制造版本旧或删除字段而跳过；原CAD/DXF/PDF/job和现场授权保持原字节。原始未发布R08仍可只读验核；旧R09合法命名副本须经公开发布入口升级，不直接当作R10发布通过。
+ 
+ ## 工厂编码命名
+ 
+@@ -68,3 +72,5 @@
+ R08冻结时作者证据摘要见[作者验证记录](references/R08-author-validation.json)，原R07独立失败见[原报告副本](references/R07-INDEPENDENT-FAILURE.md)。
+ 
+ R09本轮作者实际验证、失败保留与范围见[作者报告](references/R09-author-report.md)、[复现](references/R09-reproduction.md)及[摘要](references/R09-author-summary.json)；R09独立复验待完成。R08后续[独立限定通过报告](references/R08-INDEPENDENT-LIMITED-PASS.md)不扩展为R09通过。
++
++R10作者实测和复现见[本轮报告](references/R10-author-report.md)、[复现](references/R10-reproduction.md)、[摘要](references/R10-author-summary.json)；原R09[独立失败](references/R09-INDEPENDENT-FAILURE.md)保持不通过。本R10候选待独立复验，不把作者测试称作独立通过。
+--- R09/VERSION
++++ R10/VERSION
+@@ -1 +1 @@
+-2.7.2
++2.7.3
+--- /dev/null
++++ R10/references/R09-INDEPENDENT-FAILURE.md
+@@ -0,0 +1,91 @@
++# R09 独立验收报告
++
++**结论：本轮不通过，发现1项默认投递门禁可被删除的真实漏检。** 正常统一命名、单ZIP计划及多数定向反例通过；不把这些局部通过扩大为原冻结包全部通过。未修改被验代码，未上传、发送附件或更改BOX530原包。
++
++## 对象与范围
++
++冷解包对象：`step-sheetmetal-delivery_v2.7.2_full_candidate_R09_20261023_1232.zip`，422748字节，SHA256 `de8a16066dc4a92a1866e0330a36e6450c800f418391e6200ff5b67e3f8dcc9d`。完整SKILL、命名/投递契约和公开入口已读；verify_install核167项，最终与ZIP168个非目录成员逐字节比较未变。未读取作者259单测/11投递/6命名通过报告作为预期答案，未以作者自测代替独立结果。
++
++本轮仅用新包支持入口发布已有R08两种结构的副本，不重新生成CAD；完整门禁仍实际重新读取CAD/原生展开/尺寸/干涉。没有重新目视50页旧图册，改为独立核PDF字节不变。所有工厂编号、材料及例外请求均明确SYNTHETIC TEST ONLY，不是客户/BOX530实际分号或发送授权。BOX530只按“渠道S、编号未知”测试规则，不读取/改名/重建其原包；未额外核读图片libfile，规则来自本次明确文字要求。
++
++## F1：R09发布旧包后，删默认单ZIP计划仍获完整通过
++
++先用R09的公开 `publish_named_delivery.py` 对R08合法包做正式测试命名发布，成功且默认计划存在；源制造契约保持 `2.7.1-R08`。复制此新发布目录，仅删除其交付封套的：
++
++```text
++final_message_plan
++message_dispatch_contract
++```
++
++命名记录仍在、所有命名合法；除该封套外所有文件逐字节相同，ZIP哈希也相同。R09 `validate_delivery.py` 对此副本实际返回：
++
++```json
++{
++  "ok": true,
++  "contract": "2.7.1-R08",
++  "validator_version": "2.7.2-R09",
++  "message_dispatch": null,
++  "fresh_CAD_checks_executed": true,
++  "digital_deliverables_complete": true,
++  "production_release": false
++}
++```
++
++精确失败目录：
++
++`named_negative_cases/remove_default_plan_from_R09_published_legacy/customer_INDEPENDENT_R08/revisions/S-304_TEST_ONLY-1.2-20261020-0427-v1_R01/`
++
++原始返回：`named_negative_cases/remove_default_plan_from_R09_published_legacy.stdout.json`；最小字节差证明：`failure_proof.json`。不是绕过发送器另发消息的不可控行为，而是送检的R09命名发布产物缺少默认投递计划时，完整文件门禁仍接受。
++
++根因：`scripts/delivery_contract.py` 的check_envelope仅在 `manifest.delivery_contract == VERSION`（当前2.7.2-R09）时强制投递字段；R09支持入口publish_named_delivery保留源R08契约，因此其新发布、已有命名记录的产物可走旧版缺字段宽容分支。计划存在时会检查，删除计划却变成不检查。建议作者在新版本为“R09发布/命名产物必须有默认单ZIP计划”建立不能被删除的判定，同时继续允许原始未发布R08包只读几何兼容；本轮没有实现补丁。
++
++边界：明确提交的散发/跨消息计划仍被正确拒绝，prepare_delivery_message默认也会生成单ZIP计划。本失败不证明脚本实际散发附件，也不推定原生R09新CAD生成路径同样能删字段通过；实证范围是新包明确支持的“旧完整包命名发布副本”。
++
++## 已通过的命名与发布检查
++
++通过新包公开发布入口实际生成4个副本，均执行完整CAD门禁：
++
++| 情形 | 实际结果 |
++|---|---|
++| 首次S线上测试码 | S-304_TEST_ONLY-1.2-20261020-0427-v1_R01 |
++| 升版 | 前五段不变，v1→v2，内部仍R01；旧v1保留 |
++| X线下、内部R02 | X-304_TEST_ONLY-1.2-20261020-0432-v1_R02，未误作v2 |
++| 仅渠道S，缺正式字段 | UNNAMED_PENDING_CONFIRMATION、code=null；未补0001或v2 |
++
++独立检查全部文件、目录与唯一ZIP共享正式码/待确认前缀，套料CUT、套料预览PDF、完整折弯工艺PDF的用途后缀明确，所有basename无冲突。ZIP仅一个本修订顶层，74/74/68/68成员，CRC、清单覆盖、成员SHA和实际文件字节一致。ZIP排除自身及外部封套以避免循环，包含文件清单与命名记录。例外消息计划放修订目录外。
++
++所有成形/展开/装配/爆炸STEP、分件/套料DXF及源job在发布前后逐一字节一致，四件式保护18项、三件式16项；PDF与历史log也保持原字节。更名只改文件名/JSON路径与依赖哈希，现场专项授权原job设计绑定未变。升版没有重取今日日期或重置编号。同目标发布冲突实际退出2 `NAMING_DUPLICATE_OUTPUT`，未覆盖、自动加号或分配工厂编号。
++
++独立直接调用命名规则验证12项：S/X正例、升版正例、改日期/编号升版拒绝、不增v拒绝、材料/t与源不符拒绝、缺编号待确认、内部R02不映射v2、BOX530模拟缺编号不分号、无效日历日期拒绝。全部符合预期。`BOX530_model_only`仅是规则夹具，不是实际客户模型验收或分号。
++
++证据：`publish_results.json`、`independent_published_readback.json`、`naming_and_dispatch_results.json`、`duplicate_output_check.json`。
++
++## JSON与同内容log哈希分叉
++
++原R08 `evidence/LID_native03_20261022_2047.json` 与 `native03_execution_20261022_2047.log` 的SHA相同。R09发布后JSON因引用重绑改变SHA，log仍保持原SHA，三个首次/待确认副本实际发现并核验此分叉，完整门禁均通过。不是仅比较作者记录：独立从原文件分组找相同SHA，再逐项读取发布后的JSON/log和manifest。
++
++四件式原SHA e265a0137b1129ed99a65235721c832c395cd4eb5409d106608ca44253a8b0fc；发布JSON SHA 078b761271489af450aea3c4c827abc354a0937665ff25ceb62ffd16d4f2b79f；log仍为原SHA。三件式对应证据亦列在independent_published_readback.json。新版只由改写JSON推导依赖映射，没有把同原SHA的未改写log错误覆写成新的JSON依赖。
++
++新命名副本的同步PDF尺寸＋回执＋SHA/清单/ZIP伪报，被HEADER_AUTHORITY_MISMATCH拒绝；命名请求材料改Q235且刷新清单/ZIP，被NAMING_MATERIAL_DIFFERS_SOURCE拒绝；合法同步重打包通过。它们证明新路径实际可运行且语义拒绝不是陈旧哈希偶然命中。上述F1依然漏检，详见 `named_negative_results.json`。
++
++## 投递计划与公开CLI
++
++直接在实际发布产物上验证14项计划：默认一条消息一个完整ZIP通过；ZIP+PDF同消息、ZIP/PDF跨消息、无请求只发PDF、重复ZIP均拒绝。明确当前单件/确认图测试请求通过；旧请求current=false、错客户/ZIP哈希、未索要路径、缺原文、确认阶段夹入制造PDF均拒绝；明确索要两文件的测试例外可按两消息发送，符合新用户明确例外优先规则。
++
++另通过公开prepare_delivery_message CLI实际复测4项：默认0、跨消息散发2、明确当前单PDF测试请求0、先确认图测试计划0。它们没有发送任何消息。完整默认计划的附件仅一个ZIP；例外保持独立计划，不替换完整包内默认计划。
++
++程序只能检查提交的整次计划、范围和实际附件SHA，不能证明自然语言授权真伪，也不能看到执行方隐瞒或另发的消息；本轮不声称所有agent必然遵守。测试授权均明确TEST ONLY，无真实发送授权。证据：`plans/`、`public_message_cli_results.json`、`naming_and_dispatch_results.json`。
++
++## 旧几何、授权、HOLD没有弱化的抽测
++
++R09直接只读验证原R08两合法结构均通过。R08保留的4份同步反例——PDF首页尺寸、实际三视尺寸、封套套数、板数——全部按对应语义拒绝；R06两份UP/+90实际弯向伪报仍从源CAD读回DOWN/−90拒绝。源STEP审核目录仍SOURCE_AUDIT_ONLY_PARTIAL_HOLD，完整门禁拒绝；材料/K未知未升级。
++
++改孔后的旧专项修配job通过新包resolve_job仍 `SITE_FIT_SCOPE` 拒绝；实际命名发布三件式的source job与授权绑定原字节不变，保留真实2.292783 mm³权威干涉、现场修配/试装未确认和production_release=false。没有把用户接受的修配干涉当本轮软件失败，没有改Ri/g/q或重建CAD求通过。
++
++独立R08→R09脚本差异索引及逐文件diff保存在当前目录。cad_build、方向读回、STEP尺寸读回、site_fit等核心几何/授权脚本字节未改；发生变化的旧制造/图纸脚本主要为版本支持及路径适配，并以实际旧反例重放核对，而非只信diff结论。详见 `replay_core_results.json`、`changed_hole_authorization_check.json`、`own_script_diff_index.json`。
++
++## 完整性与剩余工作
++
++final_integrity=true：冻结ZIP/解包成员未改；R03–R08旧证据812/550/806/226/1416/913项共4723项未变；18个历史候选SHA未变；唯一授权的原STEP仍256758字节及原SHA。BOX530原包未打开/改名，全局技能未替换。本轮只写acceptance_R09独立目录，无权限拒绝、无待确认或不确定操作。
++
++所有定向工作已完成，不等待长任务、不扩大测试。剩余是作者修复F1并提供新冻结候选，再独立重放该失败、合法旧包发布与默认/例外计划；本轮不自改代码后宣称原包通过。报告仅本地保存，由父统一交付一个完整技能ZIP，不散发多个附件。
+--- /dev/null
++++ R10/references/R09-INDEPENDENT-failure-proof.json
+@@ -0,0 +1,26 @@
++{
++  "failure": "R09 publisher legacy R08 output default-dispatch erasure accepted",
++  "source_R09_published_root": "/Users/harryma/Documents/Codex/2026-10-21/task-6/acceptance_R09/published/customer_INDEPENDENT_R08/revisions/S-304_TEST_ONLY-1.2-20261020-0427-v1_R01",
++  "failure_root": "/Users/harryma/Documents/Codex/2026-10-21/task-6/acceptance_R09/named_negative_cases/remove_default_plan_from_R09_published_legacy/customer_INDEPENDENT_R08/revisions/S-304_TEST_ONLY-1.2-20261020-0427-v1_R01",
++  "exact_changed_files": [
++    "S-304_TEST_ONLY-1.2-20261020-0427-v1_交付封套_DELIVERY_ENVELOPE_正式.json"
++  ],
++  "deleted_envelope_fields": [
++    "final_message_plan",
++    "message_dispatch_contract"
++  ],
++  "other_envelope_values_changed": [],
++  "manufacturing_and_all_other_files_byte_identical": true,
++  "ZIP_SHA_unchanged": true,
++  "actual_returncode": 0,
++  "gate_result": {
++    "ok": true,
++    "validator_version": "2.7.2-R09",
++    "contract": "2.7.1-R08",
++    "message_dispatch": null,
++    "fresh_CAD_checks_executed": true,
++    "digital_deliverables_complete": true,
++    "production_release": false
++  },
++  "root_cause": "check_envelope requires dispatch fields only when manifest.delivery_contract == 2.7.2-R09; R09 publish_named_delivery preserves the source R08 contract. Naming record remains present."
++}--- /dev/null
++++ R10/references/R10-author-report.md
+@@ -0,0 +1,32 @@
++# R10 发布契约漏检修复与作者验证
++
++版本v2.7.3 R10。作者限定验证通过，独立复验待完成，production_release=false。R09独立验收的真实失败保留，不将其历史改成通过。
++
++## 根因
++
++R09公开publish_named_delivery发布R08旧包时保留源制造契约2.7.1-R08；check_envelope却只在manifest.delivery_contract等于包内VERSION（2.7.2-R09）时强制默认投递字段。删封套final_message_plan/message_dispatch_contract后变成不检查，导致真实已命名发布产物的完整门禁错误通过。
++
++## 修复
++
++新增publication_contract.py，将当前发布契约named-single-zip-v2、发布实现版本2.7.3-R10在封套、清单/ZIP内的manifest和命名记录三处绑定，命名记录另绑定源制造契约。发布器实际升级这一层，保持原制造契约、project/PDF版本和CAD/DXF/PDF/job字节。这样没有通过虚改工程版本破坏原CAD/PDF/授权或假称重新制造。
++
++门禁依据命名记录、实际正式码/待命名目录、artifact文件名和发布字段识别发布产物；不因源是R08而免检，不依赖可删除的单一声明。凡发布产物必须有默认单ZIP计划；三处发布契约/版本不一致、删除或降级也拒绝。检查在昂贵CAD读取之前先阻断错误发布字段，正常产物仍完整运行实际CAD/原生展开/方向/干涉/数量等门禁。
++
++兼容边界：合法原始未发布R08可以只读核验，返回LEGACY_UNPUBLISHED_READ_ONLY，不称为R10命名发布。旧R09合法命名包有默认计划时，可以作为公开发布器的升级源；源仍实际核CAD/文件/计划，再出当前发布副本。原失败副本缺计划，入口即拒绝，不静默补计划洗成通过；未升级R09命名包不直接作为当前正式发布通过。单跑几何manifest不替代validate_delivery完整发布门禁。
++
++## 实际作者验证（不是只有单测）
++
++1. 不改原字节，直接用R10 validate_delivery重放R09独立失败目录：返回2，DISPATCH_REQUIRED_PUBLISHED。原失败输入2个字段缺失均以明确投递政策拒绝，不是简单按旧版号全拒绝。
++2. 两份合法原始R08结构均返回0、fresh_CAD_checks_executed=true、源契约R08保留及LEGACY_UNPUBLISHED_READ_ONLY。
++3. 通过公开publish_named_delivery实际完成R08正式首发、工厂v1到v2、缺字段待命名，以及合法旧R09命名副本升级4例。目的包完整CAD/文件门禁均通过，三处发布契约为v2/R10，源制造契约仍R08；18/18/16/18个全部CAD/DXF和job保护文件字节未变。原输入75/69/76/76共296文件哈希前后相同。工厂编号均TEST ONLY；未给BOX530分号。
++4. 基于实际正式/待命名/升版输出构造19反例，均实际调用validate_delivery或公开发布入口，返回2：三类产物分别删除计划/投递契约/两者9例；封套发布契约/发布版本单改2例；三处同步降级且重绑清单/ZIP、删除全部发布标识和计划并重绑、连命名描述也删后重绑、仅删全部发布标识但保留计划、源制造版本伪报并重绑5例；同消息/跨消息散发2例；缺计划旧失败包试图再发布洗白1例。版本与SHA/ZIP同步改写反例仍按语义拒绝，不靠陈旧哈希碰巧拒绝。原正常发布源文件未变。
++5. 实际prepare_delivery_message公开CLI四例：默认0、跨消息散发2、明确当前单PDF测试例外0、先确认图测试例外0，正常路径实际CAD核验；未发消息。
++6. 267单元测试通过，包含原命名/投递/参数规则及8项发布权威用例。制造/授权核心算法8文件与R09逐字节相同；版本路由只追加R10，绘图仅版本标记。没有重复建模，没有改Ri/g/q、材料、K、孔或工厂命名规则。
++
++证据：actual_R10_publications/AUTHOR_PUBLICATION_RESULTS.json；actual_R10_negative_cases/AUTHOR_NEGATIVE_RESULTS.json；actual_R10_message_CLI/AUTHOR_MESSAGE_CLI_RESULTS.json；unit-R10.log；R10_AUTHOR_SUMMARY.json。以上均在本报告同级项目根。原独立报告和failure_proof.json保留原件，复制到新包作为历史失败证据；没有读取其它会话日志。
++
++## 限制和交接
++
++原BOX530 ZIP仍为SHA256 1c2acbe3598cfdc31dcd056e88990482e025089855dbffba68c4e26b453459b9；冻结R09仍de8a16066dc4a92a1866e0330a36e6450c800f418391e6200ff5b67e3f8dcc9d。全局未安装、未上传或发送附件。BOX530编号未知不阻断本轮软件测试，也没有从示例猜号。
++
++保留实际干涉和本项目现场授权、试装/首件/工艺HOLD，软件与命名/投递检查不等于生产放行。没有全册重新目视或实折；CAD/DXF/PDF原字节复用，正常门禁实际回读。本轮不扩展阶梯异形、源STEP制造支持或保证所有agent遵守实际发送。完整候选单ZIP交父线程进行同一独立审查；只发完整包，不散发补丁。
+--- /dev/null
++++ R10/references/R10-author-summary.json
+@@ -0,0 +1,136 @@
++{
++  "version": "2.7.3-R10",
++  "status": "AUTHOR_VALIDATED_FROZEN_CANDIDATE_PENDING_INDEPENDENT_REVIEW",
++  "independent_R10_review": "PENDING",
++  "production_release": false,
++  "scope": "Fix R09 published R08 default-message-plan erasure by source-independent publication contract binding",
++  "original_R09_failure_replay": {
++    "test": "exact_original_R09_F1",
++    "command": [
++      "/opt/homebrew/opt/python@3.14/bin/python3.14",
++      "-B",
++      "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.7.3-publication-repair/working/step-sheetmetal-delivery/scripts/validate_delivery.py",
++      "/Users/harryma/Documents/Codex/2026-10-21/task-6/acceptance_R09/named_negative_cases/remove_default_plan_from_R09_published_legacy/customer_INDEPENDENT_R08/revisions/S-304_TEST_ONLY-1.2-20261020-0427-v1_R01"
++    ],
++    "returncode": 2,
++    "expected": 2,
++    "result": {
++      "ok": false,
++      "errors": [
++        "DISPATCH_REQUIRED_PUBLISHED: source manufacturing version cannot waive the publication plan"
++      ],
++      "digital_deliverables_complete": false,
++      "production_release": false
++    }
++  },
++  "original_R08_readonly_positive_cases": 2,
++  "actual_publications": [
++    {
++      "test": "R08_formal",
++      "root": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.7.3-publication-repair/actual_R10_publications/first/customer_INDEPENDENT_R08/revisions/S-304_TEST_ONLY-1.2-20261020-0427-v1_R01",
++      "source_manufacturing_contract": "2.7.1-R08",
++      "publication": {
++        "mode": "CURRENT_NAMED_PUBLICATION",
++        "publication_contract": "named-single-zip-v2",
++        "publisher_release": "2.7.3-R10",
++        "source_manufacturing_contract": "2.7.1-R08"
++      },
++      "naming": {
++        "status": "FORMALLY_NAMED",
++        "code": "S-304_TEST_ONLY-1.2-20261020-0427-v1"
++      },
++      "fresh_CAD_checks_executed": true,
++      "all_CAD_DXF_job_preserved": 18,
++      "source_unchanged": true,
++      "production_release": false
++    },
++    {
++      "test": "R08_factory_upgrade",
++      "root": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.7.3-publication-repair/actual_R10_publications/upgrade/customer_INDEPENDENT_R08/revisions/S-304_TEST_ONLY-1.2-20261020-0427-v2_R01",
++      "source_manufacturing_contract": "2.7.1-R08",
++      "publication": {
++        "mode": "CURRENT_NAMED_PUBLICATION",
++        "publication_contract": "named-single-zip-v2",
++        "publisher_release": "2.7.3-R10",
++        "source_manufacturing_contract": "2.7.1-R08"
++      },
++      "naming": {
++        "status": "FORMALLY_NAMED",
++        "code": "S-304_TEST_ONLY-1.2-20261020-0427-v2"
++      },
++      "fresh_CAD_checks_executed": true,
++      "all_CAD_DXF_job_preserved": 18,
++      "source_unchanged": true,
++      "production_release": false
++    },
++    {
++      "test": "R08_pending",
++      "root": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.7.3-publication-repair/actual_R10_publications/pending/requirement_INDEPENDENT_R08/revisions/未命名待确认_requirement_INDEPENDENT_R08_R02",
++      "source_manufacturing_contract": "2.7.1-R08",
++      "publication": {
++        "mode": "CURRENT_NAMED_PUBLICATION",
++        "publication_contract": "named-single-zip-v2",
++        "publisher_release": "2.7.3-R10",
++        "source_manufacturing_contract": "2.7.1-R08"
++      },
++      "naming": {
++        "status": "UNNAMED_PENDING_CONFIRMATION",
++        "code": null
++      },
++      "fresh_CAD_checks_executed": true,
++      "all_CAD_DXF_job_preserved": 16,
++      "source_unchanged": true,
++      "production_release": false
++    },
++    {
++      "test": "R09_named_contract_upgrade",
++      "root": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.7.3-publication-repair/actual_R10_publications/republished_R09/customer_INDEPENDENT_R08/revisions/S-304_TEST_ONLY-1.2-20261020-0427-v1_R01",
++      "source_manufacturing_contract": "2.7.1-R08",
++      "publication": {
++        "mode": "CURRENT_NAMED_PUBLICATION",
++        "publication_contract": "named-single-zip-v2",
++        "publisher_release": "2.7.3-R10",
++        "source_manufacturing_contract": "2.7.1-R08"
++      },
++      "naming": {
++        "status": "FORMALLY_NAMED",
++        "code": "S-304_TEST_ONLY-1.2-20261020-0427-v1"
++      },
++      "fresh_CAD_checks_executed": true,
++      "all_CAD_DXF_job_preserved": 18,
++      "source_unchanged": true,
++      "production_release": false
++    }
++  ],
++  "actual_negative_cases": 19,
++  "public_message_CLI_cases": 4,
++  "unit_tests": 267,
++  "original_input_files_unchanged": {
++    "raw_R08_A": 75,
++    "raw_R08_B": 69,
++    "exact_R09_failure": 76,
++    "legal_R09_named": 76
++  },
++  "protected_manufacturing_algorithm_SHA256": {
++    "cad_build.py": "2981daf3347b24ecdc855dd6928302627fb435328e5591657db580d02dc84ddc",
++    "corner03.py": "57743173d2b1b88820ea6ead73317fc143b86983d592e09944eedeccb070e4f3",
++    "cut_dxf.py": "96599acd6b1fc67409a788a24a2e0fa2e277978901abbd8367af121efc13c0d2",
++    "native_direction_readback.py": "b71befe0909077e662d7adf09ba141a164689e17824b6b950f9117a9c4ea9b40",
++    "pdf_dimension_authority.py": "f89acb4cc6feaba632df4fd3819d2e54fb3f3bab52588f48c7a147b99a10bbfe",
++    "step_dimensions_readback.py": "f465357475e9a2d53656080d1ca9eb65a13a89698e62f9eb2c7bb7ccf921e3c6",
++    "site_fit.py": "80825a6667c8ec367e6e175ffaaf3cf2819901f8d5fec9c2d45ef4c7ec723a90",
++    "record_site_fit.py": "4cdb9e1a960828a4923234940b73bffd7156c75e288f2eca103808b8528492c0"
++  },
++  "BOX530_original_ZIP_SHA_unchanged": "1c2acbe3598cfdc31dcd056e88990482e025089855dbffba68c4e26b453459b9",
++  "R09_frozen_ZIP_SHA_unchanged": "de8a16066dc4a92a1866e0330a36e6450c800f418391e6200ff5b67e3f8dcc9d",
++  "new_CAD_build": false,
++  "global_install_changed": false,
++  "messages_or_uploads_performed": false,
++  "formal_BOX530_factory_number_assigned": false,
++  "evidence_paths": {
++    "unit-R10.log": "639cdcb2a82ea8668c02e8bf08042667216a09a0704f374817d47e341cae9a23",
++    "actual_R10_publications/AUTHOR_PUBLICATION_RESULTS.json": "1a1ca8663ded27c6ef926a49fa5104ba6564cd1e34a913e428aeab612018c153",
++    "actual_R10_negative_cases/AUTHOR_NEGATIVE_RESULTS.json": "cbf0a71c5ec5aae6d5a687c2007411e385bded9c29f3f444b3e01bbbe9c05670",
++    "actual_R10_message_CLI/AUTHOR_MESSAGE_CLI_RESULTS.json": "92147841c90f1fcdbc1d789b1ac6f4e0e4a5eab5cda8986eb678264d0cbd1e0e"
++  }
++}
+--- /dev/null
++++ R10/references/R10-publication.md
+@@ -0,0 +1,11 @@
++# R10：发布契约不由源制造版本决定
++
++R09独立验收不通过：公开命名发布旧R08包后，产物保留R08制造契约，删除封套的final_message_plan和message_dispatch_contract仍被完整校验接受。原R09包与失败证据保留，不重写为通过。
++
++R10将两种版本分开：manifest.delivery_contract和project/PDF版本仍描述原制造产物，不改CAD/DXF、PDF、原始job或现场专项授权。新发布副本另将publication_contract=`named-single-zip-v2`、publisher_release=`2.7.3-R10`同时写入封套、被清单/ZIP覆盖的manifest和命名记录；命名记录绑定source_manufacturing_contract。三处不一致、删除或降级都不能当作当前发布通过。
++
++完整门禁根据命名记录、正式码/待命名前缀的实际目录和artifact文件名、发布字段识别发布产物，而不是只看可删除的封套字段或manifest制造版本。凡发布产物必须有默认单ZIP计划，源制造契约即使是R08也不能免检。提交的散发计划仍拒绝；当前用户明确单件/确认优先仅用独立例外计划，不改封套默认计划，不跨客户继承。
++
++合法原始、未命名发布的R08包仍可用validate_delivery只读核制造完整性，返回LEGACY_UNPUBLISHED_READ_ONLY；这不是R10命名发布通过。完整新交付先经publish_named_delivery。旧R09合法命名副本可以作为该公开入口的升级源：仍完整核CAD/文件及已有默认计划，再出新副本升级发布契约；缺计划的失败副本在入口即拒绝，不静默补计划洗成通过。未升级R09命名副本不能直接声称R10发布通过。
++
++末端判定用scripts/validate_delivery.py及prepare_delivery_message.py；单跑参数/manifest几何审核不等于最终发布检查。脚本不会发送消息，不能证明用户原文真实性或控制执行方绕过计划的实际发送。所有干涉、工艺/首件HOLD、正式编号待确认与production_release=false保持原边界，软件通过不成为生产放行。
+--- /dev/null
++++ R10/references/R10-reproduction.md
+@@ -0,0 +1,24 @@
++# R10 复现与交接
++
++解压完整包后在skill根运行verify_install、discover_runtime --probe及普通Python依赖。必须有公开FreeCAD/SheetMetal/Poppler/CJK字体，不跳过CAD门禁。
++
++```bash
++python3 scripts/verify_install.py
++python3 -B -m unittest discover -s tests -v
++python3 scripts/validate_delivery.py /ABS/original-R08/customer_ID/revisions/R01
++python3 scripts/publish_named_delivery.py /ABS/original-R08/customer_ID/revisions/R01 --output /ABS/new-test-archive --naming /ABS/SYNTHETIC-naming.json
++python3 scripts/validate_delivery.py /ABS/returned_named_root
++```
++
++原R08纯校验应0/LEGACY_UNPUBLISHED_READ_ONLY，正式/待命名输出应0/CURRENT_NAMED_PUBLICATION，并保留源制造契约R08、绑定named-single-zip-v2/2.7.3-R10三处。命名必须用真实提供字段或明确SYNTHETIC；不能给BOX530假编号。升版从首次返回目录发布，previous_code保留前五段，factory_version=2；缺正式字段命名JSON可仅含渠道，code应null。
++
++原R09独立失败的精确根由 /Users/harryma/Documents/Codex/2026-10-21/task-6/acceptance_R09/failure_proof.json 的failure_root读取。对该原目录只读运行新validate_delivery，预期2/DISPATCH_REQUIRED_PUBLISHED；不得改原证据。合法R09命名目录可通过publish_named_delivery升级，缺计划的失败目录作为发布源仍必须拒绝。
++
++反例只在新副本：正式、待命名、升版分别删final_message_plan/message_dispatch_contract；修改封套/manifest/命名记录的publication_contract或publisher_release并同步SHA清单ZIP；删全部发布标识甚至命名描述后删计划；默认加PDF到同条或下一条消息，均应拒绝。合法例外放修订目录外，提供当前本项目TEST ONLY请求证据，不替换封套默认计划。
++
++```bash
++python3 scripts/prepare_delivery_message.py /ABS/current_named_root
++python3 scripts/prepare_delivery_message.py /ABS/current_named_root --plan /ABS/explicit-message-plan.json
++```
++
++作者完整实测脚本位于修复项目根：author_publication_R10.py（7项，含原失败/两原R08/四发布）；author_publication_negative_R10.py（19反例及同步重绑）；author_message_cli_R10.py（4公开消息CLI）。这些脚本指向当前真实独立输入目录，未作为通用包运行依赖；重跑需新输出目录，原样读取现存证据即可复核。包内新publication_contract模块和test_publication_contract.py可独立使用。作者自测不等于独立R10通过；工程production_release始终false。
+--- R09/references/delivery-contract.md
++++ R10/references/delivery-contract.md
+@@ -1,4 +1,6 @@
+ # v2.7.2 R09 齐套文件与单包投递契约
++
++当前发布入口和最终门禁另强制[R10发布契约](R10-publication.md)；R09规则/目录是基础，原R09独立失败不改写为通过。
+ 
+ R09沿用R08制造校验，新增最终默认一个完整ZIP消息计划。最终发送前必须读[统一投递约定](message-delivery.md)。下文R07字段/布局是历史起点，当前新生成契约为2.7.2-R09；只读兼容R07/R08，不改其冻结包。R08独立验收为限定通过，R09本次窄修复须另测。
+ 
+--- R09/references/factory-naming.md
++++ R10/references/factory-naming.md
+@@ -1,4 +1,6 @@
+ # 工厂编码与文件命名（R09）
++
++当前发布入口和最终门禁另强制[R10发布契约](R10-publication.md)；R09规则/目录是基础，原R09独立失败不改写为通过。
+ 
+ 正式主码使用 ASCII 连字符：`渠道-材质-板厚-YYYYMMDD-四位编号-vN`。例如 `S-Q235-1.0-20261019-0001-v1` 只是格式示例，不授权把当前201改Q235、给BOX530分配0001或把内部R02当成v2。
+ 
+--- R09/references/message-delivery.md
++++ R10/references/message-delivery.md
+@@ -1,4 +1,6 @@
+ # 统一主目录与最终消息投递（R09）
++
++当前发布入口和最终门禁另强制[R10发布契约](R10-publication.md)；R09规则/目录是基础，原R09独立失败不改写为通过。
+ 
+ 文件齐套和消息投递是两个检查对象。BOX530 的 R08 ZIP 已有统一目录、齐套内容和哈希，执行方仍把 ZIP 内各件另发，导致用户收到零散附件。发送方对此负责；R08 文档和代码也缺少默认附件计划约束。不能把这次发送问题说成制造文件缺失或 CAD 失败。
+ 
+--- R09/scripts/build_package.py
++++ R10/scripts/build_package.py
+@@ -122,7 +122,7 @@
+   (cadout/name).rename(e/(Path(name).stem+"_"+version+".json"))
+  artifact(e/('projections_'+version+'.json'),'cad_projections')
+  cadout.rmdir()
+- result={"status":"GEOMETRY_CHECKED_WITH_HOLD","package_version":"2.7.2-R09","core_validation_contract":"2.6.1-R06","project":project_path.name,"manifest":manifest_path.name,"selected_method":resolved["method"],"sheet_parts":list(report["parts"]),"all_planned_DXFs_present":True,"CAD_executed":True,"native03_executed":bool(n),"native03":n,"pdf":str(master.relative_to(out)),"pdf_pages":mapping["total_pages"],"pdf_rendered_pages":len(images),"PDF_visual_review_required":True,"holds":report["holds"]+[x["code"] for x in cut_check["holds"]],"production_release":False,"source_job_sha256":sha(source)}
++ result={"status":"GEOMETRY_CHECKED_WITH_HOLD","package_version":"2.7.3-R10","core_validation_contract":"2.6.1-R06","project":project_path.name,"manifest":manifest_path.name,"selected_method":resolved["method"],"sheet_parts":list(report["parts"]),"all_planned_DXFs_present":True,"CAD_executed":True,"native03_executed":bool(n),"native03":n,"pdf":str(master.relative_to(out)),"pdf_pages":mapping["total_pages"],"pdf_rendered_pages":len(images),"PDF_visual_review_required":True,"holds":report["holds"]+[x["code"] for x in cut_check["holds"]],"production_release":False,"source_job_sha256":sha(source)}
+  result.update(candidate_resolutions=resolved.get('candidate_resolutions',[]),end_profile=report.get('end_profile'),fixing_pairs=report.get('fixing_pairs',[]),handle_geometry_reports={name:str(path.relative_to(out)) for name,path in handle_reports.items()},confirmation_images=[str(path.relative_to(out)) for path in image_paths],handle_body='not modeled; mounting reference only',manufacturing_profiles=[p['id'] for p in resolved.get('profiles',[])])
+  result.update(fit=resolved['fit'],site_fit_acceptance=resolved.get('site_fit_acceptance'),geometry_interference_eliminated=False,trial_assembly_confirmed=False)
+  if n:result['root_interference_measurement']=report['root_interference_measurement']
+--- R09/scripts/delivery_contract.py
++++ R10/scripts/delivery_contract.py
+@@ -4,8 +4,8 @@
+ from datetime import datetime
+ from zoneinfo import ZoneInfo
+ from cut_dxf import parse_dxf
+-VERSION='2.7.2-R09'
+-CONTRACT_REVISIONS={'2.7.0-R07':'v2.7.0-R07','2.7.1-R08':'v2.7.1-R08',VERSION:'v2.7.2-R09'}
++VERSION='2.7.3-R10'
++CONTRACT_REVISIONS={'2.7.0-R07':'v2.7.0-R07','2.7.1-R08':'v2.7.1-R08','2.7.2-R09':'v2.7.2-R09',VERSION:'v2.7.3-R10'}
+ SCHEMA={'type':'object','additionalProperties':False,'properties':{
+  'namespace':{'enum':['customer','requirement']},'entity_id':{'type':'string','pattern':'^[A-Za-z0-9_-]+$'},'revision':{'type':'string','pattern':'^[A-Za-z0-9_-]+$'},
+  'sets':{'type':'integer','minimum':1,'maximum':100},
+@@ -232,11 +232,13 @@
+  for key,expected in expected_fields.items():
+   if type(envelope.get(key)) is not type(expected) or envelope[key]!=expected:raise ValueError('ENVELOPE_SOURCE_QUANTITY_OR_STATE_MISMATCH: '+key+' receipt='+str(envelope.get(key))+' source='+str(expected))
+  return {'input_sets':sets,'canonical_sets':value(project['project']['quantity_sets']),'BOM_quantities':{row['part_id']:row['quantity'] for row in bom},'nest_sets':layout['sets'],'required_stock_sheets':layout['required_sheets'],'receipt_sets':envelope['sets']}
+-def check_envelope(root,envelope=None,check_cad=True,runtime=None,allow_unpublished=False):
++def check_envelope(root,envelope=None,check_cad=True,runtime=None,allow_unpublished=False,allow_legacy_publication=False):
+  root=Path(root).resolve()
+  if list(root.glob('SOURCE_DELIVERY_STATUS_*.json')):raise ValueError('SOURCE_AUDIT_ONLY_PARTIAL_HOLD: no complete manufacturing delivery supported by this source-audit mode')
+  envelope=envelope or json.loads(next(root.glob('*DELIVERY_ENVELOPE_*.json')).read_text());m=json.loads((root/envelope['manifest']).read_text())
+  if envelope.get('contract') not in CONTRACT_REVISIONS or envelope.get('contract')!=m.get('delivery_contract') or envelope.get('production_release') is not False or envelope.get('digital_deliverables_complete') is not True:raise ValueError('DELIVERY_ENVELOPE_FALSE_STATE')
++ from publication_contract import check as check_publication
++ dispatch,publication=check_publication(root,envelope,m,allow_unpublished,allow_legacy_publication)
+  project=json.loads(next(root.glob('*project_*.json')).read_text());manifest_contract_check(project,m,root)
+  def only(kind):
+   selected=[a for a in m['artifacts'] if a['kind']==kind]
+@@ -263,12 +265,4 @@
+   if set(z.namelist())!={prefix+'/'+s for s in wanted}:raise ValueError('DELIVERY_ZIP_COVERAGE')
+   for name in wanted:
+    if hashlib.sha256(z.read(prefix+'/'+name)).hexdigest()!=sha(root/name):raise ValueError('DELIVERY_ZIP_MEMBER_SHA')
+- from delivery_dispatch import CONTRACT as DISPATCH_CONTRACT,check_plan
+- dispatch=None
+- if m['delivery_contract']==VERSION:
+-  if not envelope.get('naming') and not allow_unpublished:raise ValueError('NAMING_R09_PUBLICATION_REQUIRED')
+-  if envelope.get('message_dispatch_contract')!=DISPATCH_CONTRACT or 'final_message_plan' not in envelope:raise ValueError('DISPATCH_REQUIRED_R09')
+- if 'final_message_plan' in envelope:
+-  dispatch=check_plan(root,envelope['final_message_plan'],envelope,d,m)
+-  if dispatch['mode']!='DEFAULT_ONE_COMPLETE_ZIP':raise ValueError('DISPATCH_GENERATED_DEFAULT_MUST_BE_ONE_ZIP: keep explicit exceptions in a separate message plan')
+- return {'ok':True,'message_dispatch':dispatch,'contract':m['delivery_contract'],'validator_version':VERSION,'digital_deliverables_complete':bool(check_cad),'fresh_CAD_checks_executed':bool(check_cad),'actual_STEP_dimension_readback':gate.get('actual_STEP_dimension_readback') if gate else None,'quantity_authority':quantities,'production_release':False,'checks':['required kinds','source material/thickness/dimensions/quantity','native CAD checks' if check_cad else 'transport/source checks only; final CAD gate not rerun','nest actual entity/qty/spacing','source-derived process PDF','source-derived envelope counts','revision directory','inventory','ZIP CRC/members']}
++ return {'ok':True,'publication':publication,'message_dispatch':dispatch,'contract':m['delivery_contract'],'validator_version':VERSION,'digital_deliverables_complete':bool(check_cad),'fresh_CAD_checks_executed':bool(check_cad),'actual_STEP_dimension_readback':gate.get('actual_STEP_dimension_readback') if gate else None,'quantity_authority':quantities,'production_release':False,'checks':['required kinds','source material/thickness/dimensions/quantity','native CAD checks' if check_cad else 'transport/source checks only; final CAD gate not rerun','nest actual entity/qty/spacing','source-derived process PDF','source-derived envelope counts','revision directory','inventory','ZIP CRC/members']}
+--- R09/scripts/design_job.py
++++ R10/scripts/design_job.py
+@@ -100,7 +100,7 @@
+  for profile_id in sorted(profile_ids):p['provenance'].append({'id':'profile-'+profile_id,'kind':'engineering_assumption','ref':'Explicitly selected bundled assets/profiles/'+profile_id+'.json; geometric trial reference, not supplier/factory qualification','message_at':None,'recorded_at':recorded_at})
+  def put(container,key,v,status="requested",source="job",note="Declared job requirement; not a claim of customer confirmation"):
+   container[key].update(value=v,status=status,source=[source],note=note)
+- for k,v in {"customer_id":resolved['delivery']['entity_id'] if resolved['delivery']['namespace']=='customer' else 'UNASSIGNED_CUSTOMER',"project_id":resolved["id"],"revision":"v2.7.2-R09","version":version,"recorded_at":recorded_at,"record_kind":resolved["record_kind"],"quantity_sets":resolved['delivery']['sets']}.items():put(p["project"],k,v)
++ for k,v in {"customer_id":resolved['delivery']['entity_id'] if resolved['delivery']['namespace']=='customer' else 'UNASSIGNED_CUSTOMER',"project_id":resolved["id"],"revision":"v2.7.3-R10","version":version,"recorded_at":recorded_at,"record_kind":resolved["record_kind"],"quantity_sets":resolved['delivery']['sets']}.items():put(p["project"],k,v)
+  data=Path(input_path).read_bytes()
+  for k,v in {"reference":Path(input_path).name,"filename":Path(input_path).name,"sha256":hashlib.sha256(data).hexdigest(),"bytes":len(data),"preserve_original":True}.items():put(p["attachment"],k,v)
+  req=p["requirements"]
+--- R09/scripts/drawing_pdf.py
++++ R10/scripts/drawing_pdf.py
+@@ -13,7 +13,7 @@
+  def text(x,y,s,size=10):
+   cv.setFont("Helvetica",size);cv.drawString(x,y,str(s))
+  def title(s):
+-  text(35,pageh-35,s,18);text(35,pageh-55,"v2.7.2 R09 | "+resolved["id"]+" | "+project["project"]["version"]["value"]+" | mm | REVIEW / TRIAL ONLY | production_release=false",10)
++  text(35,pageh-35,s,18);text(35,pageh-55,"v2.7.3 R10 | "+resolved["id"]+" | "+project["project"]["version"]["value"]+" | mm | REVIEW / TRIAL ONLY | production_release=false",10)
+  def finish(label):
+   text(35,20,"Nominal geometric dimensions. Verify tools, springback and first article. "+label,9)
+   cv.showPage();pages.append(label)
+@@ -123,7 +123,7 @@
+     xx,yy=s[label];cv.circle(tx+zoom*xx,ty+zoom*yy,2,stroke=1,fill=1);text(tx+zoom*xx+7,ty+zoom*yy+7,label,12)
+    rows(['Eight actual sloped outer segments: two per corner.','Current t='+str(resolved['t'])+' Ri='+str(resolved['Ri']),'Corner gap='+str(resolved['corner_gap'])+' mm','Short-skirt retreat t+gap='+str(s['short_skirt_retreat'])]+[label+' = '+str([round(v,9) for v in s[label]]) for label in ['P1','P2','P3']]+['Actual native STEP re-unfold and DXF area match.','Root interference and q reported separately.','No historical fixed coordinate template.'],610,650)
+    finish('LID actual03 corner')
+- cv.save();writer=PdfWriter();writer.append_pages_from_reader(PdfReader(first));writer.append_pages_from_reader(PdfReader(io.BytesIO(buf.getvalue())));writer.add_metadata({"/Title":resolved["id"]+" sheetmetal three views and bending HOLD","/Author":"step-sheetmetal-delivery2.7.2 R09"});writer.write(path);first.unlink()
++ cv.save();writer=PdfWriter();writer.append_pages_from_reader(PdfReader(first));writer.append_pages_from_reader(PdfReader(io.BytesIO(buf.getvalue())));writer.add_metadata({"/Title":resolved["id"]+" sheetmetal three views and bending HOLD","/Author":"step-sheetmetal-delivery2.7.3 R10"});writer.write(path);first.unlink()
+  from workshop_pdf import append_process_pages
+  process=append_process_pages(path,project,resolved,report,projections)
+  (Path(path).parents[1]/'evidence'/('PROCESS_PDF_'+project['project']['version']['value']+'.json')).write_text(json.dumps(process,ensure_ascii=False,indent=2))
+--- R09/scripts/native03_check.py
++++ R10/scripts/native03_check.py
+@@ -58,7 +58,7 @@
+   root_volume=None;measured_q=None;holds=[]
+   if body_path:
+    body=Part.read(str(body_path));require(body.isValid(),'body STEP invalid');root_volume=abs(body.common(formed).Volume);fresh_root_volume=root_volume;measured_q=getattr(formed.BoundBox,dim+'Max')-s['t']-getattr(body.BoundBox,dim+'Max')
+-   if doc['project']['revision']['value'] in ['v2.6.1-R06','v2.7.0-R07','v2.7.1-R08','v2.7.2-R09']:
++   if doc['project']['revision']['value'] in ['v2.6.1-R06','v2.7.0-R07','v2.7.1-R08','v2.7.2-R09','v2.7.3-R10']:
+     from interference_volume import require_same_measurement
+     authority=doc['lid']['root_overlap_volume']['value'];require_same_measurement(authority,root_volume);root_volume=authority
+    if s['q'] is None:holds.append('q requirement not specified; actual CAD seating measurement is not an automatic approval')
+@@ -72,7 +72,7 @@
+   sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest()
+   result={'ok':True,'CAD_executed':True,'method':'actual FreeCAD SheetMetal fresh unfold and geometric area difference','FreeCAD_version':F.Version()[:3],'parameter_hash':hashlib.sha256(json.dumps(apply_lid_defaults(doc),ensure_ascii=False,sort_keys=True,separators=(',',':'),allow_nan=False).encode()).hexdigest(),'input_sha256':{'formed_step':sha(formed_path),'unfold_step':sha(unfold_path),'dxf':sha(dxf_path)},'actual_bends':4,'native_sloped_edges':8,'DXF_sloped_edges':8,'fresh_vs_provided_unfold_area_mm2':delta,'native_vs_DXF_area_mm2':dxf_delta,'root_overlap_volume_mm3':root_volume,'actual_roof_q_mm':measured_q,'numeric_tolerance_mm':tol,'numeric_area_tolerance_mm2':area_tol,'holds':holds,'production_release':False}
+   result['thickness_measurement']=thickness_measurement
+-  if doc['project']['revision']['value'] in ['v2.6.1-R06','v2.7.0-R07','v2.7.1-R08','v2.7.2-R09']:
++  if doc['project']['revision']['value'] in ['v2.6.1-R06','v2.7.0-R07','v2.7.1-R08','v2.7.2-R09','v2.7.3-R10']:
+    from interference_volume import measurement
+    result.update(root_interference_measurement=measurement(root_volume),fresh_body_lid_common_volume_mm3=fresh_root_volume)
+   result.update(assembly_interference_free=root_volume<=VOLUME_TOL_MM3,fit_disposition=disposition,site_fit_acceptance=acceptance,geometry_interference_eliminated=False,trial_assembly_confirmed=False)
+--- /dev/null
++++ R10/scripts/publication_contract.py
+@@ -0,0 +1,37 @@
++"""Publication policy is independent of the retained source manufacturing version."""
++import json,re
++from pathlib import Path
++from delivery_dispatch import CONTRACT as DISPATCH_CONTRACT,check_plan
++
++CONTRACT='named-single-zip-v2'
++RELEASE='2.7.3-R10'
++ENGINEERING_WITH_DISPATCH={'2.7.2-R09','2.7.3-R10'}
++
++def signals(root,envelope,manifest):
++ root=Path(root);names=[root.name,Path(envelope.get('zip','')).name]
++ names += [Path(a['path']).name for a in manifest.get('artifacts',[])]
++ return bool(envelope.get('naming') or any(k in envelope or k in manifest for k in ['publication_contract','publisher_release']) or
++             list(root.glob('*FILE_NAMING.json')) or any(n.startswith('未命名待确认_') or re.match(r'^[SX]-[^-]+-[0-9]+(?:\.[0-9]+)?-[0-9]{8}-[0-9]{4}-v[1-9][0-9]*_',n) for n in names))
++
++def check(root,envelope,manifest,allow_unpublished=False,allow_legacy_publication=False):
++ named=signals(root,envelope,manifest);dispatch=None
++ required=named or manifest.get('delivery_contract') in ENGINEERING_WITH_DISPATCH
++ if required:
++  if envelope.get('message_dispatch_contract')!=DISPATCH_CONTRACT or 'final_message_plan' not in envelope:raise ValueError('DISPATCH_REQUIRED_PUBLISHED: source manufacturing version cannot waive the publication plan')
++ if 'final_message_plan' in envelope:
++  dispatch=check_plan(root,envelope['final_message_plan'],envelope,manifest=manifest)
++  if dispatch['mode']!='DEFAULT_ONE_COMPLETE_ZIP':raise ValueError('DISPATCH_GENERATED_DEFAULT_MUST_BE_ONE_ZIP: keep explicit exceptions outside the envelope')
++ if not named:
++  if manifest.get('delivery_contract') in ENGINEERING_WITH_DISPATCH and not allow_unpublished:raise ValueError('NAMING_PUBLICATION_REQUIRED')
++  return dispatch,{'mode':'UNPUBLISHED_ENGINEERING_STAGE' if required else 'LEGACY_UNPUBLISHED_READ_ONLY','publication_contract':None,'source_manufacturing_contract':manifest['delivery_contract']}
++ naming=envelope.get('naming')
++ if not isinstance(naming,dict) or 'record' not in naming:raise ValueError('PUBLICATION_NAMING_DESCRIPTOR_REQUIRED')
++ path=(Path(root)/naming['record']).resolve()
++ if not path.is_relative_to(Path(root).resolve()) or not path.is_file():raise ValueError('NAMING_RECORD_ABSENT')
++ record=json.loads(path.read_text())
++ markers=[obj.get(key) for obj in [envelope,manifest,record] for key in ['publication_contract','publisher_release']]
++ if allow_legacy_publication and not any(x is not None for x in markers):
++  return dispatch,{'mode':'LEGACY_NAMED_INPUT_REQUIRES_REPUBLICATION','publication_contract':None,'source_manufacturing_contract':manifest['delivery_contract']}
++ if markers!=[CONTRACT,RELEASE]*3:raise ValueError('PUBLICATION_CONTRACT_BINDING: envelope, inventoried manifest and naming record must bind the current publication release')
++ if record.get('source_manufacturing_contract')!=manifest['delivery_contract']:raise ValueError('PUBLICATION_SOURCE_MANUFACTURING_CONTRACT')
++ return dispatch,{'mode':'CURRENT_NAMED_PUBLICATION','publication_contract':CONTRACT,'publisher_release':RELEASE,'source_manufacturing_contract':manifest['delivery_contract']}
+--- R09/scripts/publish_named_delivery.py
++++ R10/scripts/publish_named_delivery.py
+@@ -41,7 +41,7 @@
+  from delivery_dispatch import make_plan,CONTRACT
+  from validate_project import parameter_hash
+  source=Path(source).resolve();base=Path(base).resolve()
+- if not source_already_checked:check_envelope(source,runtime=runtime,allow_unpublished=True)
++ if not source_already_checked:check_envelope(source,runtime=runtime,allow_unpublished=True,allow_legacy_publication=True)
+  ep=next(source.glob('*DELIVERY_ENVELOPE_*.json'));e=json.loads(ep.read_text());mp=source/e['manifest'];m=json.loads(mp.read_text());spec=json.loads((source/next(a['path'] for a in m['artifacts'] if a['kind']=='delivery_spec')).read_text());d=spec['delivery'];job=json.loads((source/next(a['path'] for a in m['artifacts'] if a['kind']=='source_job')).read_text())
+  naming=resolve(request,job,d);dest=base/(d['namespace']+'_'+d['entity_id'])/'revisions'/leaf(naming,d)
+  if dest.exists():raise ValueError('NAMING_DUPLICATE_OUTPUT: factory owns number/reset; never auto renumber or overwrite')
+@@ -75,20 +75,21 @@
+     previous=sha(path);path.write_text(json.dumps(updated,ensure_ascii=False,indent=2));aliases[previous]=sha(path);modified=True
+   if not modified:break
+  else:raise ValueError('NAMING_HASH_DEPENDENCIES_DID_NOT_CONVERGE')
+- newm=json.loads((dest/mapping[e['manifest']]).read_text())
++ from publication_contract import CONTRACT as PUBLICATION_CONTRACT,RELEASE as PUBLISHER_RELEASE
++ newm=json.loads((dest/mapping[e['manifest']]).read_text());newm['publication_contract']=PUBLICATION_CONTRACT;newm['publisher_release']=PUBLISHER_RELEASE
+  for art in newm['artifacts']:art['sha256']=sha(dest/art['path'])
+  (dest/mapping[e['manifest']]).write_text(json.dumps(newm,ensure_ascii=False,indent=2))
+  geometry=[name for name in files if Path(name).suffix.lower() in ['.step','.stp','.dxf','.fcstd','.brep'] or name==raw_job]
+  for name in geometry:
+   if sha(dest/mapping[name])!=before[name]:raise ValueError('NAMING_CHANGED_MANUFACTURING_OR_JOB_BYTES: '+name)
+- record_name=naming['prefix']+'_文件更名与命名记录_FILE_NAMING.json';record={'request':request or {},'resolved':naming,'original_source_zip_sha256':before[e['zip']],'original_source_job_sha256':before[raw_job],'mapping':mapping,'manufacturing_and_source_job_bytes_unchanged':{mapping[n]:before[n] for n in geometry},'original_parameter_hash':old_parameter_hash,'renamed_reference_parameter_hash':new_parameter_hash,'manufacturing_geometry_changed':False,'production_release':False}
++ record_name=naming['prefix']+'_文件更名与命名记录_FILE_NAMING.json';record={'request':request or {},'resolved':naming,'original_source_zip_sha256':before[e['zip']],'original_source_job_sha256':before[raw_job],'mapping':mapping,'manufacturing_and_source_job_bytes_unchanged':{mapping[n]:before[n] for n in geometry},'original_parameter_hash':old_parameter_hash,'renamed_reference_parameter_hash':new_parameter_hash,'manufacturing_geometry_changed':False,'production_release':False,'publication_contract':PUBLICATION_CONTRACT,'publisher_release':PUBLISHER_RELEASE,'source_manufacturing_contract':m['delivery_contract']}
+  (dest/record_name).write_text(json.dumps(record,ensure_ascii=False,indent=2))
+  inventory_name=naming['prefix']+'_文件哈希_FILE_SHA256.json';zp=dest/(naming['prefix']+'_完整资料.zip');envpath=dest/(naming['prefix']+'_交付封套_DELIVERY_ENVELOPE_正式.json')
+  rows=[{'path':str(p.relative_to(dest)),'bytes':p.stat().st_size,'sha256':sha(p)} for p in sorted(dest.rglob('*')) if p.is_file()];(dest/inventory_name).write_text(json.dumps({'contract':e['contract'],'files':rows},ensure_ascii=False,indent=2))
+  with zipfile.ZipFile(zp,'x',zipfile.ZIP_DEFLATED) as z:
+   for p in sorted(dest.rglob('*')):
+    if p.is_file() and p!=zp:z.write(p,dest.name+'/'+str(p.relative_to(dest)))
+- newe={k:v for k,v in e.items() if k not in ['naming','final_message_plan','publication_stage']};newe.update(revision_root=str(dest),manifest=mapping[e['manifest']],inventory=inventory_name,zip=zp.name,zip_sha256=sha(zp),naming={k:naming[k] for k in ['status','code','prefix']});newe['naming']['record']=record_name;newe['message_dispatch_contract']=CONTRACT;newe['final_message_plan']=make_plan(dest,newe,d,newm);envpath.write_text(json.dumps(newe,ensure_ascii=False,indent=2))
++ newe={k:v for k,v in e.items() if k not in ['naming','final_message_plan','publication_stage']};newe.update(revision_root=str(dest),manifest=mapping[e['manifest']],inventory=inventory_name,zip=zp.name,zip_sha256=sha(zp),naming={k:naming[k] for k in ['status','code','prefix']});newe['publication_contract']=PUBLICATION_CONTRACT;newe['publisher_release']=PUBLISHER_RELEASE;newe['naming']['record']=record_name;newe['message_dispatch_contract']=CONTRACT;newe['final_message_plan']=make_plan(dest,newe,d,newm);envpath.write_text(json.dumps(newe,ensure_ascii=False,indent=2))
+  gate=check_envelope(dest,runtime=runtime)
+  assert before=={str(p.relative_to(source)):sha(p) for p in source.rglob('*') if p.is_file()}
+  return {'revision_root':str(dest),'delivery':newe,'checks':gate,'manufacturing_geometry_changed':False,'original_source_unchanged':True}
+--- R09/scripts/render_review_pdf.py
++++ R10/scripts/render_review_pdf.py
+@@ -25,7 +25,7 @@
+   from site_fit import acceptance_from_project
+   acceptance=acceptance_from_project(d)
+   if acceptance:
+-   if d['project']['revision']['value'] in ['v2.6.1-R06','v2.7.0-R07','v2.7.1-R08','v2.7.2-R09']:
++   if d['project']['revision']['value'] in ['v2.6.1-R06','v2.7.0-R07','v2.7.1-R08','v2.7.2-R09','v2.7.3-R10']:
+     from interference_volume import display_volume
+     root='现场修配：本项目已获用户授权，盖根干涉保留；待现场师傅修配、试装确认。未消除干涉，未确认试装。权威BODY/LID布尔体积='+display_volume(v(lid['root_overlap_volume']))+'mm^3（显示6位；CAD数值计算，不代表实测精度）；详见本图授权页。'
+    else:root='现场修配：本项目已获用户授权，盖根干涉保留；待现场师傅修配、试装确认。未消除干涉，未确认试装。实测逐件交叠合计='+str(v(lid['root_overlap_volume']))+'mm^3；详见本图授权页。'
+@@ -49,14 +49,14 @@
+   items=header_lines(doc,workshop_resolved)+[s['fit'],'顶部落座间距 q：'+s['q'],s['handle'],s['root'],'盖角方案：'+s['corner']+'；角缝：'+s['corner_gap'],'数字齐套、现场试折与生产放行分别确认；本版保留HOLD。']
+  for line in items:y=text(line,y,9 if workshop_resolved else 11)
+  if y<45:raise ValueError('WORKSHOP_FIRST_PAGE_OVERFLOW')
+- cv.setFont('STSong-Light',9);cv.drawString(50,35,'v2.7.2 R09 | 审核HOLD | 实际加工需首件验证');result={'first_page_summary':s,'pages':1}
++ cv.setFont('STSong-Light',9);cv.drawString(50,35,'v2.7.3 R10 | 审核HOLD | 实际加工需首件验证');result={'first_page_summary':s,'pages':1}
+  if s['site_fit_acceptance']:
+   from xml.sax.saxutils import escape
+   a=s['site_fit_acceptance'];cv.showPage();cv.setFont('STSong-Light',18);cv.drawString(50,786,'本项目现场修配授权及限制 / HOLD');y=745
+   for line in ['仅适用于当前项目 '+a['job_id']+'；本页不授权其它客户或变更后的参数。','授权来源：'+a['authorization_source'],'用户原文：'+a['authorization_quote'],'原始设计 SHA256：'+a['job_design_sha256'],s['root'],'保持本次 Ri/g/q、闭盖总高和物理孔位；未自动增顶隙、侧隙或删除交叠。','现场修配与试装尚未执行。几何干涉检测数值仍然有效；03/板厚/孔轴/DXF等其它门禁不得跳过。','材料、机床工装、首件和生产放行仍按各自证据确认；本授权不是生产放行。']:
+    y=text(escape(line),y,10)
+    if y<50:raise ValueError('SITE_FIT_PDF: authorization text exceeds one page; shorten reference without dropping evidence')
+-  cv.setFont('STSong-Light',9);cv.drawString(50,35,'v2.7.2 R09 | '+doc['project']['version']['value']+' | 本项目专项授权，不是生产放行')
++  cv.setFont('STSong-Light',9);cv.drawString(50,35,'v2.7.3 R10 | '+doc['project']['version']['value']+' | 本项目专项授权，不是生产放行')
+   result['pages']+=1
+  if dxf:
+   cv.showPage();cv.setFont('STSong-Light',17);cv.drawString(50,790,'已写DXF实际回读 / 展开几何核对')
+@@ -71,7 +71,7 @@
+    n=json.loads(Path(native_report).read_text());h=hashlib.sha256(Path(dxf).read_bytes()).hexdigest()
+    if n.get('ok') is not True or n.get('CAD_executed') is not True or n['input_sha256']['dxf']!=h or n.get('parameter_hash')!=__import__('handle_readback').parameter_hash(doc):raise ValueError('native report does not bind this actual DXF')
+    claim='实际STEP/DXF把手孔心回读报告已绑定；仅孔轴/孔距，不证明真实展开或生产放行。' if 'STEP' in n and 'DXF' in n else '实际CAD原生重展开报告已绑定该DXF；仍需逐页目视、根部干涉与首件验证。'
+-  text(claim,130,10);cv.setFont('STSong-Light',9);cv.drawString(50,35,'v2.7.2 R09 | 文件几何核对不构成生产放行');result.update(pdf_flat_page_index=result['pages'],pdf_flat_map=[scale,0,0,scale,ox,oy]);result['pages']+=1
++  text(claim,130,10);cv.setFont('STSong-Light',9);cv.drawString(50,35,'v2.7.3 R10 | 文件几何核对不构成生产放行');result.update(pdf_flat_page_index=result['pages'],pdf_flat_map=[scale,0,0,scale,ox,oy]);result['pages']+=1
+  cv.save();reader=PdfReader(io.BytesIO(buf.getvalue()));writer=PdfWriter();writer.append_pages_from_reader(reader);writer.add_metadata({'/Title':title,'/Author':'STEP sheetmetal workflow','/Producer':'ReportLab and pypdf'});writer.write(path);return result
+ 
+ def check_first_page(path,doc):
+--- R09/scripts/selftest_dispatch.py
++++ R10/scripts/selftest_dispatch.py
+@@ -54,7 +54,7 @@
+  def stale():
+   req=request([pdf]);req['current_for_this_delivery']=False;return make_plan(source,selected=[pdf],user_request=req)
+  trial('old_not_current_exception',stale,False)
+- if e['contract']=='2.7.2-R09':
++ if e.get('publication_contract') or e['contract'] in ['2.7.2-R09','2.7.3-R10']:
+   def change_embedded(name,remove):
+    dest=copy_root(name);envpath=next(dest.glob('*DELIVERY_ENVELOPE_*.json'));env=json.loads(envpath.read_text())
+    if remove:env.pop('final_message_plan');env.pop('message_dispatch_contract')
+--- R09/scripts/selftest_receipt_authority.py
++++ R10/scripts/selftest_receipt_authority.py
+@@ -57,5 +57,5 @@
+   if ok!=expected:raise RuntimeError('Receipt authority test failed '+name+': '+str(error))
+   results.append({'test':name,'expected_accepted':expected,'ok':ok,'error':error,'result':result,'fixture':str(root),'PDF_text_replacements':mutations,'authoritative_input_and_CAD_unchanged':True})
+  assert immutable=={str(p.relative_to(source)):sha(p) for p in source.rglob('*') if p.is_file()}
+- (out/'RECEIPT_AUTHORITY_RESULTS.json').write_text(json.dumps({'author_test_only':True,'validator':'2.7.2-R09','source_unchanged':True,'cases':results},ensure_ascii=False,indent=2));print(json.dumps({'positive':1,'semantic_negatives':4,'status':'PASS_AUTHOR_ONLY'},indent=2))
++ (out/'RECEIPT_AUTHORITY_RESULTS.json').write_text(json.dumps({'author_test_only':True,'validator':'2.7.3-R10','source_unchanged':True,'cases':results},ensure_ascii=False,indent=2));print(json.dumps({'positive':1,'semantic_negatives':4,'status':'PASS_AUTHOR_ONLY'},indent=2))
+ if __name__=='__main__':main()
+--- R09/scripts/validate_manifest.py
++++ R10/scripts/validate_manifest.py
+@@ -224,7 +224,7 @@
+      require_same_measurement(authority,measured['fresh_body_lid_common_volume_mm3'])
+   except (ValueError,KeyError,OSError,TypeError,StopIteration) as ex:errors.append('SITE_FIT_RESULT: '+str(ex))
+  delivery=None
+- if manifest.get('delivery_contract') or (value(project['project']['revision']) in ['v2.7.0-R07','v2.7.1-R08','v2.7.2-R09'] and not allow_geometry_only):
++ if manifest.get('delivery_contract') or (value(project['project']['revision']) in ['v2.7.0-R07','v2.7.1-R08','v2.7.2-R09','v2.7.3-R10'] and not allow_geometry_only):
+   try:
+    from delivery_contract import manifest_contract_check,CONTRACT_REVISIONS
+    if manifest.get('delivery_contract') not in CONTRACT_REVISIONS:raise ValueError('DELIVERY_CONTRACT_VERSION_REQUIRED_FOR_R07')
+--- R09/scripts/workshop_pdf.py
++++ R10/scripts/workshop_pdf.py
+@@ -48,7 +48,7 @@
+  style=ParagraphStyle('shop',fontName='STSong-Light',fontSize=11,leading=16,wordWrap='CJK')
+  def start(title):
+   nonlocal y
+-  cv.setFont('STSong-Light',18);cv.drawString(35,ph-35,title);cv.setFont('Helvetica',9);cv.drawString(35,ph-54,'v2.7.2 R09 | '+project['project']['version']['value']+' | mm | REVIEW / TRIAL HOLD');y=ph-86
++  cv.setFont('STSong-Light',18);cv.drawString(35,ph-35,title);cv.setFont('Helvetica',9);cv.drawString(35,ph-54,'v2.7.3 R10 | '+project['project']['version']['value']+' | mm | REVIEW / TRIAL HOLD');y=ph-86
+  def para(s):
+   nonlocal y
+   p=Paragraph(escape(s),style);_,h=p.wrap(pw-85,ph)
+--- /dev/null
++++ R10/tests/test_publication_contract.py
+@@ -0,0 +1,49 @@
++import copy,json,sys,tempfile,unittest
++from pathlib import Path
++sys.path.insert(0,str(Path(__file__).resolve().parents[1]/'scripts'))
++from publication_contract import CONTRACT,RELEASE,signals,check
++from delivery_dispatch import make_plan,CONTRACT as DISPATCH,sha
++
++class PublicationTests(unittest.TestCase):
++ def setUp(self):
++  self.temp=tempfile.TemporaryDirectory();self.addCleanup(self.temp.cleanup);self.root=Path(self.temp.name)/'customer_T/revisions/S-201-1.0-20261023-0007-v1_R01';self.root.mkdir(parents=True)
++  (self.root/'complete.zip').write_bytes(b'fixture');(self.root/'spec.json').write_text(json.dumps({'delivery':{'namespace':'customer','entity_id':'T','revision':'R01'}}))
++  self.manifest={'delivery_contract':'2.7.1-R08','publication_contract':CONTRACT,'publisher_release':RELEASE,'artifacts':[{'path':'spec.json','kind':'delivery_spec','sha256':sha(self.root/'spec.json')}]}
++  self.envelope={'zip':'complete.zip','zip_sha256':sha(self.root/'complete.zip'),'naming':{'record':'NAMING.json'},'publication_contract':CONTRACT,'publisher_release':RELEASE,'message_dispatch_contract':DISPATCH}
++  self.record={'publication_contract':CONTRACT,'publisher_release':RELEASE,'source_manufacturing_contract':'2.7.1-R08'};self.save_record();self.envelope['final_message_plan']=make_plan(self.root,self.envelope,manifest=self.manifest)
++ def save_record(self):(self.root/'NAMING.json').write_text(json.dumps(self.record))
++ def test_retained_R08_manufacturing_contract_cannot_waive_dispatch(self):
++  e=copy.deepcopy(self.envelope);e.pop('final_message_plan');e.pop('message_dispatch_contract')
++  with self.assertRaisesRegex(ValueError,'DISPATCH_REQUIRED_PUBLISHED'):check(self.root,e,self.manifest)
++ def test_current_publication_binds_three_sources(self):
++  dispatch,pub=check(self.root,self.envelope,self.manifest);self.assertEqual(pub['source_manufacturing_contract'],'2.7.1-R08');self.assertEqual(dispatch['attachment_count'],1)
++ def test_one_contract_or_release_downgrade_rejected(self):
++  for obj in ['envelope','manifest','record']:
++   for key in ['publication_contract','publisher_release']:
++    e=copy.deepcopy(self.envelope);m=copy.deepcopy(self.manifest);record=copy.deepcopy(self.record)
++    {'envelope':e,'manifest':m,'record':record}[obj][key]='OLD'
++    (self.root/'NAMING.json').write_text(json.dumps(record))
++    with self.assertRaisesRegex(ValueError,'PUBLICATION_CONTRACT_BINDING'):check(self.root,e,m)
++  self.save_record()
++ def test_all_markers_erased_still_requires_current_publication(self):
++  e=copy.deepcopy(self.envelope);m=copy.deepcopy(self.manifest);record=copy.deepcopy(self.record)
++  for obj in [e,m,record]:obj.pop('publication_contract');obj.pop('publisher_release')
++  (self.root/'NAMING.json').write_text(json.dumps(record))
++  with self.assertRaisesRegex(ValueError,'PUBLICATION_CONTRACT_BINDING'):check(self.root,e,m)
++  self.assertEqual(check(self.root,e,m,allow_legacy_publication=True)[1]['mode'],'LEGACY_NAMED_INPUT_REQUIRES_REPUBLICATION')
++ def test_legacy_upgrade_input_also_requires_plan(self):
++  e=copy.deepcopy(self.envelope);e.pop('final_message_plan')
++  with self.assertRaisesRegex(ValueError,'DISPATCH_REQUIRED_PUBLISHED'):check(self.root,e,self.manifest,allow_legacy_publication=True)
++ def test_erased_naming_and_markers_cannot_hide_named_layout(self):
++  e=copy.deepcopy(self.envelope);m=copy.deepcopy(self.manifest)
++  for obj in [e,m]:obj.pop('publication_contract');obj.pop('publisher_release')
++  e.pop('naming');e.pop('final_message_plan');e.pop('message_dispatch_contract')
++  self.assertTrue(signals(self.root,e,m))
++  with self.assertRaisesRegex(ValueError,'DISPATCH_REQUIRED_PUBLISHED'):check(self.root,e,m)
++ def test_raw_R08_read_only_compatibility(self):
++  raw=Path(self.temp.name)/'legacy/customer_T/revisions/R01';raw.mkdir(parents=True)
++  result=check(raw,{'zip':'customer_T_R01_DELIVERY.zip'},{'delivery_contract':'2.7.1-R08','artifacts':[]});self.assertIsNone(result[0]);self.assertEqual(result[1]['mode'],'LEGACY_UNPUBLISHED_READ_ONLY')
++ def test_manufacturing_contract_lie_is_not_publication_upgrade(self):
++  m=copy.deepcopy(self.manifest);m['delivery_contract']='2.7.0-R07'
++  with self.assertRaisesRegex(ValueError,'PUBLICATION_SOURCE_MANUFACTURING_CONTRACT'):check(self.root,self.envelope,m)
++if __name__=='__main__':unittest.main()

@@ -1,0 +1,10 @@
+{
+  "id": "trial-review-v1",
+  "version": 1,
+  "scope": "Explicitly opted-in common_review_v1 only; uncalibrated engineering trial",
+  "K_ANSI": 0.4,
+  "corner_gap_mm": 0.2,
+  "status": "engineering_assumption",
+  "manufacturing_released": false,
+  "source": "User authorized transparent trial candidates; neither factory calibration nor supplier specification"
+}

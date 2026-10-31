@@ -1,0 +1,27 @@
+{
+  "runtime": {
+    "cad_python": "/Applications/FreeCAD.app/Contents/Resources/bin/python",
+    "freecad_lib": "/Applications/FreeCAD.app/Contents/Resources/lib",
+    "sheetmetal_path": "/Users/harryma/Library/Application Support/FreeCAD/v1-1/Mod/SheetMetal",
+    "pdf_renderer": "/opt/homebrew/Cellar/poppler/25.11.0/bin/pdftoppm"
+  },
+  "API_probe": {
+    "ok": true,
+    "CAD_executed": false,
+    "python": "3.11.14 | packaged by conda-forge | (main, Oct 13 2025, 14:29:50) [Clang 19.1.7 ]",
+    "FreeCAD": [
+      "1",
+      "1",
+      "1",
+      "20260414 (Git shallow)",
+      "Unknown",
+      "2026/04/14 22:09:59",
+      "(HEAD detached at 0108fd4b4)",
+      "0108fd4b4850cc46e625b60e53cea7a7bbe69f8d"
+    ],
+    "OCCT": "7.8.1",
+    "networkx": "3.6.1",
+    "SheetMetal": "0.8.21",
+    "SheetMetalNewUnfolder_sha256": "295ddf32da7f85e59be30b08bb48399c8b4acd23c0e18adb302eab33797f1ff7"
+  }
+}

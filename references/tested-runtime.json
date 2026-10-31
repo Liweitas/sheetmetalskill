@@ -1,0 +1,39 @@
+{
+  "author_tested_only": true,
+  "platform": "macOS arm64",
+  "FreeCAD": "1.1.1",
+  "OCCT": "7.8.1",
+  "SheetMetal": "0.8.21",
+  "SheetMetalNewUnfolder_sha256": "295ddf32da7f85e59be30b08bb48399c8b4acd23c0e18adb302eab33797f1ff7",
+  "ordinary_python": "3.14.7 (main, Aug  5 2026, 10:29:49) [Clang 17.0.0 (clang-1700.6.4.2)]",
+  "ordinary_python_packages": {
+    "jsonschema": "4.26.0",
+    "reportlab": "4.4.10",
+    "pypdf": "6.8.0",
+    "Pillow": "12.0.0",
+    "numpy": "2.4.6"
+  },
+  "PDF_renderer": "Poppler pdftoppm 25.11.0",
+  "no_bundled_CAD_or_plugin": true,
+  "independent_agent_acceptance": "R05 partial independent result preserved; R06 two-issue author repair pending same-reviewer retest",
+  "CAD_python_dependency_probe": {
+    "ok": true,
+    "CAD_executed": false,
+    "python": "3.11.14 | packaged by conda-forge | (main, Oct 13 2025, 14:29:50) [Clang 19.1.7 ]",
+    "FreeCAD": [
+      "1",
+      "1",
+      "1",
+      "20260414 (Git shallow)",
+      "Unknown",
+      "2026/04/14 22:09:59",
+      "(HEAD detached at 0108fd4b4)",
+      "0108fd4b4850cc46e625b60e53cea7a7bbe69f8d"
+    ],
+    "OCCT": "7.8.1",
+    "networkx": "3.6.1",
+    "SheetMetal": "0.8.21",
+    "SheetMetalNewUnfolder_sha256": "295ddf32da7f85e59be30b08bb48399c8b4acd23c0e18adb302eab33797f1ff7"
+  },
+  "candidate_version": "2.5.1-R04"
+}

@@ -1,0 +1,185 @@
+{
+  "release": "2.7.2-R09",
+  "status": "AUTHOR_VALIDATED_CANDIDATE_PENDING_INDEPENDENT_REVIEW",
+  "production_release": false,
+  "independent_R09_acceptance": "PENDING",
+  "scope": [
+    "default one-complete-ZIP whole-message plan",
+    "factory code shared by directory, ZIP, DXF/nest/process PDF and all files",
+    "renamed-copy migration with actual CAD/DXF/job byte preservation"
+  ],
+  "BOX530_original_audit": {
+    "root": "/Users/harryma/Documents/Codex/2026-10-23/task/530x250x255_R08_20261023/manufacturing_authorized_R02/requirement_BOX530_PG7_HANDLES/revisions/R02",
+    "zip": "/Users/harryma/Documents/Codex/2026-10-23/task/530x250x255_R08_20261023/manufacturing_authorized_R02/requirement_BOX530_PG7_HANDLES/revisions/R02/requirement_BOX530_PG7_HANDLES_R02_DELIVERY_20261023_1145.zip",
+    "sha256": "1c2acbe3598cfdc31dcd056e88990482e025089855dbffba68c4e26b453459b9",
+    "library_file_id": "libfile_81e8f94fae608191a1f45c128875801d",
+    "zip_members": 88,
+    "single_top_directory": "requirement_BOX530_PG7_HANDLES",
+    "revision_prefix": "requirement_BOX530_PG7_HANDLES/revisions/R02",
+    "inventory_rows": 87,
+    "all_inventory_artifact_and_ZIP_bytes_match": true,
+    "fresh_CAD_not_rerun": true,
+    "engineering_status": "DELIVERED_FOR_AUTHORIZED_SITE_FIT_WITH_HOLD",
+    "production_release": false,
+    "artifact_counts": {
+      "dxf": 4,
+      "step_part": 4,
+      "unfold_step": 4,
+      "geometry_report": 5,
+      "step_assembly": 1,
+      "step_exploded": 1,
+      "pdf": 1,
+      "formed_isometric_report": 1,
+      "confirmation_png": 2,
+      "fixing_geometry_report": 1,
+      "cad_projections": 1,
+      "run_result": 1,
+      "nest_dxf": 1,
+      "nest_layout": 1,
+      "nest_preview_pdf": 1,
+      "bom_json": 1,
+      "bom_csv": 1,
+      "parameters": 1,
+      "source_job": 1,
+      "hole_table": 1,
+      "cad_report": 1,
+      "delivery_spec": 1,
+      "acceptance_report": 1,
+      "bend_dxf": 2,
+      "supplemental_evidence": 7
+    }
+  },
+  "BOX530_formal_code": null,
+  "BOX530_channel": "S user-confirmed; factory number not assigned by software",
+  "unit_tests": 259,
+  "dispatch_cases": 11,
+  "BOX530_original_transport_message_cases": 9,
+  "actual_naming_cases": [
+    {
+      "case": "v1",
+      "root": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.7.2-dispatch-repair/final_naming_tests/first/requirement_AUTHOR_EXTERNAL_380/revisions/X-201-1.2-20261023-0007-v1_R02",
+      "code": "X-201-1.2-20261023-0007-v1",
+      "naming_status": "FORMALLY_NAMED",
+      "full_gate_ok": true,
+      "fresh_CAD_executed": true,
+      "default_final_attachment_count": 1,
+      "focus_filenames": {
+        "pdf": "PDF/X-201-1.2-20261023-0007-v1_完整折弯工艺PDF_R07_EXTERNAL_380_THREE_VIEWS_BENDING_HOLD_20261023_1209.pdf",
+        "nest_dxf": "NEST/X-201-1.2-20261023-0007-v1_套料CUT_NEST_SHEET01_20261023_1209.dxf",
+        "nest_preview_pdf": "PDF/X-201-1.2-20261023-0007-v1_套料预览PDF_NEST_PREVIEW_20261023_1209.pdf"
+      },
+      "all_manufacturing_and_job_bytes_unchanged": 17,
+      "original_source_unchanged": true,
+      "production_release": false
+    },
+    {
+      "case": "v2",
+      "root": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.7.2-dispatch-repair/final_naming_tests/upgrade/requirement_AUTHOR_EXTERNAL_380/revisions/X-201-1.2-20261023-0007-v2_R02",
+      "code": "X-201-1.2-20261023-0007-v2",
+      "naming_status": "FORMALLY_NAMED",
+      "full_gate_ok": true,
+      "fresh_CAD_executed": true,
+      "default_final_attachment_count": 1,
+      "focus_filenames": {
+        "pdf": "PDF/X-201-1.2-20261023-0007-v2_完整折弯工艺PDF_R07_EXTERNAL_380_THREE_VIEWS_BENDING_HOLD_20261023_1209.pdf",
+        "nest_dxf": "NEST/X-201-1.2-20261023-0007-v2_套料CUT_NEST_SHEET01_20261023_1209.dxf",
+        "nest_preview_pdf": "PDF/X-201-1.2-20261023-0007-v2_套料预览PDF_NEST_PREVIEW_20261023_1209.pdf"
+      },
+      "all_manufacturing_and_job_bytes_unchanged": 17,
+      "original_source_unchanged": true,
+      "production_release": false
+    },
+    {
+      "case": "BOX530_pending",
+      "root": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.7.2-dispatch-repair/final_naming_tests/BOX530_PENDING_ONLY/requirement_BOX530_PG7_HANDLES/revisions/未命名待确认_requirement_BOX530_PG7_HANDLES_R02",
+      "code": null,
+      "naming_status": "UNNAMED_PENDING_CONFIRMATION",
+      "full_gate_ok": true,
+      "fresh_CAD_executed": true,
+      "default_final_attachment_count": 1,
+      "focus_filenames": {
+        "pdf": "PDF/未命名待确认_requirement_BOX530_PG7_HANDLES_R02_完整折弯工艺PDF_BOX530_PG11_NO_HANDLE_R02_THREE_VIEWS_BENDING_HOLD_20261023_1145.pdf",
+        "nest_dxf": "NEST/未命名待确认_requirement_BOX530_PG7_HANDLES_R02_套料CUT_NEST_SHEET01_20261023_1145.dxf",
+        "nest_preview_pdf": "PDF/未命名待确认_requirement_BOX530_PG7_HANDLES_R02_套料预览PDF_NEST_PREVIEW_20261023_1145.pdf"
+      },
+      "all_manufacturing_and_job_bytes_unchanged": 19,
+      "original_source_unchanged": true,
+      "production_release": false
+    }
+  ],
+  "naming_negatives": 6,
+  "original_R08_receipt_regression": {
+    "legal_repack_pass": 1,
+    "synchronized_semantic_negatives_rejected": 4
+  },
+  "public_message_CLI": "PASS actual CAD + exactly one ZIP",
+  "execute_integration": {
+    "ok": true,
+    "test": "execute integrates naming publication and emits remapped existing engineering references",
+    "CAD_build_and_raw_finalize_reused_as_cached_known_good_fixtures": true,
+    "new_CAD_build": false,
+    "destination_full_actual_CAD_gate": true,
+    "revision_root": "/Users/harryma/Documents/Codex/2026-10-20/task/sheetmetal-v2.7.2-dispatch-repair/execute_cached_geometry_test/requirement_AUTHOR_EXTERNAL_380/revisions/未命名待确认_requirement_AUTHOR_EXTERNAL_380_R02",
+    "naming": {
+      "status": "UNNAMED_PENDING_CONFIRMATION",
+      "code": null,
+      "prefix": "未命名待确认_requirement_AUTHOR_EXTERNAL_380_R02",
+      "record": "未命名待确认_requirement_AUTHOR_EXTERNAL_380_R02_文件更名与命名记录_FILE_NAMING.json"
+    },
+    "default_attachment_count": 1,
+    "all_stdout_engineering_references_exist": true,
+    "production_release": false
+  },
+  "unchanged_manufacturing_algorithm_SHA256": {
+    "cad_build.py": "2981daf3347b24ecdc855dd6928302627fb435328e5591657db580d02dc84ddc",
+    "corner03.py": "57743173d2b1b88820ea6ead73317fc143b86983d592e09944eedeccb070e4f3",
+    "cut_dxf.py": "96599acd6b1fc67409a788a24a2e0fa2e277978901abbd8367af121efc13c0d2",
+    "native_direction_readback.py": "b71befe0909077e662d7adf09ba141a164689e17824b6b950f9117a9c4ea9b40",
+    "pdf_dimension_authority.py": "f89acb4cc6feaba632df4fd3819d2e54fb3f3bab52588f48c7a147b99a10bbfe",
+    "step_dimensions_readback.py": "f465357475e9a2d53656080d1ca9eb65a13a89698e62f9eb2c7bb7ccf921e3c6",
+    "site_fit.py": "80825a6667c8ec367e6e175ffaaf3cf2819901f8d5fec9c2d45ef4c7ec723a90",
+    "record_site_fit.py": "4cdb9e1a960828a4923234940b73bffd7156c75e288f2eca103808b8528492c0"
+  },
+  "R08_frozen_ZIP_unchanged": "fe318c7b1ca9a0a0468aae99708b8a60db9d4e7b790c1a8395ba4b6b1c245129",
+  "changed_existing_files": [
+    "PRODUCT.md",
+    "QUICKSTART.md",
+    "SKILL.md",
+    "VERSION",
+    "references/delivery-contract.md",
+    "scripts/build_package.py",
+    "scripts/delivery_contract.py",
+    "scripts/design_job.py",
+    "scripts/drawing_pdf.py",
+    "scripts/native03_check.py",
+    "scripts/render_review_pdf.py",
+    "scripts/selftest_acceptance.py",
+    "scripts/selftest_cad.py",
+    "scripts/selftest_delivery_contract.py",
+    "scripts/selftest_existing_step.py",
+    "scripts/selftest_receipt_authority.py",
+    "scripts/selftest_site_fit.py",
+    "scripts/validate_manifest.py",
+    "scripts/workshop_pdf.py"
+  ],
+  "new_implementation_files": [
+    "references/factory-naming.md",
+    "references/message-delivery.md",
+    "references/naming.schema.json",
+    "scripts/delivery_dispatch.py",
+    "scripts/factory_naming.py",
+    "scripts/prepare_delivery_message.py",
+    "scripts/publish_named_delivery.py",
+    "scripts/selftest_dispatch.py",
+    "tests/test_delivery_dispatch.py",
+    "tests/test_factory_naming.py"
+  ],
+  "source_STEP_audit_scope": "unchanged partial/HOLD; manufacturing naming publication requires complete supported input",
+  "sender_behavior_guaranteed": false,
+  "number_uniqueness_reset": "factory owns allocation; no global auto serial/reset",
+  "first_attempt_failures_preserved": [
+    "author_R09_deliveries: PDF version label blocked; resumed in separate copy using same CAD",
+    "author_R09_named: report/log identical hash ambiguity blocked; corrected dependency binding in new attempt",
+    "final_receipt_regression: old test file-glob construction failed, fixed for code-prefixed filenames; independent retry directory used"
+  ]
+}

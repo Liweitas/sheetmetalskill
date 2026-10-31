@@ -1,0 +1,81 @@
+{
+  "author_selftest_only": true,
+  "new_CAD_generated": false,
+  "full_CAD_acceptance": false,
+  "production_release": false,
+  "original_unchanged_files": 73,
+  "results": [
+    {
+      "test": "normal_current_general_transport_sources",
+      "accepted": true,
+      "expected": true,
+      "error": null
+    },
+    {
+      "test": "delete_default_message_plan",
+      "accepted": false,
+      "expected": false,
+      "error": "DISPATCH_REQUIRED_PUBLISHED: source manufacturing version cannot waive the publication plan"
+    },
+    {
+      "test": "false_manufacturing_grade",
+      "accepted": false,
+      "expected": false,
+      "error": "GENERAL_ENVELOPE_STAGE_OR_MANUFACTURING_CLAIM"
+    },
+    {
+      "test": "false_envelope_quantity",
+      "accepted": false,
+      "expected": false,
+      "error": "ENVELOPE_SOURCE_QUANTITY_OR_STATE_MISMATCH: sets receipt=999 source=1"
+    },
+    {
+      "test": "omit_general_source_brief",
+      "accepted": false,
+      "expected": false,
+      "error": "GENERAL_REQUIRED_ARTIFACT: general_source_brief"
+    },
+    {
+      "test": "omit_general_parameter_sources",
+      "accepted": false,
+      "expected": false,
+      "error": "GENERAL_REQUIRED_ARTIFACT: general_parameter_sources"
+    },
+    {
+      "test": "omit_general_parameter_csv",
+      "accepted": false,
+      "expected": false,
+      "error": "GENERAL_REQUIRED_ARTIFACT: general_parameter_csv"
+    },
+    {
+      "test": "synchronous_compiled_geometry_drift",
+      "accepted": false,
+      "expected": false,
+      "error": "GENERAL_COMPILED_INPUT_AUTHORITY: compiled job/source/default/grade drift; recompile original brief instead of editing generated claims"
+    },
+    {
+      "test": "synchronous_compiled_grade_drift",
+      "accepted": false,
+      "expected": false,
+      "error": "GENERAL_COMPILED_INPUT_AUTHORITY: compiled job/source/default/grade drift; recompile original brief instead of editing generated claims"
+    },
+    {
+      "test": "synchronous_compiled_source_drift",
+      "accepted": false,
+      "expected": false,
+      "error": "GENERAL_COMPILED_INPUT_AUTHORITY: compiled job/source/default/grade drift; recompile original brief instead of editing generated claims"
+    },
+    {
+      "test": "double_scale_BEND",
+      "accepted": false,
+      "expected": false,
+      "error": "BEND_DXF_ACTUAL_NATIVE_FRAGMENT_MISMATCH"
+    },
+    {
+      "test": "missing_real_part_BEND",
+      "accepted": false,
+      "expected": false,
+      "error": "BEND_DXF_MISSING_PART: U"
+    }
+  ]
+}
