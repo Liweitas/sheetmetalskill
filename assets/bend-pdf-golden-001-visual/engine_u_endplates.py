@@ -1,4 +1,4 @@
-import sys, json, math, datetime, numpy as np, matplotlib, os
+import sys, json, math, datetime, hashlib, numpy as np, matplotlib, os
 from pathlib import Path
 # Order tools (cfg) + golden bidir
 ORDER = Path(os.environ.get('SM_ORDER') or Path(sys.argv[1]).resolve().parent if len(sys.argv) > 1 else '.')
@@ -291,7 +291,7 @@ def view(ax, name, v, fn, lw=0.7, hidden=True):
 def wrap_text(ax, text, fs, width):
     renderer = ax.figure.canvas.get_renderer()
     px = ax.transData.transform((width, 0))[0] - ax.transData.transform((0, 0))[0]
-    probe = ax.text(0, 0, '', fontsize=fs)
+    probe = ax.text(0, 0, '', fontsize=fs, parse_math=False)
     rows = []
     for paragraph in str(text).split('\n'):
         row = ''
@@ -316,8 +316,31 @@ def box(ax, x, y, w, h, lines, title=None, fs=None, ec=NAVY):
         for row in wrap_text(ax, txt, fs, w - 6):
             if yy - fs * 0.3528 * 1.3 < y + 2:
                 raise ValueError(f'PDF_LAYOUT: text exceeds box {title!r}; split page')
-            ax.text(x + 3, yy, row, fontsize=fs, color=color, va='top')
+            ax.text(x + 3, yy, row, fontsize=fs, color=color, va='top', parse_math=False)
             yy -= fs * 0.3528 * 1.3 + 1.7
+
+
+def customer_requirement_pages(ax, job):
+    sections = [('客户原始需求（原文）', job.get('customer_requirement_text') or
+                 '未提供客户原始需求；本次为历史数据重绘，需补录客户原文。')]
+    sections += [(f'后续确认 / 修改原文 {i}', text)
+                 for i, text in enumerate(job.get('customer_requirement_updates') or [], 1)]
+    rows = [('以下保留客户原话及原单位；实际采用参数、待确认项见本版图纸。', NAVY)]
+    for title, text in sections:
+        rows.append((title, REDC))
+        printable = text.replace('\r\n', '\n').replace('\r', '\n').expandtabs(4)
+        rows += [(line, 'black') for line in wrap_text(ax, printable, FS_NOTE, 390)]
+    return [rows[i:i+30] for i in range(0, len(rows), 30)]
+
+
+def draw_customer_requirements(pdf):
+    for i, rows in enumerate(_REQ_PAGES):
+        fig = plt.figure(figsize=(PW/25.4, PH/25.4), dpi=120)
+        ax = fig.add_axes([0, 0, 1, 1])
+        header(ax, NPAGES-len(_REQ_PAGES)+1+i); foot(ax)
+        box(ax, 12, 26, 396, 222, rows,
+            title=f'客户原始需求 / 后续确认（{i+1}/{len(_REQ_PAGES)}）', fs=FS_NOTE)
+        save_page(pdf, fig)
 
 
 def hole_labels(ax, holes):
@@ -562,12 +585,18 @@ def flatdraw(ax, name, show_holes=True):
                 ax.add_patch(Circle((c[0], c[1]), (c[2] / 2 if c[2] > 2 else c[2]), fill=False, ec=REDC, lw=0.45))
 
 # ---- page builders ----
+_probe_fig = plt.figure(figsize=(PW/25.4, PH/25.4), dpi=120)
+_probe_ax = _probe_fig.add_axes([0, 0, 1, 1])
+_probe_ax.set(xlim=(0, PW), ylim=(0, PH))
+_REQ_PAGES = customer_requirement_pages(_probe_ax, JOB)
+plt.close(_probe_fig)
+NPAGES += len(_REQ_PAGES)
 out_pdf = R / f'{VER}_BEND_PDF_A3_CN.pdf'
 _PAGE_LAYOUT = []
 _candidate = R / f'.{VER}.layout-check.pdf'
 # U-wrap and L use the same primitives, colours, dimensions and layout gate as the end-plate variant.
 if STRUCTURE == 'u_l_t7u':
-    NPAGES = 7
+    NPAGES = 7 + len(_REQ_PAGES)
     with PdfPages(_candidate) as pdf:
         fig = plt.figure(figsize=(PW/25.4, PH/25.4), dpi=120)
         ax = fig.add_axes([0,0,1,1]); header(ax,1); foot(ax)
@@ -648,6 +677,7 @@ if STRUCTURE == 'u_l_t7u':
                 lines += ['L形底侧板：底＋前侧一折；外露边与U外面齐平；M4固定孔按本版表。']
             box(ax,137,22,271,68,lines,title='成形位置与配合')
             save_page(pdf,fig)
+        draw_customer_requirements(pdf)
 else:
 
     with PdfPages(_candidate) as pdf:
@@ -987,6 +1017,7 @@ else:
                 '每侧4×Ø6.6（M6过孔），排距30；END_L展开X′=W−Y，END_R展开X′=Y，两者Y′=Z；把手实体/承载待供应商及实物核对。',
             ],title='端板把手安装要求',fs=FS_NOTE)
             save_page(pdf,fig)
+        draw_customer_requirements(pdf)
 
 # overlap report (layout PASS iff remaining==0)
 ov = dict(_OV)
@@ -1004,6 +1035,8 @@ logs = ORDER / 'logs'; logs.mkdir(exist_ok=True)
 (logs / 'bend_pdf_meta.json').write_text(json.dumps({
     'ver': VER, 'pdf': str(out_pdf), 'pages': NPAGES, 'stamp': _PDF_STAMP,
     'production_release': bool((JOB or {}).get('production_release', False)), 'rev': 'u_endplates_visual_001_2.8.45_t59u',
+    'customer_requirement_pages': len(_REQ_PAGES),
+    'customer_requirement_text_sha256': hashlib.sha256(JOB.get('customer_requirement_text', '').encode('utf-8')).hexdigest(),
     'dim_overlap': ov, 'pdf_layout_pass': ov['pass'],
 }, indent=2, ensure_ascii=False))
 if not ov['pass']:

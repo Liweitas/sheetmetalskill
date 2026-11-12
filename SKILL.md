@@ -2,7 +2,7 @@
 name: step-sheetmetal-delivery
 description: 核验STEP与钣金要求；为两类矩形箱体生成分件/装配/爆炸STEP、真实展开激光DXF及三视折弯PDF，强制核验03盖角和完整交付；也用于既有项目审核及窄改，纯格式转换不适用。
 metadata:
-  version: "2.8.46"
+  version: "2.8.47"
 ---
 
 # STEP 钣金审核与可复现出图
@@ -11,6 +11,12 @@ metadata:
 
 当前 MCP/API 与正式新箱体出图 CLI 统一为 `sm golden` → 本技能 `scripts/build_golden_package.py`；PDF 只用 `assets/bend-pdf-golden-001-visual/` 的五文件金样及其哈希门禁。现有适配器支持 201 不锈钢 U＋两外封端板＋03盖，以及 U围＋L＋03盖；未覆盖的结构不得静默转旧模板。`sm general`、`sm build`、直接执行旧 `build_package.py`、旧通用生成器以及旧管线 PDF 均退役；旧库函数及源 STEP 审核工具保留供内部验证。本条统一当前出图服务和官方 CLI，不声称禁止任意 Python 库调用。确认稿执行 CAD/DXF/金样/发布 ZIP 门禁；历史 R10 封套工具不代表本适配器已通过完整制造合同验收。
 
+
+### 客户原始需求进入 PDF（2.8.47）
+
+每个新出图 brief 必填 `customer_requirement_text`，逐字保存本单客户原始需求，包括原单位、孔位说法及换行，不用模型摘要、解析参数或默认值替代。后续客户确认或修改按顺序追加到可选的 `customer_requirement_updates` 字符串数组，保留原始需求；这些记录只作追溯，几何仍由明确解析的参数驱动。缺失、空白或类型不符时，统一入口在 CAD 前拒绝。
+
+同一金样引擎在工艺 PDF 末尾绘制“客户原始需求 / 后续确认”页，延续现有红蓝页眉、字号、页码及重叠门禁；长文本自动续页，不截断或缩字硬塞。ZIP 同时包含 `DOC/*_CUSTOMER_REQUIREMENT.txt` 原文及现有源 brief / 解析参数证据，PDF 生成记录 `bend_pdf_meta.json` 保存原文 SHA256。历史数据单独重绘而缺原文时明确显示“未提供”，不能从旧参数反编客户原话。图片附件不能靠该文本字段重建；填写实际收到的文字及图片文件名，不编造未读图内容。字段与验证详见[原始需求 PDF](references/customer-requirements-pdf.md)。
 
 这是完整技能，包含实际CAD生成路径；FreeCAD、SheetMetal与PDF工具是公开外部依赖。安装、最小调用及依赖见[QUICKSTART](QUICKSTART.md)，支持范围和参数见[新箱体运行契约](references/box-generation.md)。参数、几何、首件与批量放行分别报告；不能把自测或HOLD候选称为生产放行。
 

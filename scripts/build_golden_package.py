@@ -23,6 +23,15 @@ def fail(msg):
 
 def pipe_brief(brief, code):
     """通用 brief -> 共用几何 worker brief。缺外形或孔位就拒绝，不补坐标。"""
+    original = brief.get('customer_requirement_text')
+    updates = brief.get('customer_requirement_updates', [])
+    def valid_text(value):
+        return (isinstance(value, str) and bool(value.strip()) and
+                all(ord(ch) >= 32 or ch in '\n\r\t' for ch in value))
+    if not valid_text(original):
+        fail('customer_requirement_text must contain the customer original words')
+    if not isinstance(updates, list) or not all(valid_text(text) for text in updates):
+        fail('customer_requirement_updates must be a list of nonempty customer messages')
     dims = brief.get("dimensions") or {}
     try:
         L, W, H = (float(dims["length"]), float(dims["width"]), float(dims["height"]))
@@ -171,6 +180,8 @@ def pipe_brief(brief, code):
     if structure == 'u_l_t7u' and any(h['part_id'] != 'U' or h.get('axis') not in ([1, 0, 0], [-1, 0, 0]) for h in panels + rects):
         fail('U+L panel features currently support the two X-normal U walls only')
     return {
+        "customer_requirement_text": original,
+        "customer_requirement_updates": updates,
         "structure": structure,
         "release": code,
         "material_cn": "201不锈钢",
@@ -301,6 +312,7 @@ def main(argv):
               '图纸PDF仅由skill金样五文件生成；完整日志及各阶段资源记录见EVIDENCE。\n'
               '实物试折试装未进行，非生产放行。\n')
     (doc / f'{code}_README.txt').write_text(readme)
+    (doc / f'{code}_CUSTOMER_REQUIREMENT.txt').write_text(job['customer_requirement_text'], encoding='utf-8')
     (doc / f'{code}_PARAMS.json').write_text(json.dumps(job, ensure_ascii=False, indent=2))
     for folder in (work_root / 'work', logs):
         for p in sorted(folder.iterdir()):

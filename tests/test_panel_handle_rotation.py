@@ -17,6 +17,7 @@ class PanelHandleRotation(unittest.TestCase):
                 holes.append(dict(id=part+label, part_id=part, purpose='handle',
                                   diameter=6.6, point=point, axis=axis))
         return dict(dimensions=dict(length=550, width=330, height=260),
+                    customer_requirement_text='长550宽330高260；两端板居中把手，按指定方向开孔。',
                     thickness=1, dim_basis='body_outer', q=.2, holes=holes)
 
     def test_explicit_180_degree_rotation_preserves_both_panel_hole_groups(self):

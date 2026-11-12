@@ -12,6 +12,7 @@ spec.loader.exec_module(entry)
 class GoldenWrap(unittest.TestCase):
     def brief(self):
         return {'dimensions': {'length': 202, 'width': 192, 'height': 350},
+                'customer_requirement_text': '长20.5cm宽19.5cm高35cm；盖子上面一个把手。',
                 'dim_basis': 'body_outer', 'material': '201', 'thickness': 1,
                 'handles': {'profile': 'handle-85-62-30-v1', 'cx': [101], 'cy': 96},
                 'rect_cutouts': [{'id': 'RECT', 'part_id': 'U', 'center': [202, 152, 32],
@@ -26,6 +27,23 @@ class GoldenWrap(unittest.TestCase):
         self.assertEqual(job['rect_cutouts'], brief['rect_cutouts'])
         self.assertEqual(job['handles'], brief['handles'])
         self.assertEqual(brief, original)
+
+    def test_customer_words_and_updates_survive_without_rewriting(self):
+        original = '  方孔 中心距底32 mm\n保留原话和单位；201不锈钢。  '
+        updates = ['方孔 中心距底320 mm', '盖上把手不变']
+        job = entry.pipe_brief(self.brief() | {
+            'customer_requirement_text': original,
+            'customer_requirement_updates': updates}, 'TEST')
+        self.assertEqual(job.get('customer_requirement_text'), original)
+        self.assertEqual(job.get('customer_requirement_updates'), updates)
+
+    def test_missing_or_invalid_customer_words_are_rejected(self):
+        for text in (None, '', ' \n ', 12, ['原文'], '原文\x00'):
+            with self.subTest(text=text), self.assertRaises(SystemExit):
+                entry.pipe_brief(self.brief() | {'customer_requirement_text': text}, 'TEST')
+        for updates in ('修改', [None], [''], ['修改\x00']):
+            with self.subTest(updates=updates), self.assertRaises(SystemExit):
+                entry.pipe_brief(self.brief() | {'customer_requirement_updates': updates}, 'TEST')
 
     def test_handle_only_needs_no_invented_ports(self):
         job = entry.pipe_brief(self.brief() | {'rect_cutouts': []}, 'TEST')
