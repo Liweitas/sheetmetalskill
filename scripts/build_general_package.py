@@ -5,6 +5,7 @@ from pathlib import Path
 from general_process import compile_brief
 
 def execute(a):
+ raise SystemExit('sm general is closed; the only drawing entry is sm golden (bend-pdf-golden-001-visual)')
  source=Path(a.brief).resolve();brief=json.loads(source.read_text());compiled=compile_brief(brief)
  if a.resolve_only:
   print(json.dumps(compiled,ensure_ascii=False,indent=2));return compiled

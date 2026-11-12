@@ -21,7 +21,7 @@ put(Ld['corner_scheme'],'03','corner-gap');put(Ld['corner_gap'],CORNER_GAP,'corn
 B=d['bending']
 for k,v in {'Ri':ri,'compensation_mode':'K_factor','K_value':K,'K_definition':'ANSI'}.items():put(B[k],v,'empirical','assumed')
 put(B['calibrated'],False,'empirical');put(B['tool_clearance_verified'],False,'empirical')
-F=d['fabrication'];put(F['method'],'u_external_ends','user-brief');put(F['seam_gap'],SEAM,'user-brief');put(F['end_inset'],END_INSET,'user-brief');put(F['end_top_flush'],END_TOP_FLUSH,'user-brief')
+F=d['fabrication'];put(F['method'],'u_wrap_bottom_l' if STRUCTURE == 'u_l_t7u' else 'u_external_ends','user-brief');put(F['seam_gap'],SEAM,'user-brief');put(F['end_inset'],END_INSET,'user-brief');put(F['end_top_flush'],END_TOP_FLUSH,'user-brief')
 for k in ['digital_checks_passed','first_article_passed','production_release']:put(d['review'][k],False,'user-brief')
 Path(sys.argv[1]).write_text(json.dumps(d,ensure_ascii=False,indent=1))
 print('written',sys.argv[1])

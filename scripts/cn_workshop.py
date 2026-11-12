@@ -63,7 +63,7 @@ class Sheet:
   from xml.sax.saxutils import escape
   p=Paragraph(escape(str(s)),ParagraphStyle('cn',fontName='STSong-Light',fontSize=size,leading=size+4,wordWrap='CJK'));_,h=p.wrap(width,self.h);p.drawOn(self.cv,x,y-h);return y-h-7
  def start(self,title):
-  self.text(30,self.h-35,title,21);self.text(30,self.h-55,'图纸修订：'+self.revision+'　单位：mm　状态：确认/试折候选',10);self.cv.setStrokeColorRGB(.15,.3,.55);self.cv.line(30,self.h-64,self.w-30,self.h-64);self.cv.setStrokeColorRGB(0,0,0)
+  self.text(30,self.h-35,title,21);self.text(30,self.h-55,'图号：'+self.revision+'　单位：mm　状态：确认/试折候选',10);self.cv.setStrokeColorRGB(.15,.3,.55);self.cv.line(30,self.h-64,self.w-30,self.h-64);self.cv.setStrokeColorRGB(0,0,0)
  def end(self):
   self.text(30,19,'尺寸数值优先，不按纸测量；刀模与后挡料未确认，不是机床程序。',9);self.text(self.w-85,19,'第'+str(self.page+1)+'页',9);self.cv.showPage();self.page+=1
  def label(self,owner,axis,value,x,y,kind,labels):

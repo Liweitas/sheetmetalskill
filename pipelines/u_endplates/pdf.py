@@ -1,7 +1,11 @@
 # v2.8.3 pipeline u_endplates PDF = TEXT TEMPLATE vendored from order box-400x220x150 (S-201-1-20261021-001-v1, t46u: 03 corners gap 0, outer end plates).
 # Layout + wording validated ONLY for that geometry and corner_gap=0 (incl. its native03 gap-0 finding); run.py refuses other jobs (write job-specific text).
+# Outbound confirmation drawings do not use this file. The only PDF pipeline is
+# assets/bend-pdf-golden-001-visual/engine_u_endplates.py.
 # A3 all-Chinese confirmation/bend PDF (4 pages) + iso renders (addendum-venv python)
-import sys,json,math,numpy as np,matplotlib,datetime
+import sys
+raise SystemExit('pdf.py is not an outbound PDF pipeline; use assets/bend-pdf-golden-001-visual/engine_u_endplates.py')
+import json,math,numpy as np,matplotlib,datetime
 from pathlib import Path
 sys.path.insert(0,str(Path(__file__).parent));from cfg import *
 matplotlib.use('Agg');import matplotlib.pyplot as plt
@@ -14,6 +18,17 @@ FPATH='/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc';fm.fontManager.ad
 FP=fm.FontProperties(fname=FPATH);matplotlib.rcParams['font.family']='Noto Sans CJK SC';matplotlib.rcParams['axes.unicode_minus']=False
 W_=Path(sys.argv[1]);R=Path(sys.argv[2])
 rep=json.load(open(W_/'report.json'));proj=json.load(open(W_/'projections.json'));mesh=json.load(open(W_/'mesh.json'))
+# v2.8.20 / t99u: force hole_to_lid_skirt findings onto PDF p1 when present
+_conf=[];_cp=W_/'conflicts.json'
+if _cp.exists():
+    try: _conf=json.load(open(_cp))
+    except Exception: _conf=[]
+try:
+    sys.path.insert(0,str(Path(__file__).resolve().parents[2]/'scripts'))
+    from conflict_checks import lid_skirt_force_lines_cn
+    _SKIRT_LINES=lid_skirt_force_lines_cn(_conf)
+except Exception:
+    _SKIRT_LINES=[f"[{x.get('level')}] {x.get('msg_cn')}" for x in _conf if x.get('id')=='hole_to_lid_skirt' and x.get('level') in ('WARN','ERROR')]
 flats=json.load(open(W_/'flats.json'));sec=json.load(open(W_/'section_mid.json'));dchk=json.load(open(W_/'dxf_checks.json'))
 P=rep['parts'];G=rep['gap_check']
 NOTCH_LID=skirt-ro+BA/2
@@ -157,7 +172,7 @@ with PdfPages(pdf_path) as pdf:
     img(fig,W_/'iso_exp.png',318,40,96,108);ax.text(320,150,'爆炸轴测（各件仅平移）',fontsize=8.5,weight='bold')
     box(ax,196,40,118,124,[('尺寸口径（已确认）',RED),'· 400×220 = 箱体外尺寸；150 = 含盖总高',f'· 箱体高 = 150 − 1.0 − 顶隙{q:g} = {Hb:g}','· 盖外形 403×223×15；盖内 401×221',
         ('结构 / 零件拆分',BLU),'· 件1 U形底壳：底+两长侧壁（弯线沿400）','· 件2/3 外封端板：零折平板，盖住U端面，','  拼缝0、不退让、上边齐口；接合待确认','· 件4 上盖：四边裙15，03斜角折弯收口(缝0)，','  M4螺钉四边固定共10组','· 把手×2：盖顶铆接，Ø6.6×8（M6孔）',
-        ('不做',BLU),'· 无电源孔、无百叶、无PG7/PG9/线孔',('待确认',RED),'· 把手型号；铆钉型号（孔Ø6.6 M6过孔=默认）','· 盖角缝0：native03未通过（见第4页），定方案','· 端板接合（无搭接，不能点焊）',('· M4直接攻1.0板仅约1扣、易滑牙（第4页）；',RED),('  压铆/拉铆/点焊螺母替代：待确认',RED)],title='关键参数',fs=7.0)
+        ('不做',BLU),'· 无电源孔、无百叶、无PG7/PG9/线孔',('待确认',RED),'· 把手型号；铆钉型号（孔Ø6.6 M6过孔=默认）','· 盖角缝0：native03未通过（见第4页），定方案','· 端板接合（无搭接，不能点焊）',('· M4直接攻1.0板仅约1扣、易滑牙（第4页）；',RED),('  压铆/拉铆/点焊螺母替代：待确认',RED)]+([ (ln,RED) for ln in _SKIRT_LINES ] if _SKIRT_LINES else []),title='关键参数',fs=7.0)
     pdf.savefig(fig);plt.close(fig)
     # ================= PAGE 2 =================
     fig,ax=page(2,'第2页  箱体零件：件1 U形底壳、件2/3 外封端板（端板盖U，拼缝0，完全遮盖）—— 截面、展开、端角局部、折弯参数')
@@ -287,7 +302,7 @@ with PdfPages(pdf_path) as pdf:
     box(ax,280,146,135,126,[('【计算检查】（CAD计算，非实物；native03缝0未通过）',RED),f'· 模型：箱体400×220×{Hb:g}；盖403×223×15；总高150',f'· 装配干涉（含把手参考体）：最大 {max(ints.values()):.0f} mm³',f'· 盖-箱最小间隙 {rep["min_distance_mm"]["U/LID"]:.3f}；侧面0.5',f'· M4孔盖↔箱体 10/10 同轴 {"通过" if coax else "不通过"}',
         f'· 把手孔 8/8 通透、85/62/30、镜像 {"通过" if (hok and hopen) else "不通过"}',f'· 把手孔边距盖外边≥63.2、折弯切点≥61.4','· 螺丝刀进刀锥 ↔ 把手：0 干涉',f'· 铆钉尾包络Ø12×12 ↔ 箱体：距{rep["rivet_tail_envelope"]["min_dist_to_body"]:.0f}，0干涉',f'· DXF闭合/无重复/无重叠：9个 {"通过" if allpass else "不通过"}',f'· corner03.py：8斜边/坐标 通过；盖/箱根部重叠 {N3R["root_overlap_volume_mm3"]:g}',(f'· native03：缝0时原生展开把角柱1×1×13.2算给两裙(+52.8mm²)；',RED),(f'  按03定义切除后与原生展开差52.8mm² → 未通过',RED),'· 全部DXF实线无虚线；CUT/套料无折弯线',f'· 版本一致：{VER}',
         ('【实物试折试装：未进行】',RED),'· 首件试折、盖配合、螺钉、把手铆接：未进行',('· 生产放行：否（production_release=false）',RED)],title='校核结果',fs=6.6)
-    box(ax,280,40,135,103,['1. 把手型号（孔型85/62/30）','2. 铆钉型号（孔Ø6.6=M6过孔，默认）','3. 盖角缝0：native03未通过(差52.8mm²)，请定：接受切除版/改缝/接受干涉','4. 端板接合：内侧角焊或外侧激光焊（无搭接，不能点焊）',('5. M4直接攻丝仅约1扣（WARN）；压铆/拉铆/点焊螺母替代',RED),('   待确认；首件试装',RED),'6. 螺钉型号、长度、材质','7. 内R0.8、K0.4、后挡料：按实际刀具试折','8. 顶隙q=0.2 / 箱体高148.8 是否接受','9. 公差、表面、去毛刺',('已确认：400×220=箱体外；150=含盖总高',BLU),('无电源孔/百叶/PG7/PG9/线孔',BLU)],title='待确认清单',fs=6.8,ec=RED)
+    box(ax,280,40,135,103,['1. 把手型号（孔型85/62/30）','2. 铆钉型号（孔Ø6.6=M6过孔，默认）','3. 盖角缝0：native03未通过(差52.8mm²)，请定：接受切除版/改缝/接受干涉','4. 端板接合：内侧角焊或外侧激光焊（无搭接，不能点焊）',('5. M4直接攻丝仅约1扣（WARN）；压铆/拉铆/点焊螺母替代',RED),('   待确认；首件试装',RED),'6. 螺钉型号、长度、材质','7. 内R0.8、K0.4、后挡料：按实际刀具试折','8. 顶隙q=0.2 / 箱体高148.8 是否接受','9. 公差、表面、去毛刺',('已确认：400×220=箱体外；150=含盖总高',BLU),('无电源孔/百叶/PG7/PG9/线孔',BLU)]+([ (ln,RED) for ln in _SKIRT_LINES ] if _SKIRT_LINES else []),title='待确认清单',fs=6.8,ec=RED)
     pdf.savefig(fig);plt.close(fig)
     d=pdf.infodict();d['Title']=VER+' 客户确认图 非生产放行';d['Subject']=VER;d['Keywords']=VER+' production_release=false'
 print(pdf_path)

@@ -3,7 +3,8 @@
 import argparse,hashlib,json,sys
 from pathlib import Path
 def inspect(root,request):
- import FreeCAD as F,Part
+ import FreeCAD as F,Part,time as _t
+ _marks=[]; _marks.append(('start',_t.time()))
  root=Path(root).resolve();parts={};body=[];loaded={}
  def box(shape):
   b=shape.BoundBox;return [b.XMin,b.YMin,b.ZMin,b.XMax,b.YMax,b.ZMax]
@@ -27,6 +28,7 @@ def inspect(root,request):
    parts[item['id']]['orthographic_lines_mm']=projections
   loaded[item['id']]=shape
   if item.get('body_part'):body.append(shape)
+ _marks.append(('after_shapes',_t.time()))
  if not body:raise ValueError('ACTUAL_STEP_DIMENSIONS: no body sheets')
  identity=None
  if request.get('translation_only_parts'):
@@ -38,12 +40,16 @@ def inspect(root,request):
     original=loaded[owner];target=original.copy()
     if label=='EXPLODED':target.translate(F.Vector(*delta))
     possible=[]
+    def _same_shape(a,b,tol):
+     # 包围盒+体积+面积已筛过；用双向顶点最大偏差确认是同一实体（重合时为 0）。
+     # 等价于对称布尔差，但布尔 cut 对重合复杂实体极慢（单件约 13s），顶点偏差约 0.02s。
+     cb=Part.makeCompound(b.Vertexes); ca=Part.makeCompound(a.Vertexes)
+     return max(max(cb.distToShape(Part.Vertex(v.Point))[0] for v in a.Vertexes), max(ca.distToShape(Part.Vertex(v.Point))[0] for v in b.Vertexes))<=tol
     for i,s in enumerate(solids):
      if i in used or max(abs(a-b) for a,b in zip(box(s),box(target)))>1e-5:continue
      tolerance=max(1e-5,abs(target.Volume)*1e-8)
      if abs(s.Volume-target.Volume)>tolerance or abs(s.Area-target.Area)>max(1e-5,target.Area*1e-8):continue
-     difference=abs(s.cut(target).Volume)+abs(target.cut(s).Volume)
-     if difference<=tolerance:possible.append((i,difference))
+     if _same_shape(s,target,1e-5):possible.append((i,0.0))
     if len(possible)!=1:raise ValueError('ASSEMBLY_NOT_SAME_TRANSLATED_PART: '+label+'/'+owner)
     i,difference=possible[0];used.add(i);rows.append({'part_id':owner,'translation_mm':delta if label=='EXPLODED' else [0,0,0],'symmetric_volume_difference_mm3':difference})
    identity[label]=rows

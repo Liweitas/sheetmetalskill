@@ -41,6 +41,19 @@ def build(brief, conflicts=(), checks_passed=None):
         if h.get('basis') not in ('孔心', '孔边'):
             d = h.get('diameter', 0)
             pend.append(f"{h['what']}“{h['axis']}{h['value']:g}”有两种读法：孔心{h['axis']}{h['value']:g}，或孔边{h['axis']}{h['value']:g}（=孔心{h['value'] + d / 2:g}）；本版按{h.get('used', '孔心')}，请确认")
+    # v2.8.20 / t99u: force hole_to_lid_skirt WARN/ERROR into 待确认 as well as 冲突与风险 (PDF/README must match)
+    try:
+        from conflict_checks import lid_skirt_force_lines_cn
+        for line in lid_skirt_force_lines_cn(conflicts):
+            # strip [LEVEL] prefix for pending list readability but keep 盖裙遮挡 text
+            body = line.split('] ', 1)[-1] if '] ' in line else line
+            if body not in pend:
+                pend.append(body)
+    except Exception:
+        for x in conflicts:
+            if x.get('id') == 'hole_to_lid_skirt' and x.get('level') in ('WARN', 'ERROR'):
+                if x.get('msg_cn') and x['msg_cn'] not in pend:
+                    pend.append(x['msg_cn'])
     risks = [f"[{x['level']}] {x['msg_cn']}" for x in conflicts if x['level'] in ('WARN', 'ERROR')]
     L = c['dims']; kr = c.get('kr_source_cn', '经验值（未做本厂试折标定）')
     lines = [

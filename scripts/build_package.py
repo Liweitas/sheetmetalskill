@@ -11,9 +11,17 @@ from drawing_pdf import write_drawings
 ROOT=Path(__file__).resolve().parents[1]
 sha=lambda p:hashlib.sha256(Path(p).read_bytes()).hexdigest()
 def run(cmd,log,timeout=900):
+ # 不用 subprocess timeout：带 timeout 时 Python 走忙等轮询(_wait 每 0.5–50ms 醒一次 waitpid)，
+ # 单次出图空耗约 30s。改为阻塞等待 + 独立 watchdog 线程，到点才杀进程，正常路径零轮询开销。
+ import threading
  with Path(log).open("wb") as stream:
-  result=subprocess.run(cmd,stdout=stream,stderr=subprocess.STDOUT,timeout=timeout,env={**os.environ,"PYTHONDONTWRITEBYTECODE":"1"})
- if result.returncode:raise RuntimeError("Required subprocess failed; inspect "+str(log))
+  proc=subprocess.Popen(cmd,stdout=stream,stderr=subprocess.STDOUT,env={**os.environ,"PYTHONDONTWRITEBYTECODE":"1"})
+  def _kill():
+   if proc.poll() is None: proc.kill()
+  wd=threading.Timer(timeout,_kill); wd.daemon=True; wd.start()
+  try: proc.wait()
+  finally: wd.cancel()
+ if proc.returncode:raise RuntimeError("Required subprocess failed; inspect "+str(log))
 def execute_core(a):
  source=Path(a.job).resolve();job=json.loads(source.read_text());resolved=resolve_job(job)
  resolved['delivery']=a._delivery
@@ -29,7 +37,8 @@ def execute_core(a):
  out=Path(a.output).resolve()
  if out.exists():raise ValueError("OUTPUT_EXISTS: choose a new empty run path; no overwrite")
  if out==source or out in source.parents:raise ValueError("Output must not contain/replace the job input")
- now=datetime.now(ZoneInfo("Asia/Shanghai"));version=now.strftime("%Y%m%d_%H%M");recorded=now.isoformat(timespec="seconds")
+ now=datetime.now(ZoneInfo("Asia/Shanghai"));recorded=now.isoformat(timespec="seconds")
+ version=job.get('factory_code') or now.strftime("%Y%m%d_%H%M")
  project=project_for(job,resolved,source,version,recorded);model_check=validate(project,"model")
  if not model_check["ok"]:raise ValueError("MODEL_PARAMETERS_BLOCKED: "+json.dumps(model_check["errors"]))
  out.mkdir(parents=True);a._created_output=out;a._phase="CAD_build";e=out/"evidence";e.mkdir();step=out/"STEP";step.mkdir();dxf=out/"DXF";dxf.mkdir();pdfdir=out/"PDF";pdfdir.mkdir()
@@ -191,4 +200,4 @@ def main():
    failure["partial_files"]=[{"path":str(path.relative_to(created)),"bytes":path.stat().st_size,"sha256":sha(path)} for path in sorted(created.rglob("*")) if path.is_file()]
    (created/"BLOCKED_RESULT.json").write_text(json.dumps(failure,ensure_ascii=False,indent=2))
   print(json.dumps(failure,ensure_ascii=False),file=sys.stderr);raise SystemExit(2)
-if __name__=="__main__":main()
+if __name__=="__main__":raise SystemExit("Legacy drawing CLI retired; use sm golden / MCP sheetmetal_job (skill scripts/build_golden_package.py)")

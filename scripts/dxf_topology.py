@@ -78,9 +78,40 @@ def validate_planar(ents,indices):
  for i,(loop,poly) in enumerate(loops):
   for j,(other,opol) in enumerate(loops):
    if i!=j and inside(poly[0],opol):raise ValueError('nested outer boundaries need CAD adapter')
- holes=[e for i,e in enumerate(ents) if i not in indices]
- for i,h in enumerate(holes):
+ leftover=[(i,e) for i,e in enumerate(ents) if i not in indices]
+ circle_holes=[e for i,e in leftover if e['type']=='CIRCLE']
+ noncircle=[(i,e) for i,e in leftover if e['type']!='CIRCLE']
+ # Closed LINE/ARC openings use the same self-intersection and containment checks as outer loops.
+ inner_loops=[]
+ pending={k:e for k,e in noncircle}
+ while pending:
+  seed=min(pending);e=pending.pop(seed);loop=[e];poly=sampled(e)
+  while dist(poly[-1],poly[0])>EPS:
+   options=[]
+   for j,f in list(pending.items()):
+    if f['type']=='CIRCLE':continue
+    a,b=ends(f)
+    if dist(a,poly[-1])<EPS:options.append((j,False))
+    elif dist(b,poly[-1])<EPS:options.append((j,True))
+   if len(options)!=1:raise ValueError('inner opening loop cannot be ordered uniquely')
+   j,rev=options[0];f=pending.pop(j);loop.append(f);poly.extend(sampled(f,rev)[1:])
+  area=abs(sum(a[0]*b[1]-a[1]*b[0] for a,b in zip(poly,poly[1:]+poly[:1])))/2
+  if area<=1e-6:raise ValueError('zero-area inner opening')
+  matches=[(oloop,opoly) for oloop,opoly in loops if inside(poly[0],opoly) and min(distance(e,poly[0]) for e in oloop)>GUARD]
+  if len(matches)!=1:raise ValueError('inner opening outside/crossing outer boundary or within0.002mm review guard')
+  validate_planar(loop,list(range(len(loop))))
+  for pe in poly:
+   if not inside(pe,matches[0][1]) or min(distance(e,pe) for e in matches[0][0])<=GUARD+.001:raise ValueError('inner opening outside/near outer')
+  for other,opol in loops+inner_loops:
+   if any(intersections(e,f) for e in loop for f in other):raise ValueError('inner opening crosses another boundary')
+  for other,opol in inner_loops:
+   if inside(poly[0],opol) or inside(opol[0],poly):raise ValueError('nested inner openings')
+  inner_loops.append((loop,poly))
+ for i,h in enumerate(circle_holes):
   c=xy(h);r=float(h[40]);matches=[loop for loop,poly in loops if inside(c,poly) and min(distance(e,c) for e in loop)>r+GUARD]
   if len(matches)!=1:raise ValueError('hole outside/crossing outer boundary or within0.002mm review guard')
-  if any(dist(c,xy(f))<=r+float(f[40])+GUARD for f in holes[:i]):raise ValueError('overlapping/touching inner circles')
- return {'planar_checked':True,'boundary_guard_mm':GUARD,'arc_winding_max_sag_mm':.001}
+  if any(dist(c,xy(f))<=r+float(f[40])+GUARD for f in circle_holes[:i]):raise ValueError('overlapping/touching inner circles')
+  # also keep clearance from polygonal openings
+  for loop,poly in inner_loops:
+   if inside(c,poly) or min(distance(e,c) for e in loop)<=r+GUARD:raise ValueError('circle hole overlaps polygonal opening')
+ return {'planar_checked':True,'boundary_guard_mm':GUARD,'arc_winding_max_sag_mm':.001,'inner_polygonal_openings':len(inner_loops),'circle_holes':len(circle_holes)}

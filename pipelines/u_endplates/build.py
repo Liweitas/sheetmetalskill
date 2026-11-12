@@ -54,6 +54,52 @@ def endplate():
     return s.removeSplitter()
 EL=endplate()
 ER=EL.copy();ER=ER.mirror(V(L/2,0,0),V(1,0,0))
+# side connector cutouts (this order). Applied after the mirror so only the named plate is cut.
+END_CUTS=[]
+for c in AND_CUTS:
+    plate=c['plate'];cy=float(c['y']);cz=float(c['z']);big=float(c['d']);small=float(c['d_bolt']);pitch=float(c['pitch'])
+    assert plate in ('END_L','END_R'),plate
+    target=EL if plate=='END_L' else ER
+    x=t/2 if plate=='END_L' else L-t/2
+    target=target.cut(cyl(big,[x,cy,cz],[1,0,0],ln=t+4))
+    for sy in (-1,1):
+        for sz in (-1,1):
+            target=target.cut(cyl(small,[x,cy+sy*pitch/2,cz+sz*pitch/2],[1,0,0],ln=t+4))
+    if plate=='END_L':EL=target
+    else:ER=target
+    END_CUTS.append({'plate':plate,'y':cy,'z':cz,'d':big,'d_bolt':small,'pitch':pitch,'bolts':4})
+EL=EL.removeSplitter();ER=ER.removeSplitter()
+from rect_cutout_tool import rounded_rect_prism
+panel_parts = {'U': U, 'END_L': EL, 'END_R': ER}
+for h in PANEL_HOLES:
+    name = h['part_id']
+    panel_parts[name] = panel_parts[name].cut(cyl(h['diameter'], h['point'], h['axis'], ln=2*t+4))
+for h in RECT_CUTOUTS:
+    name = h['part_id']
+    panel_parts[name] = panel_parts[name].cut(rounded_rect_prism(h['center'], h['size_xy'], h.get('corner_radius', 0), h['axis'], length=2*t+4))
+U, EL, ER = (panel_parts[n].removeSplitter() for n in ('U', 'END_L', 'END_R'))
+body_parts = {'U': U, 'END_L': EL, 'END_R': ER}
+if STRUCTURE == 'u_l_t7u':
+    # Same U-wrap/L-cover construction as pipelines/u_l_t7u/build_main.py; 0 gap/setback.
+    pp = [(0,W),(0,ro),(ro,0),(L-ro,0),(L,ro),(L,W),(L-t,W),(L-t,ro),(L-ro,t),(ro,t),(t,ro),(t,W)]
+    aa = {1:(ro-ro*s2,ro-ro*s2),3:(L-ro+ro*s2,ro-ro*s2),7:(L-ro+ri*s2,ro-ri*s2),9:(ro-ri*s2,ro-ri*s2)}
+    U = wf([(x,W-y,0) for x,y in pp], {i:(x,W-y,0) for i,(x,y) in aa.items()}).extrude(V(0,0,Hb))
+    keep = wf([(-5,t,Hb+5),(-5,t,ro),(-5,ro,t),(-5,W+5,t),(-5,W+5,Hb+5)], {1:(-5,ro-ri*s2,ro-ri*s2)}).extrude(V(L+10,0,0))
+    U = U.common(keep).removeSplitter()
+    LP = wf([(0,0,Hb),(0,0,ro),(0,ro,0),(0,W,0),(0,W,t),(0,ro,t),(0,t,ro),(0,t,Hb)], {1:(0,ro-ro*s2,ro-ro*s2),5:(0,ro-ri*s2,ro-ri*s2)}).extrude(V(L,0,0))
+    clip = wf([(0,-5,-5),(L,-5,-5),(L,W-ro,-5),(L-ro,W,-5),(ro,W,-5),(0,W-ro,-5)], {2:(L-ro+ro*s2,W-ro+ro*s2,-5),4:(ro-ro*s2,W-ro+ro*s2,-5)}).extrude(V(0,0,Hb+10))
+    body_parts = {'U': U, 'L': LP.common(clip).removeSplitter()}
+    for h in holes:
+        h['body_part'] = 'L' if h['axis'] == [0,1,0] and h['point'][1] == 0 else 'U'
+        n = h['body_part']
+        body_parts[n] = body_parts[n].cut(cyl(D_BODY, h['point'], h['axis'])).removeSplitter()
+    for h in PANEL_HOLES:
+        n = h['part_id']
+        body_parts[n] = body_parts[n].cut(cyl(h['diameter'], h['point'], h['axis'], ln=2*t+4)).removeSplitter()
+    for h in RECT_CUTOUTS:
+        n = h['part_id']
+        body_parts[n] = body_parts[n].cut(rounded_rect_prism(h['center'], h['size_xy'], h.get('corner_radius',0), h['axis'], length=2*t+4)).removeSplitter()
+    U = body_parts['U']
 # ---------------- LID ----------------
 X0,X1,Y0,Y1=-g-t,L+g+t,-g-t,W+g+t       # lid outer
 ZT=H;zb=H-skirt
@@ -97,6 +143,16 @@ for h in holes:
     LID=LID.cut(cyl(D_LID,p,h['axis']))
 HH=handle_holes()
 for h in HH:LID=LID.cut(cyl(D_HDL,[h['x'],h['y'],ZT-t/2],[0,0,1]))
+# lid-top Anderson ports (this order). Coordinates are on the lid outer plan, z = lid top.
+_LID_IN=list(LID_PORTS);LID_PORT_REC=[]
+for c in _LID_IN:
+    px,py=float(c['x']),float(c['y']);big=float(c['d']);small=float(c.get('d_bolt') or 0);pitch=float(c.get('pitch') or 0)
+    LID=LID.cut(cyl(big,[px,py,ZT-t/2],[0,0,1],ln=t+4))
+    if small and pitch:
+        for sy in (-1,1):
+            for sx in (-1,1):
+                LID=LID.cut(cyl(small,[px+sx*pitch/2,py+sy*pitch/2,ZT-t/2],[0,0,1],ln=t+4))
+    LID_PORT_REC.append({'x':px,'y':py,'d':big,'d_bolt':small,'pitch':pitch,'bolts':4 if small and pitch else 0})
 LID=LID.removeSplitter()
 # reference handle bodies (envelope only, marked REFERENCE; not sheet metal, not supplier geometry)
 def handle_ref(cx):
@@ -108,9 +164,9 @@ def handle_ref(cx):
     return sh.removeSplitter().Solids[0]
 # v2.8.2: handles/reference envelopes only when the brief asks for them
 HREF={f'HANDLE_REF_{"L" if cx<L/2 else "R"}':handle_ref(cx) for cx in HANDLE_CX} if HANDLE_REF else {}
-parts={'U':U,'END_L':EL,'END_R':ER,'LID':LID}
+parts={**body_parts,'LID':LID}
 for n,s in {**parts,**HREF}.items():assert s.isValid() and len(s.Solids)==1,(n,s.isValid(),len(s.Solids))
-rep={'version':VER,'params':dict(L=L,W=W,H=H,t=t,Ri=ri,Ro=ro,K_ANSI=K,g=g,q=q,qmin=qmin,Hb=Hb,skirt=skirt,seam_gap=SEAM,end_inset=END_INSET,end_top_flush=END_TOP_FLUSH,ZH=ZH,BA=BA,OSSB=OSSB,BD=BD,D_body=D_BODY,D_lid=D_LID),'parts':{},'holes':holes}
+rep={'version':VER,'params':dict(L=L,W=W,H=H,t=t,Ri=ri,Ro=ro,K_ANSI=K,g=g,q=q,qmin=qmin,Hb=Hb,skirt=skirt,seam_gap=SEAM,end_inset=END_INSET,end_top_flush=END_TOP_FLUSH,ZH=ZH,BA=BA,OSSB=OSSB,BD=BD,D_body=D_BODY,D_lid=D_LID),'parts':{},'holes':holes,'end_cutouts':END_CUTS,'lid_ports':LID_PORT_REC}
 def export(s,path,n):
     s.exportStep(str(path));b=Part.read(str(path))
     assert b.isValid() and len(b.Solids)==n and abs(b.Volume-s.Volume)<max(.01,s.Volume*1e-7),path
@@ -121,12 +177,12 @@ for n,s in HREF.items():
     b=export(s,out/(n+'.step'),1);rep['parts'][n]={'reference_only':True,'bbox':bbox(b),'size':[round(b.BoundBox.XLength,6),round(b.BoundBox.YLength,6),round(b.BoundBox.ZLength,6)]}
 allp={**parts,**HREF}
 asm=Part.makeCompound(list(allp.values()));export(asm,out/'ASSEMBLY.step',len(allp))
-shifts={'U':[0,0,0],'END_L':[-80,0,0],'END_R':[80,0,0],'LID':[0,0,90],'HANDLE_REF_L':[0,0,150],'HANDLE_REF_R':[0,0,150]}
+shifts={'U':[0,0,0],'END_L':[-80,0,0],'END_R':[80,0,0],'L':[0,-80,0],'LID':[0,0,90],'HANDLE_REF_L':[0,0,150],'HANDLE_REF_R':[0,0,150]}
 ex=[]
 for n,s in allp.items():
     c=s.copy();c.translate(V(*shifts[n]));ex.append(c)
 exc=Part.makeCompound(ex);export(exc,out/'EXPLODED.step',len(allp))
-rep['assembly']={'bbox':bbox(asm),'body_bbox':bbox(Part.makeCompound([U,EL,ER])),'exploded_shifts':shifts}
+rep['assembly']={'bbox':bbox(asm),'body_bbox':bbox(Part.makeCompound(list(body_parts.values()))),'exploded_shifts':shifts}
 rep['intersections_mm3']={a+'/'+b:abs(allp[a].common(allp[b]).Volume) for a,b in itertools.combinations(allp,2)}
 rep['min_distance_mm']={a+'/'+b:allp[a].distToShape(allp[b])[0] for a,b in itertools.combinations(allp,2)}
 # ---- handle hole checks ----
@@ -162,8 +218,16 @@ rep['handle_mirror_ok']=len(HANDLE_CX)!=2 or all(any(abs(a['x']+b['x']-L)<1e-9 a
 rep['handle_min_hole_edge_spacing']=min((math.dist([a['x'],a['y']],[b['x'],b['y']])-D_HDL for a,b in pp),default=None)
 # rivet tail / rivet-nut envelope under lid top: Ø12 x 12 below lid inner face (generic envelope, model 待确认)
 tails=Part.makeCompound([Part.makeCylinder(6,12,V(h['x'],h['y'],ZT-t-12)) for h in HH])
-if HH: rep['rivet_tail_envelope']={'envelope':'Ø12 x 12 below lid inner face (generic, rivet model 待确认)','min_dist_to_body':min(tails.distToShape(p_)[0] for p_ in (U,EL,ER)),'intersect_body_mm3':sum(abs(tails.common(p_).Volume) for p_ in (U,EL,ER))}
+if HH: rep['rivet_tail_envelope']={'envelope':'Ø12 x 12 below lid inner face (generic, rivet model 待确认)','min_dist_to_body':min(tails.distToShape(p_)[0] for p_ in body_parts.values()),'intersect_body_mm3':sum(abs(tails.common(p_).Volume) for p_ in body_parts.values())}
 # screwdriver access: horizontal lines from each skirt screw outward 200 mm vs handle bodies; lid lift-off path: handles move with lid
+# skpt must be module-scope: handle loop's nested def skpt is skipped when HAS_HANDLES=False but M4 holes exist (rule23 / t86u)
+def skpt(pt):
+    q_=list(pt)
+    if q_[1]==0:q_[1]=Y0
+    elif q_[1]==W:q_[1]=Y1
+    elif q_[0]==0:q_[0]=X0
+    else:q_[0]=X1
+    return q_
 acc=[]
 for hh in holes:
     pt=V(*skpt(hh['point']));a=V(*hh['axis']);sgn=-1 if (hh['point'][1]==0 and hh['axis']==[0,1,0]) or (hh['point'][0]==0 and hh['axis']==[1,0,0]) else 1
@@ -200,9 +264,12 @@ for h in holes:
 rep['hole_coaxial']=co
 # ---- end cover checks (skill u_external_ends; user: 端板盖U 不要留缝隙，完全遮盖) ----
 cv={}
-for n,xo,xi in (('END_L',0.0,t),('END_R',L,L-t)):
-    useg=U.slice(V(1,0,0),(t+SEAM+1e-3) if n=='END_L' else (L-t-SEAM-1e-3))     # U end profile wires (YZ)
-    uface=Part.Face(Part.Wire(useg[0].Edges)) if len(useg)==1 else None
+for n,xo,xi in ((('END_L',0.0,t),('END_R',L,L-t)) if STRUCTURE == 'u_endplates' else []):
+    # Near-end slices can be empty at OCCT's size-dependent tolerance; use the actual end face.
+    end_x=U.BoundBox.XMin if n=='END_L' else U.BoundBox.XMax
+    ufaces=[f for f in U.Faces if isinstance(f.Surface,Part.Plane) and abs(abs(f.normalAt(0,0).x)-1)<1e-9 and abs(f.CenterOfMass.x-end_x)<1e-6]
+    assert len(ufaces)==1,('U end profile faces',n,len(ufaces))
+    uface=ufaces[0]
     eface=[f for f in parts[n].Faces if isinstance(f.Surface,Part.Plane) and abs(abs(f.normalAt(0,0).x)-1)<1e-9 and abs(f.CenterOfMass.x-xi)<1e-6][0]
     # project U profile onto plate inner plane
     up=uface.copy();up.translate(V(xi-up.CenterOfMass.x,0,0))
@@ -217,7 +284,10 @@ for n,xo,xi in (('END_L',0.0,t),('END_R',L,L-t)):
            'U_outer_arc_centres':[[ro,ro,ro],[W-ro,ro,ro]],'exposed_U_end_edge':uncovered>1e-6 or abs(eb.YMin-ub.YMin)>1e-9 or abs(eb.YMax-ub.YMax)>1e-9 or abs(eb.ZMax-ub.ZMax)>1e-9}
 rep['end_cover']=cv
 # single-layer check on every M4 axis: total body material along the axis line = t (no double layer / no bend zone)
-body=Part.makeCompound([U,EL,ER]);export(body,out/'BODY.step',3)
+body=Part.makeCompound(list(body_parts.values()));export(body,out/'BODY.step',len(body_parts))
+if STRUCTURE == 'u_l_t7u':
+    rep['L_covers_U']={'gap_mm':0,'setback_mm':0,'U_front_y':U.BoundBox.YMin,'U_bottom_z':U.BoundBox.ZMin}
+    assert abs(U.BoundBox.YMin-t)<1e-6 and abs(U.BoundBox.ZMin-t)<1e-6
 for c_,h in zip(co,holes):
     p=V(*h['point']);a=V(*h['axis'])
     # probe parallel to the axis just outside the hole (r+0.3) at 4 positions: total sheet thickness crossed = layers*t
@@ -249,11 +319,18 @@ def unfold(name,shape,nb,rootsel):
     return flat,lines,recs,tm
 roots={'U':(2,lambda f:f.normalAt(0,0).z<-.999 and abs(f.CenterOfMass.z)<1e-6),
        'LID':(4,lambda f:f.normalAt(0,0).z>.999 and abs(f.CenterOfMass.z-H)<1e-6)}
-# END plates: 0 bends -> rigid transform to flat (SKILL.md L78 '零折端板只刚体转平'); outer face to Z=0, viewed from outside
-RIG={'END_L':F.Matrix(0,1,0,0, 0,0,1,0, 1,0,0,0, 0,0,0,1),          # X'=Y, Y'=Z, Z'=X   (det +1)
-     'END_R':F.Matrix(0,-1,0,W, 0,0,1,0, -1,0,0,L, 0,0,0,1)}        # X'=W-Y, Y'=Z, Z'=L-X (det +1)
+# END plates: 0 bends -> rigid transform to flat (SKILL.md L78 + 规则31 t58u); exterior/treated face toward reader (Z'=0, look +Z')
+# v2.8.44 / Harry t58u: flats = looking at exterior (treated) face; treated face UP at laser.
+# END_R outside view (+X→−X, Z up): left=Y≈0 → X'=Y; exterior at Z'=0 with material in −Z → Z'=X-L.
+# END_L outside view (−X→+X, Z up): left=Y≈W → X'=W-Y; exterior at Z'=0 → Z'=-X.
+# OLD END_R X'=W-Y + Z'=L-X was inside-view (L/R mirror vs outside) — caused DXF/PDF chirality bug on asymmetric holes.
+RIG={'END_L':F.Matrix(0,-1,0,W, 0,0,1,0, -1,0,0,0, 0,0,0,1),         # X'=W-Y, Y'=Z, Z'=-X  (det +1; exterior-up)
+     'END_R':F.Matrix(0,1,0,0, 0,0,1,0, 1,0,0,-L, 0,0,0,1)}         # X'=Y, Y'=Z, Z'=X-L (det +1; exterior-up)
+if STRUCTURE == 'u_l_t7u':
+    roots['U']=(2,lambda f:f.normalAt(0,0).x<-.999 and abs(f.CenterOfMass.x)<1e-6)
+    roots['L']=(1,lambda f:f.normalAt(0,0).z<-.999 and abs(f.CenterOfMass.z)<1e-6)
 flats={}
-for n in ('U','END_L','END_R','LID'):
+for n in parts:
     if n in roots:
         nb,sel=roots[n];flat,lines,recs,tm=unfold(n,parts[n],nb,sel)
     else:
@@ -295,6 +372,7 @@ for n in ('U','END_L','END_R','LID'):
         try:r,idx,diff=write_dxf(out/(n+'_CUT_raw.dxf'),face)
         finally:DT.intersections=_orig
         dxfval='skill validate_planar with tangent points merged at 1e-6 (first try: %s)'%ex
+    rep['parts'][n]['flat_rectangles']=[[w.BoundBox.XMin,w.BoundBox.YMin,w.BoundBox.XMax,w.BoundBox.YMax] for w in face.Wires if not w.isSame(face.OuterWire) and len(w.Edges)==4 and all(isinstance(e.Curve,Part.Line) for e in w.Edges)]
     rep['parts'][n]['dxf_validation']=dxfval
     flats[n]=face
     rep['parts'][n].update(flat_size=[face.BoundBox.XLength,face.BoundBox.YLength],flat_area=face.Area,dxf_native_area_diff=diff,bend_records=recs,thickness=tm,
@@ -327,15 +405,16 @@ cm={}
 for tag,zb_,zt_,names in (('bottom',-1,26,('U','END_L')),('top',124,151,('U','END_L','LID')),('lid03',133,151,('LID',))):
     clip=Part.makeBox(27 if tag!='lid03' else 22,27 if tag!='lid03' else 22,zt_-zb_,V(-2,-2,zb_));cm[tag]={}
     for n in names:
+        if n not in allp: continue
         c=allp[n].common(clip)
         if c.Volume>0:v,f=c.tessellate(.01);cm[tag][n]={'v':[list(x) for x in v],'f':[list(x) for x in f]}
 json.dump(cm,open(out/'corner_mesh.json','w'))
 csec={}
-for n in ('U','END_L','LID'):
+for n in ('U','L','LID') if STRUCTURE == 'u_l_t7u' else ('U','END_L','LID'):
     csec[n]={'XY_Z74':[[[p.x,p.y] for p in w.discretize(Deflection=.002)] for w in allp[n].slice(V(0,0,1),round(Hb/2))],
              'XZ_Y110':[[[p.x,p.z] for p in w.discretize(Deflection=.002)] for w in allp[n].slice(V(0,1,0),W/2)]}
 # end plate outline (YZ) vs U outer profile at bottom corner
-csec['END_L']['YZ_face']=[[[p.y,p.z] for p in w.discretize(Deflection=.002)] for w in EL.slice(V(1,0,0),0.5)]
+if STRUCTURE == 'u_endplates': csec['END_L']['YZ_face']=[[[p.y,p.z] for p in w.discretize(Deflection=.002)] for w in EL.slice(V(1,0,0),0.5)]
 csec['U']['YZ_X200']=[[[p.y,p.z] for p in w.discretize(Deflection=.002)] for w in U.slice(V(1,0,0),L/2)]
 json.dump(csec,open(out/'corner_sections.json','w'))
 json.dump({n:{'wires':[[[p.x,p.y] for p in w.discretize(Deflection=.02)] for w in fc.Wires],'bbox':[fc.BoundBox.XMin,fc.BoundBox.YMin,fc.BoundBox.XMax,fc.BoundBox.YMax]} for n,fc in flats.items()},open(out/'flats.json','w'))

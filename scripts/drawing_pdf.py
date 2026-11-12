@@ -1,7 +1,12 @@
-"""Actual projected STEP views and actual native flat geometry. No stock CAD silhouettes."""
+"""Actual projected STEP views and actual native flat geometry. No stock CAD silhouettes.
+
+Outbound confirmation drawings do not use this writer. The only PDF pipeline is
+assets/bend-pdf-golden-001-visual/engine_u_endplates.py.
+"""
 from pathlib import Path
 import io,json,math
 def write_drawings(project,resolved,report,projections,path,lid_dxf=None,native_report=None):
+ raise SystemExit('THREE_VIEWS writer is closed; use assets/bend-pdf-golden-001-visual/engine_u_endplates.py')
  if project["project"]["revision"]["value"]=="v2.8.1-R12":
   from cn_workshop import write
   return write(project,resolved,report,projections,path,lid_dxf,native_report)

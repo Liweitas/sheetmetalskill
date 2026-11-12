@@ -3,10 +3,12 @@
 import json, math, os
 from pathlib import Path
 _J = json.load(open(os.environ['SM_JOB']))
-assert _J['structure'] == 'u_endplates', 'this pipeline builds structure=u_endplates only'
+STRUCTURE = _J['structure']
+assert STRUCTURE in ('u_endplates', 'u_l_t7u')
 VER = _J['release']                      # used exactly as given - never normalized
 MATERIAL_CN = _J['material_cn']; DENSITY = _J.get('density_kg_mm3', 7.93e-6)
 L, W, H = float(_J['L']), float(_J['W']), float(_J['H'])     # L,W = body external; H = total height incl. lid
+OUTER_L, OUTER_W, OUTER_H = _J.get('finished_outer_mm', [L + 2*(_J['g']+_J['t']), W + 2*(_J['g']+_J['t']), H])
 assert _J.get('dim_basis', 'body_outer') == 'body_outer' and _J.get('height_basis', 'total_incl_lid') == 'total_incl_lid'
 t = float(_J['t']); ri = float(_J['Ri']); ro = ri + t; K = float(_J['K'])   # K/R: source in _J['kr_source'] (empirical unless measured)
 KR_SOURCE = _J.get('kr_source', 'empirical')
@@ -37,6 +39,7 @@ if _HJ:
 else:
     D_HDL = HDL_WIDE = HDL_NARROW = HDL_ROWS = 0.0; HANDLE_CX = []; HANDLE_CY = W / 2
 HAS_HANDLES = bool(HANDLE_CX)
+HANDLE_MOUNT = "NONE"
 HANDLE_REF = bool(_HJ.get('reference_envelope', False))
 def handle_holes():
     out = []
@@ -51,7 +54,24 @@ def handle_holes():
 _E = (_pf.get('reference_envelope_mm') if _HJ else None) or {'base': [50, 105, 3], 'posts': [10, 10, 35], 'bar': [10, 100, 8]}
 HREF_BX, HREF_BY, HREF_BT = _E['base']; HREF_POST = _E['posts'][2]; HREF_BAR = _E['bar'][2]
 NEST = _J.get('nest', {}); SHEET = tuple(NEST.get('sheet', (2440, 1220))); NEST_M = NEST.get('margin', 10); NEST_G = NEST.get('gap', 10)
-NEST_ORDER = NEST.get('order', ['U', 'LID', 'END_L', 'END_R'])
+NEST_ORDER = NEST.get('order', ['U', 'LID', 'L'] if STRUCTURE == 'u_l_t7u' else ['U', 'LID', 'END_L', 'END_R'])
+# Anderson / side connector cutouts. Only the named end plate is cut, after the L/R mirror,
+# so a right-side opening is not copied to the left. Coordinates are on the end plate:
+# y from the Y=0 long wall, z from the bottom. This order only; absent means no cutout.
+AND_CUTS = [dict(c) for c in (_J.get('end_cutouts') or [])]
+# This order only. Lid-top Anderson ports are not the end-plate cutouts above.
+LID_PORTS = [dict(c) for c in (_J.get('lid_ports') or [])]
+PANEL_HOLES = _J.get('panel_holes') or []
+RECT_CUTOUTS = _J.get('rect_cutouts') or []
+# PDF engine reads LID_HOLES as id/d/x/y. This order only.
+LID_HOLES = []
+for i, c in enumerate(LID_PORTS, 1):
+    LID_HOLES.append({"id": f"P{i}", "d": float(c["d"]), "x": float(c["x"]), "y": float(c["y"])})
+    if c.get("d_bolt") and c.get("pitch"):
+        for sx in (-1, 1):
+            for sy in (-1, 1):
+                LID_HOLES.append({"id": f"P{i}{sx:+d}{sy:+d}", "d": float(c["d_bolt"]), "x": float(c["x"]) + sx * float(c["pitch"]) / 2, "y": float(c["y"]) + sy * float(c["pitch"]) / 2})
+LID_HOLES += [dict(h, d=D_HDL) for h in handle_holes()]
 JOB = _J
 # PDF/DOC page layout (pdf.py, docs.py narrative) is a hand-laid template validated ONLY for this geometry:
 TEMPLATE_DIMS = dict(L=400.0, W=220.0, H=150.0, t=1.0, ri=0.8, g=0.5, skirt=15.0, handles=2)

@@ -1,6 +1,16 @@
 """Compare source/canonical design and printed dimensions to freshly read actual STEP extents."""
-import json,math,re,subprocess,tempfile,os
+import json,math,re,subprocess,tempfile,os,sys
 from pathlib import Path
+def _resident_readback(op,root,request):
+ """走常驻 FreeCAD worker（SM_FC_WORKER=1 时启用），省掉每次重起 FreeCAD。失败返回 None 由调用方回退子进程。"""
+ if os.environ.get('SM_FC_WORKER')!='1':return None
+ try:
+  sys.path.insert(0,os.environ.get('SM_FC_CLIENT_DIR','/tmp/smopt'))
+  import fc_client
+  return fc_client.call(op,{'root':str(root),'request':request})
+ except Exception as _e:
+  print('RESIDENT_FAIL',op,type(_e).__name__,str(_e)[:300],file=sys.stderr,flush=True)
+  return None
 def check_printed_three_views(pdf,shapes,tolerance_mm=1e-5):
  from pypdf import PdfReader
  reader=PdfReader(pdf);pages=[p.extract_text() for p in reader.pages];norm=lambda s:re.sub(r'\s+','',s);results={}
@@ -27,12 +37,14 @@ def actual_dimensions(project,manifest,root,runtime=None):
  data={'shapes':shapes,'dimensioned_CN_views':cn}
  if manifest.get('general_process_contract'):
   cad=json.loads((root/next(a['path'] for a in manifest['artifacts'] if a['kind']=='cad_report')).read_text());data['translation_only_parts']=cad['exploded_translations_mm']
- with tempfile.TemporaryDirectory(prefix='sheetmetal-actual-dimensions-') as td:
-  td=Path(td);request=td/'request.json';target=td/'result.json';request.write_text(json.dumps(data));cmd=[runtime['cad_python'],'-B',str(Path(__file__).with_name('step_dimensions_readback.py')),'--root',str(root),'--request',str(request),'--output',str(target)]
-  if runtime.get('freecad_lib'):cmd+=['--module-path',runtime['freecad_lib']]
-  run=subprocess.run(cmd,capture_output=True,text=True,timeout=300,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'})
-  if not target.exists():raise ValueError('ACTUAL_STEP_DIMENSIONS_UNAVAILABLE: '+(run.stdout+run.stderr)[-500:])
-  actual=json.loads(target.read_text())
+ actual=_resident_readback('step_dimensions',root,data)
+ if actual is None:
+  with tempfile.TemporaryDirectory(prefix='sheetmetal-actual-dimensions-') as td:
+   td=Path(td);request=td/'request.json';target=td/'result.json';request.write_text(json.dumps(data));cmd=[runtime['cad_python'],'-B',str(Path(__file__).with_name('step_dimensions_readback.py')),'--root',str(root),'--request',str(request),'--output',str(target)]
+   if runtime.get('freecad_lib'):cmd+=['--module-path',runtime['freecad_lib']]
+   run=subprocess.run(cmd,capture_output=True,text=True,timeout=300,env={**os.environ,'PYTHONDONTWRITEBYTECODE':'1'})
+   if not target.exists():raise ValueError('ACTUAL_STEP_DIMENSIONS_UNAVAILABLE: '+(run.stdout+run.stderr)[-500:])
+   actual=json.loads(target.read_text())
  if actual.get('ok') is not True or actual.get('CAD_executed') is not True:raise ValueError('ACTUAL_STEP_DIMENSIONS_FAILED: '+str(actual.get('errors')))
  L,W,H=[value(project['requirements']['dimensions'][a]) for a in 'XYZ'];t=value(project['requirements']['nominal_t']);has=value(project['requirements']['lid_required']);hb=H-t-value(project['lid']['roof_gap']) if has else H
  expected=[0.,0.,0.,L,W,hb]

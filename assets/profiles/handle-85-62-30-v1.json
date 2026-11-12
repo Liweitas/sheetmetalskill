@@ -12,5 +12,7 @@
   "status": "engineering_reference_candidate",
   "source": "User-approved project mounting reference: 85/62/30 and reference M6 clearance6.6; not a manufacturer drawing",
   "body_envelope": "unknown; do not generate a handle body",
-  "manufacturing_released": false
+  "manufacturing_released": false,
+  "orientation_notes_cn": "t109u/t110u: 盖顶双把手相向时宽排(长孔距)朝盖中心; 端侧把手宽排靠下、窄排靠上",
+  "source_orientation": "user t109u/t110u 2026-11-05"
 }

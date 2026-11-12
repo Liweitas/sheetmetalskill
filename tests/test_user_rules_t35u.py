@@ -27,8 +27,12 @@ class CableHoles(unittest.TestCase):
 
     def test_skill_md_rule(self):
         s = (SK / 'SKILL.md').read_text(encoding='utf-8')
-        self.assertIn('线孔至少2个', s); self.assertIn('version: "2.8.5"', s)
-        self.assertEqual((SK / 'VERSION').read_text().strip(), '2.8.5')
+        self.assertIn('线孔至少2个', s)
+        self.assertIn('cable_hole_min_count', s)
+        # version floats with skill bumps; require current VERSION matches frontmatter major.minor.patch
+        ver = (SK / 'VERSION').read_text().strip()
+        self.assertIn(f'version: "{ver}"', s)
+        self.assertGreaterEqual(tuple(int(x) for x in ver.split('.')[:3]), (2, 8, 5))
 
 
 if __name__ == '__main__':

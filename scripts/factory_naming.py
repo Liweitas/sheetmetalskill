@@ -10,7 +10,7 @@ def thickness(value):
  return s if '.' in s else s+'.0'
 def resolve(request,job,delivery):
  request={} if request is None else request
- if not isinstance(request,dict) or set(request)-set(FIELDS+['previous_code','source','material_code','material_mapping']):raise ValueError('NAMING_FIELDS')
+ if not isinstance(request,dict) or set(request)-set(FIELDS+['previous_code','source','material_code','material_mapping','thickness_literal','number_literal']):raise ValueError('NAMING_FIELDS')
  request={k:v for k,v in request.items() if v is not None and v!=''}
  from pathlib import Path
  import json
@@ -25,7 +25,8 @@ def resolve(request,job,delivery):
  scale={'mm':1,'cm':10,'m':1000,'inch':25.4}[job.get('units','mm')]
  if 'thickness' in request and thickness(request['thickness'])!=thickness(job['thickness']*scale):raise ValueError('NAMING_THICKNESS_DIFFERS_SOURCE')
  normalized={k:request[k] for k in FIELDS if k in request}
- if 'thickness' in request:normalized['thickness']=thickness(request['thickness'])
+ if 'thickness' in request and request.get('thickness_literal') is True:normalized['thickness']=str(request['thickness'])
+ elif 'thickness' in request:normalized['thickness']=thickness(request['thickness'])
  if 'date' in request:
   value=str(request['date']);value=value.replace('/','').replace('-','')
   if not re.fullmatch(r'\d{8}',value):raise ValueError('NAMING_DATE_YYYYMMDD')
@@ -35,7 +36,7 @@ def resolve(request,job,delivery):
  if 'number' in request:
   value=request['number']
   if isinstance(value,bool) or not re.fullmatch(r'\d{1,4}',str(value)) or not 1<=int(value)<=9999:raise ValueError('NAMING_NUMBER_1_TO_9999')
-  normalized['number']=f'{int(value):04d}'
+  normalized['number']=str(value) if request.get('number_literal') is True else f'{int(value):04d}'
  if 'factory_version' in request:
   value=request['factory_version']
   if type(value) is not int or value<1:raise ValueError('NAMING_FACTORY_VERSION_POSITIVE_INTEGER')

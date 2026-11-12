@@ -12,6 +12,20 @@ python3 scripts/create_intake.py --output project.json --handle-layout four_hole
 
 客户明确其它值保留原来源并显式覆盖，不能伪标default。既有项目迁移保留包括原84在内的明确记录，不自动改CAD；这不允许把旧值作为新项目默认。范围/布局未定时不从四孔数量推定梯形或把手数量。本次更新不声称任何历史客户CAD由84改85，也不确认未归属截图的文件身份。
 
+
+## 两边加把手 → 端板朝上（用户 t53u，2026-10-31）
+
+订单写「两边/两侧加把手」且未另指安装面时：把手装在 **两端板**，握把朝上，方便从两端同时端起；宽排沿端板水平轴。不要默认装到 U 长侧壁。盖顶仅当用户明确要求。与同端面线孔/品字口的避让见 [holes-and-hardware](holes-and-hardware.md) 与 SKILL 用户硬性规则16。
+
+## 梯形长孔距朝向（用户 t109u/t110u，2026-11-05，v2.8.40）
+
+宽排85 = 长孔距；窄排62。草图：`assets/user-sketches/t109u-handle-wide-pitch-inward.png`。
+
+1. **盖顶双把手相向**：每只 **宽排朝盖中心（朝里）**，窄排朝外；两把手镜像，禁止同向或宽排朝外。与 profile `wide_row_toward: box_center_x` 一致。
+2. **端侧把手**（端板等，握把朝上）：**宽排靠下、窄排靠上**（纠正旧「窄下宽上」）。
+3. STEP/DXF 回读须核宽排朝向；PDF 须能辨认。本单另指定时写来源。
+
+
 ## 参数与实例
 
 handles包含layout、wide_row_pitch、narrow_row_pitch、row_spacing和patterns。每个pattern明确id、所属part_id、wide_hole_ids两个、narrow_hole_ids两个。四孔必须属于已声明的handle-purpose孔组、同一零件且不复用；实例数对已明确数量校验。没有足够的孔ID/孔中心/轴向时依赖步骤阻断，不按全局最小最大X猜孔对。
@@ -38,4 +52,4 @@ PDF实际尺寸/孔表明确标85.00宽排圆心距与来源，图形必须来�
 
 ## 显式常用安装孔型
 
-新箱体入口支持选用assets/profiles/handle-85-62-30-v1.json：宽85、窄62沿Y、两排相距30沿X，M6参考通孔Φ6.6；每个中心分别声明，宽排朝箱体X中心。此配置是工程参考候选，不是全局默认或厂家型号确认。X恰位于中心时center_wide_towards可选方向，未写采用positive_x的候选约定。入口实际核STEP中心/方向和STEP/DXF85/62/30，不生成未知把手实体。见[常用配置](common-profiles.md)。
+新箱体入口支持选用assets/profiles/handle-85-62-30-v1.json：宽85、窄62沿Y、两排相距30沿X，M6参考通孔Φ6.6；每个中心分别声明，宽排朝箱体X中心（盖顶双把手相向=长孔距朝里，见上节 t109u）。端侧安装时宽排靠下。此配置是工程参考候选，不是全局默认或厂家型号确认。X恰位于中心时center_wide_towards可选方向，未写采用positive_x的候选约定。入口实际核STEP中心/方向和STEP/DXF85/62/30，不生成未知把手实体。见[常用配置](common-profiles.md)。

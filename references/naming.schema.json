@@ -14,6 +14,8 @@
       "type": "string",
       "pattern": "^[A-Za-z0-9_一-鿿]+$"
     },
+    "thickness_literal": {"type": "boolean"},
+    "number_literal": {"type": "boolean"},
     "thickness": {
       "oneOf": [
         {

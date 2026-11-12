@@ -81,3 +81,8 @@ SOURCE_DELIVERY_STATUS逐一列原件/确认图/STEP、每件展开状态、套�
 ## 复现与证据
 
 `python3 -B -m unittest discover -s tests -v`；`python3 -B scripts/selftest_delivery_contract.py --output /ABS/NEW_TEST`会从包内纯合成raw job执行两种尺寸结构、未知材料/K源审计、必交缺件、错版本/材料/t、套料漏件/重叠/尺度、ZIP缺失及实际原生方向伪报反例。模拟授权明确标SYNTHETIC，绝非客户许可。作者结果与R06历史独立验收分别保存；R07须另由独立agent前向复验。
+
+
+## 对外交付落盘（Mac · 规则27）
+
+数字齐套 zip 生成后，执行方还必须将 `{VER}_CONFIRM_DRAFT.zip`（及折弯 PDF、sha256）同步到 Harry Mac 路径 `…/骊臻/客户图纸/YYYYMMDD/`（订单日码）。只写 box/Downloads/聊天不算本契约下的完成交付。

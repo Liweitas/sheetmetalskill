@@ -54,3 +54,22 @@ python3 scripts/prepare_delivery_message.py /ABS/customer_ID/revisions/R02 \
 - R09 生成入口实际返回默认单 ZIP 计划；完整门禁拒绝缺失或被改成散发的默认计划。独立提供的拟发计划须再次检查真实 ZIP 和附件，例外须有当前本项目用户证据。
 - `prepare_delivery_message.py` 不上传、不发消息。它仅检查提供给它的计划；无法看到执行方另发或隐瞒的消息，也不证明授权文字真实，不保证任何 agent 必然遵守。实际发送者须把最终整次发送与已核计划逐一核对。
 - 数字齐套、单包发送或本轮软件测试通过均不代表消除真实干涉、已试装或生产放行。保留所有 HOLD 和项目专项授权边界。
+
+## Mac 客户图纸按日目录（规则27 / t21u 2026-11-03）
+
+交付确认稿后，除聊天附件与可选 `~/Downloads` 外，**必须** `CopyFromBox` 到：
+
+`/Users/harryma/Documents/Liweitas/20267/liu_0805/骊臻/客户图纸/YYYYMMDD/`
+
+- `YYYYMMDD` = 工厂 VER 日期段（订单日码）
+- 至少：确认稿 `{VER}_CONFIRM_DRAFT.zip`(+sha256)；投产面则 `{VER}_OPEN_ME.zip`(+sha256)
+- 建议另存：`{VER}_BEND_PDF_A3_CN.pdf`（与包内海军蓝折弯 PDF 同字节）+ sha256
+- **仅拷 Downloads 不算完成**；Mac 不可达时在回报中标明，连上后补拷
+
+## Mac 按日目录同步（规则27 / v2.8.29）
+
+对外确认稿交付闭环：**聊天附件 ≠ 完成**。在发 zip/PDF 给用户的同时（或紧接其后），必须把同一 `{VER}_CONFIRM_DRAFT.zip`（及 `.sha256`；可选 `*_BEND_PDF_A3_CN.pdf`）拷到已连接 Mac：
+
+`/Users/harryma/Documents/Liweitas/20267/liu_0805/骊臻/客户图纸/YYYYMMDD/`
+
+`YYYYMMDD` 取工厂码第4段订单日（例 `20261029`）。缺日目录则创建。核对拷贝后 zip sha256 与 outbound 一致。本条不替代「默认一个完整 ZIP」消息规则，是本地归档硬门禁。

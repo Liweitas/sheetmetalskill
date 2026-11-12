@@ -1,5 +1,11 @@
 # STEP钣金交付完整中文规则清单｜2.4.1
 
+用户硬性规则17（有源 STEP 几何真源 / 差异表，t95u/t96u/t97u，v2.8.15）：见 `SKILL.md` 规则17 与 [step-source-of-truth.md](step-source-of-truth.md)。
+
+用户硬性规则22（体面孔 vs 盖裙遮挡，t99u/t98u，v2.8.20；处置 t27u/t28u，v2.8.26）：见 `SKILL.md` 规则22/25 与 [hole-to-lid-skirt.md](hole-to-lid-skirt.md)；`conflict_checks.hole_to_lid_skirt`。ERROR 须主动下移 Z 至整组净空≥10；禁止开裙缺口（除非用户明确）；禁止带 ERROR 出确认稿/投产包。
+用户硬性规则25（盖裙遮挡不得复发，t27u/t28u，v2.8.26）：与规则22联动；出图前跑通门禁，先改几何再出包。
+用户硬性规则28（盖内↔盒口贴合 + 折弯误差 + 螺孔同轴，t98u/t99u/t100u，v2.8.30）：见 `SKILL.md` 规则28；出图前核侧向 g / 顶向 q / ∩→0 / M4 同轴；K/BA 未标定 HOLD。
+
 ## 一、已批准的条件默认
 
 1. 仅有盖新项目：四周直壁单边g=0.5mm，盖内直壁相对盒外直壁的长、宽总差各1.0mm；不是盖外总尺寸差。
@@ -58,3 +64,26 @@
 42. 保留旧版和原附件，不改客户生产图或未知安装位置；商业包只带通用规则/虚构夹具，不带客户案例、路径、消息或凭据。
 
 2.4完整入口：新箱体选型→schema→实际CAD→逐件原生展开→全部DXF/STEP/PDF覆盖→03强制核验→逐页渲染。缺件或跳过不能作为通过；作者自测与独立agent测试分开，未知工厂条件保持HOLD。
+
+## 规则26（v2.8.27 / t61u）折弯 PDF 金样哈希门禁 + 尺寸避让
+- 出确认稿前：`scripts/check_bend_pdf_golden.py ORDER [--overlap logs/bend_pdf_overlap.json --strict-overlap]`
+- addendum 四文件 sha256 = `assets/bend-pdf-golden-004-v2/GOLDEN_SCRIPTS.sha256`
+- 灰框 `tools/pdf.py` 禁止外发；`bend_pdf_overlap.json` remaining=0 布局 PASS
+
+## 规则27（v2.8.29 / t21u 站规·同步路径）Mac 按日目录
+- 日目录：`/Users/harryma/Documents/Liweitas/20267/liu_0805/骊臻/客户图纸/YYYYMMDD/`（YYYYMMDD=VER 订单日码，非出图日）
+- 必交：确认稿 `{VER}_CONFIRM_DRAFT.zip`(+sha256) 或投产 `{VER}_OPEN_ME.zip`(+sha256)；可选 `{VER}_BEND_PDF_A3_CN.pdf`
+- 只发聊天或 Downloads ≠ 交付完成
+
+## 规则28 — 盖内↔盒口贴合 / 折弯误差 / 螺孔同轴（v2.8.30 / t100u）
+
+出确认稿前勾选：
+
+- [ ] 高段：盖裙内壁 ↔ 高段盒口外皮，侧向间隙 ≈ g（默认 0.5；裙中段探针，避开顶圆角让位带）
+- [ ] 低段：同上
+- [ ] 顶向座位间隙 ≈ q；无「差约 1×t」顶/侧争位
+- [ ] `SIDE∩LID`、`U∩LID` 体积 → 0（或 <1e-3）；让位优先改端板/U，少动盖展开；底 Ro 盖合 U 保留
+- [ ] 盖裙 M4 过孔与端板/U 攻丝孔成形态同轴（径向偏差 ≤0.05 mm，目标 0）；让位切削未削孔
+- [ ] K/BA：有本厂试折标定则用标定值；否则写候选+HOLD，并写明首件须测裙隙与螺孔对位
+- [ ] 确认稿分列「几何贴合检查通过」与「实物试折试装：未进行」
+用户硬性规则29（线孔未标位置：盖顶·沿短边·靠右，t120u，v2.8.31）：见 `SKILL.md` 规则29 与 [holes-and-hardware.md](holes-and-hardware.md)。

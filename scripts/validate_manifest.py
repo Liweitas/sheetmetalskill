@@ -37,6 +37,9 @@ def actual_native_directions(project,manifest,root,iso,runtime=None):
  data={'parts':parts}
  if manifest.get('workflow_contract')=='2.6.1-R06' and value(project['requirements']['lid_required']):
   item=next(i for i in manifest['artifacts'] if i.get('kind')=='dxf' and i.get('part_ids')==['LID']);data['interference']={'body_step':item['body_step'],'lid_step':item['formed_step'],'claimed_authority_mm3':value(project['lid']['root_overlap_volume'])}
+ from pdf_dimension_authority import _resident_readback
+ resident=_resident_readback('native_direction',root,data)
+ if resident is not None:return resident
  with tempfile.TemporaryDirectory(prefix='sheetmetal-native-direction-') as td:
   td=Path(td);request=td/'request.json';result=td/'result.json';request.write_text(json.dumps(data,allow_nan=False))
   cmd=[runtime['cad_python'],'-B',str(Path(__file__).with_name('native_direction_readback.py')),'--root',str(root),'--request',str(request),'--output',str(result),'--module-path',runtime['sheetmetal_path']]

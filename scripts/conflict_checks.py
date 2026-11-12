@@ -20,12 +20,19 @@ Checks:
                          on the sketch/order -> add a 2nd of the same diameter, same height, same face, default 25 mm centre pitch
                          toward the face centre (suggest_second_cable_hole), clearance-checked, listed as a HOLD for position.
                          Opt-in: runs only when PARAMS has 'cable_holes' (backward compatible); <2 -> WARN, 0 -> INFO (not invented).
+  hole_to_lid_skirt      user t99u / audit t98u (2026-10-31, v2.8.20, rule ~22): body-face cable/IEC/meter cutouts vs lid skirt
+                         free bottom when lid closed. clearance = (H-skirt) - feature_top_Z. ERROR if <0 (msg MUST say 盖裙遮挡);
+                         WARN if 0<=clearance<10 (rule16 靠盖裙10mm). Excludes body M4 rim fasteners and lid screw holes.
+                         Params: H, skirt, end_features (dict circles/rects or list) and/or report['end_features']; optional
+                         cable_holes with z; hold_skirt_clearance_waived demotes ERROR->WARN. Force lines via lid_skirt_force_lines_cn
+                         into PDF p1 / CONFIRMATION / README.
 CLI: conflict_checks.py PARAMS.json [REPORT.json] -> JSON list, exit 1 if any ERROR
 PARAMS.json keys: t, Ri, K, g, q, (optional) punch_height_mm, hole_bend_min_mm, deep_u:[{part,wall_h,inner_w}],
                   requested:{handles:bool, roof_ports:bool}, features:{handles:int, roof_ports:int},
                   connectors:[{name, screw_holes:[{d, thread?, tap_drill?, process?}]}],
                   l_cover_setback_mm / end_inset / seam_gap / lid_long_skirt_setback_mm (+ setback_source_user:str),
-                  (v2.8.5, optional) cable_holes:[{id, d, face?, u?, v?, added_by_rule?:bool}]
+                  (v2.8.5, optional) cable_holes:[{id, d, face?, u?, v?, added_by_rule?:bool}],
+                  (v2.8.20) H, skirt, end_features, hold_skirt_clearance_waived?:bool
 """
 import json, math, sys
 
@@ -192,6 +199,177 @@ def cable_hole_count(cable_holes, min_count=CABLE_HOLE_MIN):
     return {'id': 'cable_hole_min_count', 'level': 'INFO', 'ok': True, 'msg_cn': msg, 'data': {'count': n, 'min': min_count, 'added_by_rule': added}}
 
 
+LID_SKIRT_CLEAR_MM = 10.0   # user rule16 靠盖裙10mm; hole_to_lid_skirt WARN band (v2.8.20 / t99u)
+_LID_SKIRT_EXCLUDE_TOKENS = (
+    'm4_body', 'm4_lid', 'body_m4', 'lid_m4', 'lid_screw', 'body_fixing', 'skirt_screw', 'fixing_m4',
+    '盖裙螺钉', '裙边螺钉', '箱体固定', '盖-体固定', '盖体固定', ' rim m4', 'fixing hole',
+)
+
+
+def skirt_free_edge_z(H, skirt):
+    """Lid closed: free bottom edge of skirt in world Z (pipelines zb=H-skirt)."""
+    return float(H) - float(skirt)
+
+
+def _lid_skirt_feature_excluded(f):
+    """Exclude body M4 rim fasteners and lid screw/skirt fixing holes (t98u m4_note)."""
+    if f.get('exclude_from_lid_skirt') or f.get('fixing') or f.get('is_m4_fixing') or f.get('is_lid_screw'):
+        return True
+    role = ' '.join(str(f.get(k) or '') for k in ('role', 'kind', 'use', 'note', 'id')).lower()
+    if any(tok.lower() in role for tok in _LID_SKIRT_EXCLUDE_TOKENS):
+        return True
+    # bare M4 body tap Ø3.3 / lid clearance Ø4.5 when explicitly tagged as fixing or ZH rim
+    d = f.get('d', f.get('diameter_mm'))
+    if f.get('role') in ('m4', 'fixing') or f.get('kind') in ('m4', 'fixing'):
+        return True
+    if d is not None and abs(float(d) - 3.3) < 0.05 and ('m4' in role or '攻' in role or '固定' in role):
+        return True
+    if d is not None and abs(float(d) - 4.5) < 0.05 and ('盖裙' in role or 'lid' in role or '过孔' in role or '固定' in role):
+        return True
+    return False
+
+
+def _norm_lid_skirt_feature(f):
+    """Normalize circle/rect/cable feature to {id,part,kind,feature_top_Z,...} or None if incomplete/excluded."""
+    if not f or _lid_skirt_feature_excluded(f):
+        return None
+    fid = f.get('id', '?')
+    part = f.get('part') or f.get('face') or ''
+    use = f.get('use') or f.get('note') or ''
+    # circle: z + d/2; rect: cz + h/2; accept feature_top_Z if precomputed
+    if f.get('feature_top_Z') is not None:
+        top = float(f['feature_top_Z'])
+        kind = f.get('kind') or ('rect' if f.get('w') or f.get('h') else 'circle')
+        return {'id': fid, 'part': part, 'kind': kind, 'feature_top_Z': top, 'use': use,
+                'd': f.get('d'), 'w': f.get('w'), 'h': f.get('h'), 'z': f.get('z', f.get('cz'))}
+    if f.get('w') is not None or f.get('h') is not None or f.get('kind') == 'rect':
+        cz = f.get('cz', f.get('z', f.get('v')))
+        h = f.get('h', f.get('height_mm'))
+        if cz is None or h is None:
+            return None
+        return {'id': fid, 'part': part, 'kind': 'rect', 'feature_top_Z': float(cz) + float(h) / 2.0,
+                'use': use, 'd': None, 'w': f.get('w'), 'h': float(h), 'z': float(cz)}
+    d = f.get('d', f.get('diameter_mm'))
+    z = f.get('z', f.get('cz', f.get('v')))
+    if d is None or z is None:
+        return None
+    return {'id': fid, 'part': part, 'kind': 'circle', 'feature_top_Z': float(z) + float(d) / 2.0,
+            'use': use, 'd': float(d), 'w': None, 'h': None, 'z': float(z)}
+
+
+def collect_lid_skirt_features(params, report=None):
+    """Gather body-face cutouts from params end_features / end_holes / end_rects / cable_holes and report."""
+    out, seen = [], set()
+
+    def add(f):
+        n = _norm_lid_skirt_feature(f)
+        if not n:
+            return
+        key = (n['part'], n['id'], round(n['feature_top_Z'], 3), n.get('d'), n.get('w'), n.get('h'))
+        if key in seen:
+            return
+        seen.add(key); out.append(n)
+
+    sources = []
+    ef = params.get('end_features')
+    if ef is None and report is not None:
+        ef = report.get('end_features')
+    if isinstance(ef, dict):
+        for c in ef.get('circles') or []: sources.append(c)
+        for r in ef.get('rects') or []: sources.append(r)
+        for f in ef.get('features') or []: sources.append(f)
+    elif isinstance(ef, list):
+        sources.extend(ef)
+    for key in ('end_holes', 'end_rects', 'face_features'):
+        for f in params.get(key) or []: sources.append(f)
+        if report is not None:
+            for f in report.get(key) or []: sources.append(f)
+    for h in params.get('cable_holes') or []:
+        sources.append(h)
+    for f in sources:
+        add(f)
+    return out
+
+
+def hole_to_lid_skirt(params, report=None, clear_mm=None):
+    """v2.8.20 / t99u: feature top edge vs lid skirt free bottom (lid closed).
+    clearance = skirt_free_edge_Z - feature_top_Z. ERROR if <0 (盖裙遮挡); WARN if 0<=clr<clear_mm (default 10).
+    Opt-in when H+skirt present and at least one body-face feature is available; otherwise INFO skip.
+    hold_skirt_clearance_waived / skirt_occlusion_accepted: ERROR demoted to WARN (must still say 盖裙遮挡)."""
+    H, skirt = params.get('H'), params.get('skirt', params.get('skirt_height'))
+    lim = float(clear_mm if clear_mm is not None else params.get('lid_skirt_clear_mm', LID_SKIRT_CLEAR_MM))
+    feats = collect_lid_skirt_features(params, report)
+    if H is None or skirt is None:
+        return {'id': 'hole_to_lid_skirt', 'level': 'INFO', 'ok': True,
+                'msg_cn': '未提供 H/skirt，跳过盖裙遮挡检查（有盖且有线孔/品字/电表口时须提供）',
+                'data': {'skipped': 'missing_H_or_skirt', 'features_seen': len(feats)}}
+    if not feats:
+        # only run as INFO when no features — not an invent-features case
+        return {'id': 'hole_to_lid_skirt', 'level': 'INFO', 'ok': True,
+                'msg_cn': f'无箱体面线孔/品字/电表等切口需核盖裙遮挡（裙下沿 Z={skirt_free_edge_z(H, skirt):.3f}）',
+                'data': {'H': H, 'skirt': skirt, 'skirt_free_edge_Z': skirt_free_edge_z(H, skirt),
+                         'limit_mm': lim, 'features_checked': 0}}
+    zb = skirt_free_edge_z(H, skirt)
+    rows = []
+    for n in feats:
+        clr = zb - n['feature_top_Z']
+        rows.append({**n, 'skirt_free_edge_Z': zb,
+                     'clearance_featureTop_to_skirtFreeEdge_mm': round(clr, 3),
+                     'overlap_under_skirt_mm': round(max(0.0, -clr), 3),
+                     'under_or_collides_skirt': clr < -1e-9,
+                     'rule16_10mm_ok': clr >= lim - 1e-9})
+    overlaps = [r for r in rows if r['under_or_collides_skirt']]
+    near = [r for r in rows if (not r['under_or_collides_skirt']) and r['clearance_featureTop_to_skirtFreeEdge_mm'] < lim - 1e-9]
+    waived = bool(params.get('hold_skirt_clearance_waived') or params.get('skirt_occlusion_accepted'))
+    if overlaps:
+        level = 'WARN' if waived else 'ERROR'
+        bits = []
+        for r in overlaps:
+            size = (f"Ø{r['d']:g}" if r.get('d') else (f"{r['w']:g}×{r['h']:g}" if r.get('w') is not None else r['kind']))
+            bits.append(f"{r['part'] or '?'} {r['id']} {size} 孔顶/口顶Z={r['feature_top_Z']:g} 高于盖裙下沿Z={zb:g}（侵入{r['overlap_under_skirt_mm']:g}mm）")
+        msg = ('盖裙遮挡：' + '；'.join(bits) +
+               f'；孔顶→裙下沿净空最小{min(r["clearance_featureTop_to_skirtFreeEdge_mm"] for r in overlaps):g} mm'
+               f'（规则16默认≥{lim:g}）。确认稿/PDF第1页/README必须反馈，不得静默通过'
+               + ('（用户已书面接受遮挡/开裙缺口：hold_skirt_clearance_waived）' if waived else ''))
+        return {'id': 'hole_to_lid_skirt', 'level': level, 'ok': False, 'msg_cn': msg,
+                'data': {'H': H, 'skirt': skirt, 'skirt_free_edge_Z': zb, 'limit_mm': lim,
+                         'waived': waived, 'violations': overlaps, 'near_misses': near,
+                         'features_checked': len(rows), 'min_clearance': min(r['clearance_featureTop_to_skirtFreeEdge_mm'] for r in rows)}}
+    if near:
+        bits = []
+        for r in near:
+            size = (f"Ø{r['d']:g}" if r.get('d') else (f"{r['w']:g}×{r['h']:g}" if r.get('w') is not None else r['kind']))
+            bits.append(f"{r['part'] or '?'} {r['id']} {size} 净空{r['clearance_featureTop_to_skirtFreeEdge_mm']:g}")
+        msg = (f'靠盖裙不足{lim:g}mm（规则16）：' + '；'.join(bits) +
+               f'（裙下沿Z={zb:g}）。建议下移孔组使孔顶≤裙下沿−{lim:g}；确认稿须列出')
+        return {'id': 'hole_to_lid_skirt', 'level': 'WARN', 'ok': False, 'msg_cn': msg,
+                'data': {'H': H, 'skirt': skirt, 'skirt_free_edge_Z': zb, 'limit_mm': lim,
+                         'violations': near, 'features_checked': len(rows),
+                         'min_clearance': min(r['clearance_featureTop_to_skirtFreeEdge_mm'] for r in rows)}}
+    mn = min(r['clearance_featureTop_to_skirtFreeEdge_mm'] for r in rows)
+    return {'id': 'hole_to_lid_skirt', 'level': 'INFO', 'ok': True,
+            'msg_cn': f'箱体面切口孔顶→盖裙下沿均≥{lim:g}（最小{mn:.2f}，裙下沿Z={zb:g}）',
+            'data': {'H': H, 'skirt': skirt, 'skirt_free_edge_Z': zb, 'limit_mm': lim,
+                     'features_checked': len(rows), 'min_clearance': mn, 'rows': rows}}
+
+
+def lid_skirt_force_lines_cn(conflicts):
+    """Force-findings lines for PDF p1 / CONFIRMATION_DRAFT / README when hole_to_lid_skirt WARN/ERROR present.
+    Callers MUST print every returned line (red/pending); do not drop 盖裙遮挡 wording."""
+    lines = []
+    for x in conflicts or []:
+        if x.get('id') != 'hole_to_lid_skirt' or x.get('level') not in ('WARN', 'ERROR'):
+            continue
+        msg = x.get('msg_cn') or ''
+        if msg:
+            lines.append(f"[{x['level']}] {msg}")
+        # ensure 盖裙遮挡 appears on ERROR even if a caller rewrote msg
+        if x['level'] == 'ERROR' and '盖裙遮挡' not in msg:
+            lines.append('[ERROR] 盖裙遮挡：箱体面切口侵入盖裙下沿，见 conflict_checks.hole_to_lid_skirt')
+    return lines
+
+
+
 def run(params, report=None):
     p = params; res = [lid_root(p['t'], p['Ri'], p['g'], p['q'])] if p.get('g') is not None else []
     res.append(m4_tap(p['t'], n=p.get('m4_count'), material_cn=p.get('material_cn', '')))
@@ -203,6 +381,11 @@ def run(params, report=None):
     if p.get('connectors'): res.append(connector_screw_taps(p['connectors']))   # user t16u
     res.append(joint_flush(p))   # user t16u
     if 'cable_holes' in p: res.append(cable_hole_count(p['cable_holes']))   # user t35u (v2.8.5), opt-in
+    # v2.8.20 / t99u: lid-skirt occlusion for body-face cutouts (params H+skirt+end_features and/or report)
+    if p.get('H') is not None and (p.get('skirt') is not None or p.get('skirt_height') is not None):
+        res.append(hole_to_lid_skirt(p, report))
+    elif p.get('end_features') is not None or (report and report.get('end_features')):
+        res.append(hole_to_lid_skirt(p, report))  # still emit INFO skip if H/skirt missing
     return res
 
 
