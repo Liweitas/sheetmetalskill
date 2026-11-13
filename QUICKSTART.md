@@ -2,7 +2,7 @@
 
 ## 当前入口（2026-11-12，优先于下文历史调用）
 
-当前版本 2.8.47，基于 27 服务器 2.8.46 部署快照。新箱体出图统一为 `sm golden` → `scripts/build_golden_package.py`，PDF 只走 `bend-pdf-golden-001-visual`。brief 必填客户原话 `customer_requirement_text`，可选后续原话数组 `customer_requirement_updates`，几何参数仍需单独填写；原文及修改记录自动排入工艺 PDF 末尾。实际参数、支持结构、环境变量和调用方式见 [README](README.md)。本仓库不包含另行部署的 MCP/HTTP 服务。
+当前版本 2.8.48，基于 27 服务器 2.8.46 部署快照。新箱体出图统一为 `sm golden` → `scripts/build_golden_package.py`，PDF 只走 `bend-pdf-golden-001-visual`。brief 必填客户原话 `customer_requirement_text`，可选后续原话数组 `customer_requirement_updates`，几何参数仍需单独填写；原文及修改记录自动排入工艺 PDF 末尾。实际参数、支持结构、环境变量和调用方式见 [README](README.md)。本仓库不包含另行部署的 MCP/HTTP 服务。
 
 下文保留早期安装、审核工具和 R12/R10 验收说明；其中 `build_package.py` / `build_general_package.py` 等历史出图 CLI 已退役，不能作为当前新箱体出图入口。旧验收记录不代表当前部署版本已通过完整制造合同或实物验收。
 

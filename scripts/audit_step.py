@@ -14,7 +14,8 @@ def execute_core(a):
  cfg=config_for(json.loads(Path(a.config).read_text()) if a.config else {})
  if a.diagnostic_K is not None:cfg['diagnostic_K_ANSI']=a.diagnostic_K;cfg=config_for(cfg)
  # Part.read works in mm; this bounded imported adapter requires explicit source millimetres.
- header=src.read_text(errors='strict');mm=bool(re.search(r'SI_UNIT\s*\(\s*\.MILLI\.\s*,\s*\.METRE\.\s*\)',header,re.I))
+ # STEP headers may contain legacy local-codepage filenames; unit tokens are ASCII.
+ header=src.read_bytes().decode('latin-1');mm=bool(re.search(r'SI_UNIT\s*\(\s*\.MILLI\.\s*,\s*\.METRE\.\s*\)',header,re.I))
  if not mm:raise ValueError('SOURCE_UNITS_UNSUPPORTED_OR_UNKNOWN: explicit STEP SI_UNIT(.MILLI.,.METRE.) required; do not infer units from bbox')
  from runtime_paths import locate,probe
  import reportlab,pypdf,numpy
