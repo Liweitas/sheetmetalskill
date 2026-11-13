@@ -2,7 +2,7 @@
 name: step-sheetmetal-delivery
 description: 核验STEP与钣金要求；为两类矩形箱体生成分件/装配/爆炸STEP、真实展开激光DXF及三视折弯PDF，强制核验03盖角和完整交付；也用于既有项目审核及窄改，纯格式转换不适用。
 metadata:
-  version: "2.8.48"
+  version: "2.8.58"
 ---
 
 # STEP 钣金审核与可复现出图
