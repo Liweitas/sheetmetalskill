@@ -330,7 +330,8 @@ def main(argv):
     for p in work_root.glob('page-*.png'):
         shutil.copy2(p, preview / (code+'_'+p.name))
     run('package', FC, '-B', HERE / 'release_package.py', 'package', stage, code,
-        '--zip', out / f'{code}_CONFIRM_DRAFT.zip', '--dxf-python', FC)
+        '--zip', out / f'{code}_CONFIRM_DRAFT.zip', '--dxf-python', FC,
+        '--pdf-max-pages', '6')
     print(json.dumps({"ok": True, "pdf": str(pdfs[0]), "drawing_code": code,
                       "pipeline": "bend-pdf-golden-001-visual",
                       "production_release": False}, ensure_ascii=False))
