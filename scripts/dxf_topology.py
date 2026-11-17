@@ -31,13 +31,30 @@ def intersections(e,f):
  if e['type']=='LINE':
   a,b=ends(e);c=xy(f);u=sub(b,a);v=sub(a,c);A=sum(q*q for q in u);B=2*sum(u[i]*v[i] for i in range(2));C=sum(q*q for q in v)-float(f[40])**2;disc=B*B-4*A*C
   if disc< -EPS:return []
+  # A line starting exactly tangent to an arc can acquire a tiny positive
+  # discriminant from STEP/DXF float serialization. Keep that shared endpoint
+  # as one intersection instead of reporting a spurious self crossing.
+  if abs(C)<1e-10 and abs(B)<1e-8:disc=0
+  # The same tangent can be serialized with its shared point at the *end*
+  # of the line.  Round a near-zero discriminant at sub-micron scale before
+  # solving, otherwise floating error invents two crossings ~1e-7 mm apart.
+  if abs(disc)<=1e-10*max(1.0,A*float(f[40])**2):disc=0
   ts=[(-B+sign*math.sqrt(max(0,disc)))/(2*A) for sign in [-1,1]];pts=[(a[0]+t*u[0],a[1]+t*u[1]) for t in ts]
  else:
   a=xy(e);b=xy(f);r=float(e[40]);s=float(f[40]);d=dist(a,b)
   if d<EPS:
    if abs(r-s)>EPS:return []
-   # Coincident arcs/circles overlap is deliberately unsupported, even split circles.
-   raise ValueError('coincident curved boundaries need CAD adapter')
+   if e['type']=='CIRCLE' or f['type']=='CIRCLE':
+    raise ValueError('coincident curved boundaries need CAD adapter')
+   a0,sa=angles(e);b0,sb=angles(f)
+   shared=[]
+   for shift in (-2*math.pi,0,2*math.pi):
+    lo=max(a0,b0+shift);hi=min(a0+sa,b0+shift+sb)
+    if hi-lo>1e-8:raise ValueError('overlapping curved boundaries')
+    if hi>=lo-1e-8:
+     q=(a[0]+r*math.cos((lo+hi)/2),a[1]+r*math.sin((lo+hi)/2))
+     if not any(dist(q,z)<EPS for z in shared):shared.append(q)
+   return shared
   if d>r+s+EPS or d<abs(r-s)-EPS:return []
   x=(d*d+r*r-s*s)/(2*d);h=math.sqrt(max(0,r*r-x*x));u=((b[0]-a[0])/d,(b[1]-a[1])/d);m=(a[0]+x*u[0],a[1]+x*u[1]);pts=[(m[0]+sign*h*u[1],m[1]-sign*h*u[0]) for sign in [-1,1]]
  return [p for p in pts if on(e,p) and on(f,p)]
