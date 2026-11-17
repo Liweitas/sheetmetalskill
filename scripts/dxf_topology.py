@@ -132,3 +132,19 @@ def validate_planar(ents,indices):
   for loop,poly in inner_loops:
    if inside(c,poly) or min(distance(e,c) for e in loop)<=r+GUARD:raise ValueError('circle hole overlaps polygonal opening')
  return {'planar_checked':True,'boundary_guard_mm':GUARD,'arc_winding_max_sag_mm':.001,'inner_polygonal_openings':len(inner_loops),'circle_holes':len(circle_holes)}
+
+def largest_closed_loop_indices(ents):
+ """Find the exterior loop without treating polygonal openings as exteriors.
+ validate_planar must still validate all remaining loops and circles against it.
+ """
+ pending={i for i,e in enumerate(ents) if e['type']!='CIRCLE'};loops=[]
+ while pending:
+  seed=min(pending);pending.remove(seed);ids=[seed];poly=sampled(ents[seed])
+  while dist(poly[-1],poly[0])>EPS:
+   options=[(i,dist(ends(ents[i])[1],poly[-1])<EPS) for i in pending if any(dist(p,poly[-1])<EPS for p in ends(ents[i]))]
+   if len(options)!=1:raise ValueError('boundary loop cannot be ordered uniquely')
+   i,reverse=options[0];pending.remove(i);ids.append(i);poly.extend(sampled(ents[i],reverse)[1:])
+  area=abs(sum(a[0]*b[1]-a[1]*b[0] for a,b in zip(poly,poly[1:]+poly[:1])))/2
+  loops.append((area,ids))
+ if not loops:raise ValueError('no noncircular exterior loop')
+ return max(loops,key=lambda item:item[0])[1]

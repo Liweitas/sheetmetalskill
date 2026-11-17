@@ -14,6 +14,17 @@ ENGINE = Path(__file__).resolve().parents[1] / 'assets/bend-pdf-golden-001-visua
 
 
 class GoldenLayout(unittest.TestCase):
+    def test_fixing_edge_offsets_come_from_actual_order_coordinates(self):
+        function = next(n for n in ast.parse(ENGINE.read_text()).body
+                        if isinstance(n, ast.FunctionDef) and n.name == 'fixing_edge_coordinates')
+        namespace = {}
+        exec(compile(ast.Module(body=[function], type_ignores=[]), str(ENGINE), 'exec'), namespace)
+        convert = namespace['fixing_edge_coordinates']
+        self.assertEqual(convert([dict(formed=[3,3,285]), dict(formed=[197,167,285])],1.5),
+                         ([4.5,198.5],[4.5,168.5]))
+        self.assertEqual(convert([dict(formed=[10.5,10.5,220]), dict(formed=[436.5,366.5,220])],1.5),
+                         ([12,438],[12,368]))
+
     def setUp(self):
         tree = ast.parse(ENGINE.read_text())
         functions = [n for n in tree.body if isinstance(n, ast.FunctionDef)]

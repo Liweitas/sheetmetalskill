@@ -43,8 +43,9 @@ HANDLE_MOUNT = "NONE"
 HANDLE_REF = bool(_HJ.get('reference_envelope', False))
 def handle_holes():
     out = []
-    for cx in HANDLE_CX:
-        s = 1 if cx < L / 2 else -1          # wide row toward lid centre X (handles face each other)
+    for hi,cx in enumerate(HANDLE_CX):
+        rotations = _HJ.get('rotations')
+        s = (1 if rotations[hi] == 90 else -1) if rotations is not None else (1 if cx < L / 2 else -1)          # wide row toward lid centre X (handles face each other)
         tag = 'L' if s > 0 else 'R'
         xw = cx + s * HDL_ROWS / 2; xn = cx - s * HDL_ROWS / 2
         out += [dict(id=f'H{tag}-W1', handle=tag, row='wide', x=xw, y=HANDLE_CY - HDL_WIDE / 2), dict(id=f'H{tag}-W2', handle=tag, row='wide', x=xw, y=HANDLE_CY + HDL_WIDE / 2),

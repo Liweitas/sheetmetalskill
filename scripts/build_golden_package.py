@@ -76,7 +76,7 @@ def pipe_brief(brief, code):
     handles = brief.get("handles") or {}
     if handles:
         if (not isinstance(handles, dict) or
-                set(handles) - {"profile", "cx", "cy"} or
+                set(handles) - {"profile", "cx", "cy", "rotations"} or
                 handles.get("profile") != "handle-85-62-30-v1"):
             fail("handles needs the supported handle-85-62-30-v1 lid profile")
         handles = dict(handles)
@@ -94,6 +94,10 @@ def pipe_brief(brief, code):
                 type(cy) not in (int, float) or not math.isfinite(cy) or
                 not 45.8 < cy < W - 45.8):
             fail("handle mounting holes must fit inside the lid")
+    if handles.get('rotations') is not None:
+        rotations=handles['rotations']
+        if not isinstance(rotations,list) or len(rotations)!=len(handles['cx']) or any(type(r) not in (int,float) or r not in (90,270) for r in rotations):
+            fail('handle rotations must be 90/270, one per center')
     panels = [h for h in brief.get('holes', []) if h.get('part_id') != 'LID']
     rects = brief.get('rect_cutouts') or []
     if (panels or rects) and basis != 'body_outer':

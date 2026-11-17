@@ -52,7 +52,9 @@ def verify(doc,formed_path,unfold_path,dxf_path,body_path=None,execution_state=N
    elif e['type']=='ARC':
     center=V(float(e[10]),float(e[20]),0);rad=float(e[40]);a=math.radians(float(e[50]));sweep=(math.radians(float(e[51]))-a)%(2*math.pi);pt=lambda q:center+V(rad*math.cos(a+q*sweep),rad*math.sin(a+q*sweep),0);edges.append(Part.Arc(pt(0),pt(.5),pt(1)).toShape())
    else:holes.append(Part.Face(Part.Wire([Part.makeCircle(float(e[40]),V(float(e[10]),float(e[20]),0))])))
-  wire=Part.Wire(Part.__sortEdges__(edges));require(wire.isClosed(),'actual DXF outer not closed');cut=Part.Face(wire)
+  wires=[Part.Wire(group) for group in Part.sortEdges(edges)];require(all(w.isClosed() for w in wires),'actual DXF loop not closed');faces=[Part.Face(w) for w in wires];outer=max(faces,key=lambda f:f.Area);cut=outer
+  for opening in faces:
+   if opening is not outer:cut=cut.cut(opening)
   for hole in holes:cut=cut.cut(hole)
   dxf_delta=actual.cut(cut).Area+cut.cut(actual).Area;require(dxf_delta<=area_tol,'DXF area/holes differ from actual native unfolded face')
   root_volume=None;measured_q=None;holds=[]

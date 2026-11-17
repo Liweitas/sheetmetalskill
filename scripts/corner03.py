@@ -45,9 +45,9 @@ def same_segment(a,b,c,d,tol):return min(max(math.dist(a,c),math.dist(b,d)),max(
 
 def check_dxf(path,s,tol=1e-5):
  from cut_dxf import parse_dxf
- from dxf_topology import validate_planar
- ents=parse_dxf(Path(path));indices=[i for i,e in enumerate(ents) if e['type']!='CIRCLE'];validate_planar(ents,indices)
- lines=[([float(e[10]),float(e[20])],[float(e[11]),float(e[21])]) for e in ents if e['type']=='LINE'];diags=[(a,b) for a,b in lines if abs(a[0]-b[0])>tol and abs(a[1]-b[1])>tol]
+ from dxf_topology import validate_planar,largest_closed_loop_indices
+ ents=parse_dxf(Path(path));indices=largest_closed_loop_indices(ents);validate_planar(ents,indices)
+ lines=[([float(e[10]),float(e[20])],[float(e[11]),float(e[21])]) for i,e in enumerate(ents) if i in indices and e['type']=='LINE'];diags=[(a,b) for a,b in lines if abs(a[0]-b[0])>tol and abs(a[1]-b[1])>tol]
  expected=expected_segments(s)
  if len(diags)!=8:raise ValueError('claimed03 must have8 actual outer sloped segments; right-angle/20straight0sloped is not03')
  if any(not any(same_segment(a,b,c,d,tol) for c,d in diags) for a,b in expected):raise ValueError('03 slopes differ from current t,Ri,seam,BA calculation or unnormalized flat frame')

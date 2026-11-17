@@ -56,6 +56,12 @@ _RECTS = JOB.get('rect_cutouts') or []
 _TOP4 = rep.get('top_fixings') or []
 _TOP_SUPPORTS = bool(_TOP4) and all('TAB'+str(i+1) in P for i in range(len(_TOP4)))
 
+def fixing_edge_coordinates(fixings, offset):
+    return (sorted({round(h['formed'][0]+offset,8) for h in fixings}),
+            sorted({round(h['formed'][1]+offset,8) for h in fixings}))
+
+_FIX_X,_FIX_Y=fixing_edge_coordinates(_TOP4,g+t)
+
 def panel_handle_row_note(holes):
     rows = []
     for z in sorted({h['point'][2] for h in holes}):
@@ -91,8 +97,12 @@ if _PANEL:
 _SIDE_TITLE = (f'侧视图 {EF_PART}（端板功能孔；ASSEMBLY 沿X投影）' if _END_HOLES else f'侧视图（外封端板侧）')
 _TOP_CAPTION = f'盖顶功能孔 {len(LID_HOLES)} 个，坐标/孔径见第4页孔表'
 _TOP_EXTRA = '孔位见第4页；盖-体固定 M4'
+if STRUCTURE == 'u_l_t7u':
+    _SIDE_TITLE='右视图（U围侧壁）'
+    _SKIRT_NOTE='箱体无功能孔；功能开口在盖上'
+
 if _TOP4:
-    _END_SUMMARY = ('END_L/END_R均无孔；M4固定在盖顶及角部支承片' if _TOP_SUPPORTS else 'END_L/END_R均无孔；仅盖顶4孔，螺钉承接结构未定')
+    _END_SUMMARY = (('U围＋L，箱体无孔；盖顶承接结构未定' if STRUCTURE=='u_l_t7u' else 'END_L/END_R均无孔；仅盖顶4孔，螺钉承接结构未定') if not _TOP_SUPPORTS else '盖顶M4固定在角部支承片')
     _TOP_EXTRA = '盖顶四角M4；孔位直接标注'
 
 
@@ -200,7 +210,7 @@ def header(ax, n):
     ax.text(PW - 8, PH - 12, f'{n}/{NPAGES}', color='w', fontsize=_fs(12), ha='right', va='center')
     # taller ERP red bar: material / t / LWH / VER / date (rule18)
     ax.add_patch(Rectangle((0, PH - 34), PW, 16, fc=REDC, ec='none'))
-    ax.text(8, PH - 22, f'材料 {MATERIAL_CN}｜板厚 t={t:g} mm｜外形 {OUTER_L:g}×{OUTER_W:g}×{H:g}（含盖不含把手）｜内R{ri:g} K={K:.4f} BD={BD:.3f}(候选)｜每套{len(P)}件｜production_release={str(_pr).lower()}',
+    ax.text(8, PH - 22, f'材料 {MATERIAL_CN}｜板厚 t={t:g} mm｜箱体 {L:g}×{W:g}×含盖高{H:g}｜盖外{OUTER_L:g}×{OUTER_W:g}｜内R{ri:g} K={K:.4f} BD={BD:.3f}(候选)｜每套{len(P)}件｜production_release={str(_pr).lower()}',
             color='w', fontsize=_fs(FS_HEADER_META), va='center')
     ax.text(8, PH - 31, f'工厂编号 {VER}｜出图 {stamp}｜用户外形口径｜公差 +0/−2｜金样引擎 engine_u_endplates 2.8.45｜视觉参考001-v1｜可>4页',
             color='w', fontsize=_fs(FS_HEADER_META), va='center')
@@ -605,7 +615,7 @@ out_pdf = R / f'{VER}_BEND_PDF_A3_CN.pdf'
 _PAGE_LAYOUT = []
 _candidate = R / f'.{VER}.layout-check.pdf'
 # U-wrap and L use the same primitives, colours, dimensions and layout gate as the end-plate variant.
-if STRUCTURE == 'u_l_t7u':
+if STRUCTURE == 'u_l_t7u' and not JOB.get('compact_wrap_review'):
     NPAGES = 7 + len(_REQ_PAGES)
     with PdfPages(_candidate) as pdf:
         fig = plt.figure(figsize=(PW/25.4, PH/25.4), dpi=120)
@@ -740,7 +750,7 @@ else:
         dimv(a2, 0, H, -38, -OH, -OH, f'{H:g}', fs=_fs(9.4))
         for y in SHORT_Y:
             a2.plot([y], [ZH], '+', color=BLU, ms=5, mew=0.8)
-        a2.text(15, 35, (f'端板 {W:g}×{Hb:g}；零折' if _TOP4 else f'每侧 M4×{len(SHORT_Y)}；端板 {W:g}×{Hb:g}'), fontsize=_fs(9.4), color=BLU)
+        a2.text(15, 35, ((f'箱体侧面 {W:g}×{Hb:g}' if STRUCTURE=='u_l_t7u' else f'端板 {W:g}×{Hb:g}；零折') if _TOP4 else f'每侧 M4×{len(SHORT_Y)}；端板 {W:g}×{Hb:g}'), fontsize=_fs(9.4), color=BLU)
         # END_R functional holes (formed YZ)
         a2.hlines(H - skirt, 0, W, color=REDC, ls=':', lw=0.6)
         a2.text(W*0.55, H - skirt + 2, f'盖裙下沿 Z={H-skirt:g}', fontsize=_fs(9.4), color=REDC)
@@ -756,7 +766,7 @@ else:
             cy, cz, ww, hh = float(r['cy']), float(r['cz']), float(r['w']), float(r['h'])
             a2.add_patch(Rectangle((cy-ww/2, cz-hh/2), ww, hh, fill=False, ec=REDC, lw=0.8))
             a2.text(cy, cz-hh/2-6, f"品字{ww:g}×{hh:g}", fontsize=_fs(9.4), ha='center', color=REDC)
-        a2.text(8, 65, '端板把手坐标见附页' if _PANEL_HANDLES else ('端板功能孔见第3页' if _END_HOLES else '端板无功能孔'), fontsize=_fs(9.4), color=REDC)
+        a2.text(8, 65, '端板把手坐标见附页' if _PANEL_HANDLES else ('端板功能孔见第3页' if _END_HOLES else ('箱体无功能孔' if STRUCTURE=='u_l_t7u' else '端板无功能孔')), fontsize=_fs(9.4), color=REDC)
         # --- 俯视图 top: length × width ---
         sT = min(0.32, 190 / (L + 110), 118 / (W + 120))
         _top_extra = _TOP_EXTRA
@@ -789,11 +799,24 @@ else:
                 if len(ys)>1: dimv(a3,ys[0],ys[-1],xx+65,xx,xx,f'{ys[-1]-ys[0]:g}')
                 a3.text(xx+48,ys[-1]+15,f'{len(ports)}×Ø{ports[0]["d"]:g}',fontsize=FS_NOTE,color=BLU)
             for i,cx in enumerate(HANDLE_CX):
-                dimh(a3,-OH,cx,42+24*i,-OH,HANDLE_CY,f'{cx+OH:g}')
+                dimh(a3,-OH,cx,(-60-18*i if JOB.get('lid_rectangles') else 42+24*i),-OH,HANDLE_CY,f'{cx+OH:g}')
                 dimv(a3,-OH,HANDLE_CY,cx+70,cx,cx,f'{HANDLE_CY+OH:g}')
-            a3.text(L*.22,W*.9,'4×Ø6.6；宽排85/窄排62/排距30',fontsize=FS_NOTE,color=BLU)
-            dimh(a3,-OH,12-OH,W+22,W,W,'12')
-            dimv(a3,-OH,12-OH,L+20,L,L,'12')
+            if not JOB.get('lid_rectangles'):
+                a3.text(L*.22,W*.9,'4×Ø6.6；宽排85/窄排62/排距30',fontsize=FS_NOTE,color=BLU)
+            for i,rect in enumerate(JOB.get('lid_rectangles') or []):
+                xx,yy=rect['center'];ww,hh=rect['size']
+                dimh(a3,xx-ww/2,xx+ww/2,yy+hh/2+12,yy+hh/2,yy+hh/2,f'{ww:g}')
+                dimv(a3,yy-hh/2,yy+hh/2,xx-ww/2-12,xx-ww/2,xx-ww/2,f'{hh:g}')
+                dimh(a3,0,xx,-18-i*18,0,yy,f'X{xx:g}')
+                dimv(a3,0,yy,xx+ww/2+12+i*18,xx,xx,f'Y{yy:g}')
+                a3.text(xx,yy,rect['id'],fontsize=FS_NOTE,color=REDC,ha='center')
+            rr=JOB.get('lid_rectangles') or []
+            if len(rr)==2:
+                xx=rr[0]['center'][0];y1,y2=sorted(r['center'][1] for r in rr)
+                dimv(a3,y1,y2,xx+64,xx,xx,f'心距{y2-y1:g}')
+
+            dimh(a3,-OH,_FIX_X[0]-OH,W+22,W,W,f'{_FIX_X[0]:g}')
+            dimv(a3,-OH,_FIX_Y[0]-OH,L+20,L,L,f'{_FIX_Y[0]:g}')
 
         # --- 装配轴测：2D iso solid + outer dim arrows (ref 001 isoview L/W/H) t107u/t109u ---
         if HAS_HANDLES and HANDLE_MOUNT in ('END_L+END_R','END_R','END_L'):
@@ -803,6 +826,7 @@ else:
             _iso_parts = ['U', 'END_L', 'END_R', 'LID'] + [f'HANDLE_REF_{"L" if cx < L/2 else "R"}' for cx in HANDLE_CX]
         else:
             _iso_parts = ['U', 'END_L', 'END_R', 'LID']
+        if STRUCTURE == 'u_l_t7u': _iso_parts = ['U','L','LID']
         if _TOP_SUPPORTS: _iso_parts += ['TAB'+str(i+1) for i in range(len(_TOP4))]
         _iso_dir = ORDER / 'logs' / 'iso'; _iso_dir.mkdir(parents=True, exist_ok=True)
         _iso_png = render_assy_iso_png(_iso_dir / f'{VER}_ASSEMBLY_iso.png', _iso_parts, exploded=False)
@@ -829,10 +853,12 @@ else:
         a3d.set_title(f'装配轴测  {OUTER_L:g}×{OUTER_W:g}×{H:g}', fontsize=_fs(9.4), loc='left')
         if _TOP4:
             ha=vax(fig,220,20,(-25,65),(-65,65),.34,'把手安装孔局部：4×Ø6.6')
-            for xx,pitch in [(0,85),(30,62)]:
+            for xx,pitch in ([(30,85),(0,62)] if (JOB.get('handles') or {}).get('rotations')==[90] else [(0,85),(30,62)]):
                 for yy in [-pitch/2,pitch/2]:ha.add_patch(Circle((xx,yy),3.3,fill=False,ec=BLU))
-            dimv(ha,-42.5,42.5,-15,0,0,'85')
-            dimv(ha,-31,31,45,30,30,'62')
+            if (JOB.get('handles') or {}).get('rotations')==[90]:
+                dimv(ha,-42.5,42.5,45,30,30,'85');dimv(ha,-31,31,-15,0,0,'62')
+            else:
+                dimv(ha,-42.5,42.5,-15,0,0,'85');dimv(ha,-31,31,45,30,30,'62')
             dimh(ha,0,30,-52,-42.5,-31,'30')
         elif not customer_image:
             a3e = fig.add_axes([0.51, 0.06, 0.25, 0.15])
@@ -847,15 +873,16 @@ else:
             f'· 箱体高 Hb={Hb:g}',
             f'· 盖外 {LOL:g}×{LOW:g}×{skirt:g}（盖外形，非ERP）',
             ('结构', NAVY),
-            '· 件1 U：底+两长侧壁',
-            '· 件2/3 外封端板零折',
+            ('· 件1 U：三面围板' if STRUCTURE=='u_l_t7u' else '· 件1 U：底+两长侧壁'),
+            ('· 件2 L：底＋前侧，一折' if STRUCTURE=='u_l_t7u' else '· 件2/3 外封端板零折'),
             '  拼缝0/不退让/齐口',
-            f'· 件4 盖裙{skirt:g} 03角缝候选0.2',
+            f'· {"件3" if STRUCTURE=="u_l_t7u" else "件4"} 盖裙{skirt:g} 03角缝候选0.2',
             *(['· 件5-8：4块25×25×0.8角部支承片'] if _TOP_SUPPORTS else []),
             f'· 把手：{_HDL_LINE}',
             *([JOB['customer_image_note']] if JOB.get('customer_image_note') else []),
+            *([JOB['review_datum_note']] if JOB.get('review_datum_note') else []),
             f'· 盖顶孔共{len(LID_HOLES)}个（含把手及固定）',
-            '· 功能孔及把手坐标见附页' if _PANEL else '· 端板功能孔见第3页',
+            '· 功能孔及把手坐标见附页' if _PANEL else ('· 箱体无孔；L件展开见第3页' if STRUCTURE=='u_l_t7u' else '· 端板功能孔见第3页'),
             (('· 盖顶4×Ø4.5；支承片Ø3.3攻M4' if _TOP_SUPPORTS else '· 盖顶4×Ø4.5；承接结构未定 HOLD') if _TOP4 else '· 仍开盖-体M4（规则4/23）'),
             f'· {_SKIRT_NOTE}',
             ('待确认', REDC),
@@ -864,9 +891,9 @@ else:
             '· 法兰用途/卫星是否改攻丝',
         ], title='关键参数', fs=_fs(9.4))
         box(ax, 330, 25, 82, 55, [
-            ('盖顶四角：均距邻边12' if _TOP4 else f'长X={"/".join(f"{x:g}" for x in LONG_X)}'),
-            (f'孔心X：12 / {OUTER_L-12:g}' if _TOP4 else f'短Y={"/".join(f"{y:g}" for y in SHORT_Y)}'),
-            (f'孔心Y：12 / {OUTER_W-12:g}' if _TOP4 else f'Z={ZH:g}；箱Ø3.3/盖Ø4.5')
+            (f'盖顶四角：距邻边{_FIX_X[0]:g}' if _TOP4 else f'长X={"/".join(f"{x:g}" for x in LONG_X)}'),
+            (f'孔心X：{_FIX_X[0]:g} / {_FIX_X[-1]:g}' if _TOP4 else f'短Y={"/".join(f"{y:g}" for y in SHORT_Y)}'),
+            (f'孔心Y：{_FIX_Y[0]:g} / {_FIX_Y[-1]:g}' if _TOP4 else f'Z={ZH:g}；箱Ø3.3/盖Ø4.5')
         ], title='M4 布局', fs=_fs(9.4))
         # t108u: removed cream banner at PH-48 — it overlapped navy/red header & front-view top.
         # Outer L×W×H already on red ERP bar + three orthographic views + iso title/callouts.
@@ -889,62 +916,81 @@ else:
         dimh(a, 0, ufx, -22, 0, 0, f'{ufx:.2f}'); dimv(a, 0, ufy, ufx + 18, ufx, ufx, f'{ufy:.2f}')
         bilateral_dims(a, BU)
         box(ax, 270, 40, 140, 200, [
-            f'U：弯线沿长{L-2*t:g}；第2道侧壁高{Hb:g}、内宽{W-2*t:g} — 深U折弯避让 WARN',
+            (f'U三面围板：折线长{math.dist(*P["U"]["bend_records"][0]["flat_line_mm"]):g}，两折；夹持与翻面需首件核验' if STRUCTURE=='u_l_t7u' else f'U：弯线沿长{L-2*t:g}；第2道侧壁高{Hb:g}、内宽{W-2*t:g} — 深U折弯避让 WARN'),
             f'拼缝0、inset0、上边齐口；接合=内侧角焊或外侧激光焊（待确认）',
-            f'BD={BD:.4f}；U展开宽公式 {W:g}+2×{Hb:g}−2×BD = {W+2*Hb-2*BD:.2f}',
+            (f'BD={BD:.4f}；实际U展开{ufx:.2f}×{ufy:.2f}' if STRUCTURE=='u_l_t7u' else f'BD={BD:.4f}；U展开宽公式 {W:g}+2×{Hb:g}−2×BD = {W+2*Hb-2*BD:.2f}'),
             f'视觉：参考 S-201-1-20261031-001-v1；字号≥{MINPT}pt；拥挤则加页不缩字',
             '处理面朝外（规则31）；展开外表面朝读者',
         ] + (['展开孔表：平坯左下为原点，X / Y / Φ'] + [f'{a[0]:.3f} / {a[1]:.3f} / {a[2]:g}' for a in P['U']['flat_circles']] if JOB.get('compact_panel_review') else []), title='U 说明（右栏）', fs=FS_BOX)
+        if JOB.get('compact_wrap_review'):
+            up=render_assy_iso_png(R/'PREVIEW'/f'{VER}_U_iso.png',['U'])
+            ui=fig.add_axes([275/PW,45/PH,125/PW,110/PH]);ui.imshow(plt.imread(up));ui.axis('off');ui.set_title('U件实际成形轴测',fontsize=FS_TITLE,loc='left')
         save_page(pdf, fig)
 
-        # PAGE 3 — END_R (+ END_L note) alone
-        fig = plt.figure(figsize=(PW / 25.4, PH / 25.4), dpi=120)
-        ax = fig.add_axes([0, 0, 1, 1]); header(ax, 3); foot(ax)
-        efx, efy = P['END_R']['flat_size']
-        sE = min(0.9, 220 / max(efx + 50, 1), 180 / max(efy + 50, 1))
-        a2 = vax(fig, 20, 50, (-20, efx + 30), (-20, efy + 30), sE,
-                 f'件3 END_R 展开（零折；外表面/处理面朝读者）{efx:.2f}×{efy:.2f}')
-        flatdraw(a2, 'END_R')
-        for y in SHORT_Y:
-            a2.plot(y, ZH, 'b+', ms=5, mew=0.8)
-        a2.axhline(H - skirt, color=REDC, ls=':', lw=0.5)
-        a2.text(efx * 0.4, H - skirt - 18, f'盖裙下沿 Z={H-skirt:g}', fontsize=_fs(FS_NOTE), color=REDC)
-        def _er_flat(y, z):
-            return (float(y), float(z))
-        for c in _END_CIRCLES:
-            if (c.get('part') or EF_PART) != 'END_R':
-                continue
-            fx, fy = _er_flat(c['y'], c['z']); dd = float(c['d'])
-            a2.text(fx + 3, fy + dd/2 + 1.5, f"{c.get('id','')}Ø{dd:g}\n成形Y{float(c['y']):g} Z{float(c['z']):g}", fontsize=_fs(FS_NOTE), color=REDC)
-        for r in _END_RECTS:
-            if (r.get('part') or EF_PART) != 'END_R':
-                continue
-            cy, cz, ww, hh = float(r['cy']), float(r['cz']), float(r['w']), float(r['h'])
-            fx, fy = _er_flat(cy, cz)
-            a2.add_patch(Rectangle((fx-ww/2, fy-hh/2), ww, hh, fill=False, ec=REDC, lw=0.9))
-            a2.text(fx, fy, f"品字{ww:g}×{hh:g}\n成形Y{cy:g} Z{cz:g}", fontsize=_fs(FS_NOTE), ha='center', va='center', color=REDC)
-        a2.text(efx * 0.5, 28, 'END_R展开 X′=Y（外表面朝读者/处理面朝上）；孔标注=成形Y/Z；与CUT DXF同手性', fontsize=_fs(FS_NOTE), ha='center', color=BLU)
-        dimh(a2, 0, efx, -14, 0, 0, f'{efx:.2f}'); dimv(a2, 0, efy, efx + 14, efx, efx, f'{efy:.2f}')
-        # END_L small
-        efxL, efyL = P['END_L']['flat_size']
-        aL = vax(fig, 250, 155, (-15, efxL + 20), (-15, efyL + 20), min(0.55, 140/max(efxL+40,1), 85/max(efyL+35,1)),
-                 f'件2 END_L 展开（零折）{efxL:.2f}×{efyL:.2f}')
-        flatdraw(aL, 'END_L')
-        dimh(aL, 0, efxL, -12, 0, 0, f'{efxL:.2f}'); dimv(aL, 0, efyL, efxL + 12, efxL, efxL, f'{efyL:.2f}')
-        box(ax, 250, 40, 155, 100, [
-            f'端板：零折平板，外轮廓={W:g}×{Hb:g}，底角R{ro:g}与U外圆同心',
-            ('本单两端板均无孔，零折' if _TOP4 else ('两端板把手居中；坐标及孔表见附页' if _PANEL_HANDLES else 'END_R：功能孔见左图；END_L：通常仅M4（以本单为准）')),
-            (('支承片Φ3.3攻M4；盖顶Φ4.5，见首页与第5页' if _TOP_SUPPORTS else '仅盖顶Φ4.5固定孔；螺钉承接结构未定') if _TOP4 else '仍开盖-体 M4（规则23）：端板短边 Y 上攻丝 Ø3.3'),
-            '规则31：处理面朝外；DXF与PDF同手性',
-            'NEST：端板可旋转90°塞进单张2440×1220；单件CUT未旋转',
-        ], title='端板说明（右栏）', fs=FS_BOX)
-        save_page(pdf, fig)
+        if STRUCTURE == 'u_l_t7u':
+            fig=plt.figure(figsize=(PW/25.4,PH/25.4),dpi=120)
+            ax=fig.add_axes([0,0,1,1]);header(ax,3);foot(ax)
+            fx,fy=P['L']['flat_size'];BB=bidir(rep,'L')
+            aa=vax(fig,18,40,(-40,fx+45),(-35,fy+40),min(230/(fx+85),195/(fy+75)),f'件2 L形底侧板：实际展开 {fx:.2f}×{fy:.2f}')
+            flatdraw(aa,'L');bilateral_dims(aa,BB)
+            for sg in BB['X_seg']:dimh(aa,sg[0],sg[1],fy+10,fy,fy,f'{sg[2]:.2f}')
+            for sg in BB['Y_seg']:dimv(aa,sg[0],sg[1],-12,0,0,f'{sg[2]:.2f}')
+            dimh(aa,0,fx,-24,0,0,f'{fx:.2f}');dimv(aa,0,fy,fx+20,fx,fx,f'{fy:.2f}')
+            notes=[f'L盖U，拼缝0、退让0；实际厚度{t:g}。',f'成形外包{P["L"]["size"]}；一折，内R{ri:g}。']
+            notes += [f'{row["id"]}：{row["axis"]}距A{row["a"]}/距B{row["b"]}；{row["seg_prev"]}；{row["seg_next"]}；90°' for row in table_rows(BB,'L')]
+            box(ax,270,135,140,110,notes,title='L件工艺与定位')
+            path=render_assy_iso_png(R/'PREVIEW'/f'{VER}_L_iso.png',['L'])
+            ai=fig.add_axes([275/PW,38/PH,125/PW,85/PH]);ai.imshow(plt.imread(path));ai.axis('off');ai.set_title('L件实际成形轴测',fontsize=FS_TITLE,loc='left')
+            save_page(pdf,fig)
+        else:
+            # PAGE 3 — END_R (+ END_L note) alone
+            fig = plt.figure(figsize=(PW / 25.4, PH / 25.4), dpi=120)
+            ax = fig.add_axes([0, 0, 1, 1]); header(ax, 3); foot(ax)
+            efx, efy = P['END_R']['flat_size']
+            sE = min(0.9, 220 / max(efx + 50, 1), 180 / max(efy + 50, 1))
+            a2 = vax(fig, 20, 50, (-20, efx + 30), (-20, efy + 30), sE,
+                     f'件3 END_R 展开（零折；外表面/处理面朝读者）{efx:.2f}×{efy:.2f}')
+            flatdraw(a2, 'END_R')
+            for y in SHORT_Y:
+                a2.plot(y, ZH, 'b+', ms=5, mew=0.8)
+            a2.axhline(H - skirt, color=REDC, ls=':', lw=0.5)
+            a2.text(efx * 0.4, H - skirt - 18, f'盖裙下沿 Z={H-skirt:g}', fontsize=_fs(FS_NOTE), color=REDC)
+            def _er_flat(y, z):
+                return (float(y), float(z))
+            for c in _END_CIRCLES:
+                if (c.get('part') or EF_PART) != 'END_R':
+                    continue
+                fx, fy = _er_flat(c['y'], c['z']); dd = float(c['d'])
+                a2.text(fx + 3, fy + dd/2 + 1.5, f"{c.get('id','')}Ø{dd:g}\n成形Y{float(c['y']):g} Z{float(c['z']):g}", fontsize=_fs(FS_NOTE), color=REDC)
+            for r in _END_RECTS:
+                if (r.get('part') or EF_PART) != 'END_R':
+                    continue
+                cy, cz, ww, hh = float(r['cy']), float(r['cz']), float(r['w']), float(r['h'])
+                fx, fy = _er_flat(cy, cz)
+                a2.add_patch(Rectangle((fx-ww/2, fy-hh/2), ww, hh, fill=False, ec=REDC, lw=0.9))
+                a2.text(fx, fy, f"品字{ww:g}×{hh:g}\n成形Y{cy:g} Z{cz:g}", fontsize=_fs(FS_NOTE), ha='center', va='center', color=REDC)
+            a2.text(efx * 0.5, 28, 'END_R展开 X′=Y（外表面朝读者/处理面朝上）；孔标注=成形Y/Z；与CUT DXF同手性', fontsize=_fs(FS_NOTE), ha='center', color=BLU)
+            dimh(a2, 0, efx, -14, 0, 0, f'{efx:.2f}'); dimv(a2, 0, efy, efx + 14, efx, efx, f'{efy:.2f}')
+            # END_L small
+            efxL, efyL = P['END_L']['flat_size']
+            aL = vax(fig, 250, 155, (-15, efxL + 20), (-15, efyL + 20), min(0.55, 140/max(efxL+40,1), 85/max(efyL+35,1)),
+                     f'件2 END_L 展开（零折）{efxL:.2f}×{efyL:.2f}')
+            flatdraw(aL, 'END_L')
+            dimh(aL, 0, efxL, -12, 0, 0, f'{efxL:.2f}'); dimv(aL, 0, efyL, efxL + 12, efxL, efxL, f'{efyL:.2f}')
+            box(ax, 250, 40, 155, 100, [
+                f'端板：零折平板，外轮廓={W:g}×{Hb:g}，底角R{ro:g}与U外圆同心',
+                ('本单两端板均无孔，零折' if _TOP4 else ('两端板把手居中；坐标及孔表见附页' if _PANEL_HANDLES else 'END_R：功能孔见左图；END_L：通常仅M4（以本单为准）')),
+                (('支承片Φ3.3攻M4；盖顶Φ4.5，见首页与第5页' if _TOP_SUPPORTS else '仅盖顶Φ4.5固定孔；螺钉承接结构未定') if _TOP4 else '仍开盖-体 M4（规则23）：端板短边 Y 上攻丝 Ø3.3'),
+                '规则31：处理面朝外；DXF与PDF同手性',
+                'NEST：端板可旋转90°塞进单张2440×1220；单件CUT未旋转',
+            ], title='端板说明（右栏）', fs=FS_BOX)
+            save_page(pdf, fig)
 
         # PAGE 4 — LID flat + roof holes + handles
         fig = plt.figure(figsize=(PW / 25.4, PH / 25.4), dpi=120)
         ax = fig.add_axes([0, 0, 1, 1]); header(ax, 4); foot(ax)
         lfx, lfy = P['LID']['flat_size']
-        a = vax(fig, 15, 35, (-50, lfx + 40), (-40, lfy + 35), min(.48, 245/(lfx+90), 190/(lfy+75)), f'件4 上盖展开 {lfx:.2f}×{lfy:.2f}（外表面朝读者；双向尺寸）')
+        a = vax(fig, 15, 35, (-50, lfx + 40), (-40, lfy + 35), min(.48, 245/(lfx+90), 190/(lfy+75)), f'件{3 if STRUCTURE=="u_l_t7u" else 4} 上盖展开 {lfx:.2f}×{lfy:.2f}（外表面朝读者；双向尺寸）')
         flatdraw(a, 'LID')
         BL = bidir(rep, 'LID')
         for i, sg in enumerate(BL.get('X_seg', [])):
@@ -953,6 +999,9 @@ else:
             dimv(a, sg[0], sg[1], -6 - (i % 2) * 7, -1, -1, f'{sg[2]:.2f}', fs=_fs(9.4))
         dimh(a, 0, lfx, -22, 0, 0, f'{lfx:.2f}'); dimv(a, 0, lfy, lfx + 12, lfx, lfx, f'{lfy:.2f}')
         bilateral_dims(a, BL)
+        if JOB.get('compact_wrap_review'):
+            lp=render_assy_iso_png(R/'PREVIEW'/f'{VER}_LID_iso.png',['LID'])
+            li=fig.add_axes([20/PW,175/PH,160/PW,75/PH]);li.imshow(plt.imread(lp));li.axis('off');li.set_title('盖件实际成形轴测',fontsize=FS_TITLE,loc='left')
         # formed lid top sketch
         a2 = vax(fig, 280, 180, (-20, L + 20), (-20, W + 20), min(.25, 120/(L+40), 65/(W+40)), ('盖顶俯视（本单JSON坐标）' if _TOP4 else '盖顶俯视（成形坐标，孔位待确认）'))
         a2.add_patch(Rectangle((-g, -g), L + 2 * g, W + 2 * g, fill=False, ec=GRN, lw=0.9))
@@ -960,13 +1009,15 @@ else:
         for cx in (HANDLE_CX if HANDLE_MOUNT not in ('END_L+END_R','END_R','END_L') else []):
             a2.add_patch(Rectangle((cx - HREF_BX / 2, HANDLE_CY - HREF_BY / 2), HREF_BX, HREF_BY, fill=False, ec='0.4', ls=':', lw=0.6))
             a2.plot(cx, HANDLE_CY, 'k+', ms=5)
-            a2.text(cx, HANDLE_CY + 55, (f'把手\n盖左下({cx+OH:g},{HANDLE_CY+OH:g})' if _TOP4 else f'把手\n({cx:g},{HANDLE_CY:g})'), fontsize=_fs(9.4), ha='center', color=BLU)
+            a2.text(cx, HANDLE_CY + 55, ('把手' if JOB.get('lid_rectangles') else (f'把手\n盖左下({cx+OH:g},{HANDLE_CY+OH:g})' if _TOP4 else f'把手\n({cx:g},{HANDLE_CY:g})')), fontsize=_fs(9.4), ha='center', color=BLU)
         for h in LID_HOLES:
             a2.add_patch(Circle((h['x'], h['y']), h['d'] / 2, fill=False, ec=REDC, lw=0.7))
-        hole_labels(a2, LID_HOLES)
+        hole_labels(a2, [h for h in LID_HOLES if not (_TOP4 and h['id'].startswith('F'))])
+        for rr in JOB.get('lid_rectangles') or []:
+            xx,yy=rr['center'];ww,hh=rr['size'];a2.add_patch(Rectangle((xx-ww/2,yy-hh/2),ww,hh,fill=False,ec=REDC));a2.text(xx,yy,rr['id'],fontsize=FS_NOTE,color=REDC,ha='center')
         box(ax, 280, 25, 125, 145, [
             '孔号 / 直径 / 成形X / 成形Y（mm）',
-        ] + [f"{h['id']} / Ø{h['d']:g} / {h['x']:g} / {h['y']:g}" for h in LID_HOLES] + [
+        ] + [f"{h['id']} / Ø{h['d']:g} / {h['x']:g} / {h['y']:g}" for h in LID_HOLES] + [f'{rect["id"]} {rect["size"][0]:g}×{rect["size"][1]:g}；X{rect["center"][0]:g}/Y{rect["center"][1]:g}' for rect in JOB.get('lid_rectangles') or []] + [
             f'把手：{_HDL_LINE}',
             _END_SUMMARY,
             f'{_SKIRT_NOTE}',
@@ -1005,7 +1056,7 @@ else:
             '1.0 板攻 M4 约 1 扣，压铆或拉铆未定',
             '确认稿，production_release=false，非生产放行',
         ])
-        box(ax, 270, 40, 140, 220, [f'{i+1}. {p}' for i, p in enumerate(pending)] + ([('折弯定位与建议顺序（先长后短）', NAVY)] + [f'{part} {row["id"]}：90° Ri{ri:g}；{row["axis"]}距A{row["a"]}/距B{row["b"]}；{row["seg_prev"]}；{row["seg_next"]}' for part in ('U','LID') for row in sorted(table_rows(bidir(rep,part),part), key=lambda row: (-next(math.dist(*b['flat_line_mm']) for b in P[part]['bend_records'] if b['id']==row['id']),row['id']))] + ['折弯方向：展开外表面朝读者，翼边背向读者。顺序随模具和夹持空间首件确认。'] if _TOP4 else []), title='工艺 / 折弯定位', fs=_fs(9.4), ec=REDC)
+        box(ax, 270, 40, 140, 220, [f'{i+1}. {p}' for i, p in enumerate(pending)] + ([('折弯定位与建议顺序（先长后短）', NAVY)] + [f'{part} {row["id"]}：90° Ri{ri:g}；线长{next(math.dist(*b["flat_line_mm"]) for b in P[part]["bend_records"] if b["id"]==row["id"]):g}；{row["axis"]}距A{row["a"]}/距B{row["b"]}；{row["seg_prev"]}；{row["seg_next"]}' for part in (('U','L','LID') if STRUCTURE=='u_l_t7u' else ('U','LID')) for row in sorted(table_rows(bidir(rep,part),part), key=lambda row: (-next(math.dist(*b['flat_line_mm']) for b in P[part]['bend_records'] if b['id']==row['id']),row['id']))] + ['折弯方向：展开外表面朝读者，翼边背向读者。顺序随模具和夹持空间首件确认。'] if _TOP4 else []), title='工艺 / 折弯定位', fs=_fs(9.4), ec=REDC)
         if _TOP_SUPPORTS:
             ta=vax(fig,18,42,(-10,125),(-12,65),1.1,'角部焊接支承片：25×25×0.8；4件；零折')
             for i,item in enumerate(_TOP4):
@@ -1022,14 +1073,14 @@ else:
         else:
             box(ax, 12, 40, 250, 100, [
                 f'BA=π/2×(Ri+K·t)={BA:.4f}；OSSB={OSSB:.1f}；BD={BD:.4f}',
-                f'U展开宽={W:g}+2×{Hb:g}−2BD={W+2*Hb-2*BD:.2f}（CAD {P["U"]["flat_size"][1]:.2f}）',
-                f'盖展开 CAD {P["LID"]["flat_size"][0]:.2f}×{P["LID"]["flat_size"][1]:.2f}；端板零折 {P["END_L"]["flat_size"][0]:.2f}×{P["END_L"]["flat_size"][1]:.2f}',
+                (f'U实际展开{P["U"]["flat_size"][0]:.2f}×{P["U"]["flat_size"][1]:.2f}' if STRUCTURE=='u_l_t7u' else f'U展开宽={W:g}+2×{Hb:g}−2BD={W+2*Hb-2*BD:.2f}（CAD {P["U"]["flat_size"][1]:.2f}）'),
+                (f'盖展开{P["LID"]["flat_size"][0]:.2f}×{P["LID"]["flat_size"][1]:.2f}；L展开{P["L"]["flat_size"][0]:.2f}×{P["L"]["flat_size"][1]:.2f}' if STRUCTURE=='u_l_t7u' else f'盖展开 CAD {P["LID"]["flat_size"][0]:.2f}×{P["LID"]["flat_size"][1]:.2f}；端板零折 {P["END_L"]["flat_size"][0]:.2f}×{P["END_L"]["flat_size"][1]:.2f}'),
                 f'K={K:.4f} / Ri{ri:g}：候选，须试折；孔坐标：箱体外角 X0/Y0/Z0',
                 f'把手：{_HDL_LINE}；{_END_SUMMARY}',
                 f'订单{JOB.get("quantity", 1)}套；套料1盒；production_release={str(bool((JOB or {}).get("production_release", False))).lower()}；版本 {VER}',
             ] + [f'{part}/{row["id"]} {row["axis"]} 距A {row["a"]} / 距B {row["b"]} / '
                  f'段长 {row["seg_prev"]}；{row["seg_next"]} / {row["dir"]} {row["ang"]:g}°'
-                 for part in ('U', 'LID') for row in table_rows(bidir(rep, part), part)],
+                 for part in (('U','L','LID') if STRUCTURE=='u_l_t7u' else ('U','LID')) for row in table_rows(bidir(rep, part), part)],
                 title='K值 / 折弯扣除 / 折弯表（原生编号，非机台工序）', fs=_fs(9.4))
         save_page(pdf, fig)
 

@@ -204,7 +204,7 @@ for h in HH:
         elif q_[0]==0:q_[0]=X0
         else:q_[0]=X1
         return q_
-    dsk=min((math.dist([x,y,ZT],skpt(pt))-r-D_LID/2,i) for pt,i in sk)
+    dsk=min(((math.dist([x,y,ZT],skpt(pt))-r-D_LID/2,i) for pt,i in sk), default=(None,None))
     hc.append({**h,'d':D_HDL,'axis_line_lid_material_mm':LID.common(ln).Length,'open_at_r':open_,'material_at_r_plus_min':mat,
       'edge_to_lid_outer':edge_to_lid_outer,'edge_to_bend_tangent':edge_to_bend_tangent,'edge_to_nearest_skirt_hole_3d':dsk[0],'nearest_skirt_hole':dsk[1]})
 pp=[(a,b) for a,b in itertools.combinations(HH,2)]
