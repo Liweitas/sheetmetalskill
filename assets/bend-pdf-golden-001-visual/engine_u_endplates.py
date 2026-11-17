@@ -54,6 +54,7 @@ _HDL_LINE = (('两端板把手握把朝上' if HANDLE_MOUNT == 'END_L+END_R' els
 _PANEL = JOB.get('panel_holes') or []
 _RECTS = JOB.get('rect_cutouts') or []
 _TOP4 = rep.get('top_fixings') or []
+_TOP_SUPPORTS = bool(_TOP4) and all('TAB'+str(i+1) in P for i in range(len(_TOP4)))
 
 def panel_handle_row_note(holes):
     rows = []
@@ -89,7 +90,7 @@ _SIDE_TITLE = (f'侧视图 {EF_PART}（端板功能孔；ASSEMBLY 沿X投影）'
 _TOP_CAPTION = f'盖顶功能孔 {len(LID_HOLES)} 个，坐标/孔径见第4页孔表'
 _TOP_EXTRA = '孔位见第4页；盖-体固定 M4'
 if _TOP4:
-    _END_SUMMARY = 'END_L/END_R均无孔；M4固定在盖顶及角部支承片'
+    _END_SUMMARY = ('END_L/END_R均无孔；M4固定在盖顶及角部支承片' if _TOP_SUPPORTS else 'END_L/END_R均无孔；仅盖顶4孔，螺钉承接结构未定')
     _TOP_EXTRA = '盖顶四角M4；孔位直接标注'
 
 
@@ -711,7 +712,7 @@ else:
         dimh(a, 0, L, -22, 0, 0, f'{L:g} 箱体外长（已确认）', fs=_fs(9.4))
         for x in LONG_X:
             a.plot([x], [ZH], '+', color=BLU, ms=5, mew=0.8)
-        a.text(L * 0.12, Hb*.4 if _PANEL else ZH - 28, ('盖顶四角4×M4；焊接支承片见第5页' if _TOP4 else f'长边每侧 M4×{len(LONG_X)}  Z={ZH:g}（Ø3.3攻 / 盖Ø4.5）'), fontsize=_fs(9.4), color=BLU)
+        a.text(L * 0.12, Hb*.4 if _PANEL else ZH - 28, (('盖顶四角4×M4；焊接支承片见第5页' if _TOP_SUPPORTS else '盖顶四角4孔；螺钉承接结构未定') if _TOP4 else f'长边每侧 M4×{len(LONG_X)}  Z={ZH:g}（Ø3.3攻 / 盖Ø4.5）'), fontsize=_fs(9.4), color=BLU)
         a.text(L * 0.12, 35, f'盖裙下沿 Z={H - skirt:g}；箱体顶 Z={Hb:g}；顶隙 q={q:g}', fontsize=_fs(9.4))
         # --- 左/端板侧视图 right: width × height (same y/scale as front; clear header) ---
         sR = min(sF, 110 / (W + 105))
@@ -787,7 +788,7 @@ else:
             _iso_parts = ['U', 'END_L', 'END_R', 'LID'] + [f'HANDLE_REF_{"L" if cx < L/2 else "R"}' for cx in HANDLE_CX]
         else:
             _iso_parts = ['U', 'END_L', 'END_R', 'LID']
-        if _TOP4: _iso_parts += ['TAB'+str(i+1) for i in range(len(_TOP4))]
+        if _TOP_SUPPORTS: _iso_parts += ['TAB'+str(i+1) for i in range(len(_TOP4))]
         _iso_dir = ORDER / 'logs' / 'iso'; _iso_dir.mkdir(parents=True, exist_ok=True)
         _iso_png = render_assy_iso_png(_iso_dir / f'{VER}_ASSEMBLY_iso.png', _iso_parts, exploded=False)
         _exp_png = render_assy_iso_png(_iso_dir / f'{VER}_EXPLODED_iso.png', _iso_parts, exploded=True)
@@ -835,12 +836,12 @@ else:
             '· 件2/3 外封端板零折',
             '  拼缝0/不退让/齐口',
             f'· 件4 盖裙{skirt:g} 03角缝候选0.2',
-            *(['· 件5-8：4块25×25×0.8角部支承片'] if _TOP4 else []),
+            *(['· 件5-8：4块25×25×0.8角部支承片'] if _TOP_SUPPORTS else []),
             f'· 把手：{_HDL_LINE}',
             *([JOB['customer_image_note']] if JOB.get('customer_image_note') else []),
             f'· 盖顶孔共{len(LID_HOLES)}个（含把手及固定）',
             '· 功能孔及把手坐标见附页' if _PANEL else '· 端板功能孔见第3页',
-            ('· 盖顶4×Ø4.5；支承片Ø3.3攻M4' if _TOP4 else '· 仍开盖-体M4（规则4/23）'),
+            (('· 盖顶4×Ø4.5；支承片Ø3.3攻M4' if _TOP_SUPPORTS else '· 盖顶4×Ø4.5；承接结构未定 HOLD') if _TOP4 else '· 仍开盖-体M4（规则4/23）'),
             f'· {_SKIRT_NOTE}',
             ('待确认', REDC),
             '· 端板接合/RiK/角缝',
@@ -918,7 +919,7 @@ else:
         box(ax, 250, 40, 155, 100, [
             f'端板：零折平板，外轮廓={W:g}×{Hb:g}，底角R{ro:g}与U外圆同心',
             ('本单两端板均无孔，零折' if _TOP4 else ('两端板把手居中；坐标及孔表见附页' if _PANEL_HANDLES else 'END_R：功能孔见左图；END_L：通常仅M4（以本单为准）')),
-            ('支承片Φ3.3攻M4；盖顶Φ4.5，见首页与第5页' if _TOP4 else '仍开盖-体 M4（规则23）：端板短边 Y 上攻丝 Ø3.3'),
+            (('支承片Φ3.3攻M4；盖顶Φ4.5，见首页与第5页' if _TOP_SUPPORTS else '仅盖顶Φ4.5固定孔；螺钉承接结构未定') if _TOP4 else '仍开盖-体 M4（规则23）：端板短边 Y 上攻丝 Ø3.3'),
             '规则31：处理面朝外；DXF与PDF同手性',
             'NEST：端板可旋转90°塞进单张2440×1220；单件CUT未旋转',
         ], title='端板说明（右栏）', fs=FS_BOX)
@@ -975,7 +976,7 @@ else:
         box(ax, 12, 150, 250, 110, [
             ('【计算检查】CAD，非实物；native03结果见本次报告', REDC),
             f'· 模型：箱体{L:g}×{W:g}×{Hb:g}；盖约{L+2*(g+t):g}×{W+2*(g+t):g}×{skirt:g}；总高{H:g}',
-            (f'· 盖顶/支承片 M4孔{len(_TOP4)}对；同轴见实际STEP回读报告' if _TOP4 else f'· M4孔盖↔箱体 {len(rep["holes"])}/{len(rep["holes"])} 同轴 {"通过" if coax else "见报告"}'),
+            ((f'· 盖顶/支承片 M4孔{len(_TOP4)}对；同轴见实际STEP回读报告' if _TOP_SUPPORTS else '· 仅盖顶四角孔已建模；螺钉承接结构尚未设计') if _TOP4 else f'· M4孔盖↔箱体 {len(rep["holes"])}/{len(rep["holes"])} 同轴 {"通过" if coax else "见报告"}'),
             (f'· 端板把手孔{len(_PANEL_HANDLES)}；STEP/DXF回读见cad_verification' if _PANEL_HANDLES else (f'· 把手孔 {len(rep.get("handle_holes") or [])} 通透核验、85/62/30、镜像 {"通过" if hok else "见报告"}' if HAS_HANDLES else '· 不要把手，无把手孔')),
             f'· {_END_SUMMARY}；{_SKIRT_NOTE}',
             f'· DXF CUT/BEND/NEST 门禁：{"通过" if allpass else "见 dxf_checks"}',
@@ -990,7 +991,7 @@ else:
             '确认稿，production_release=false，非生产放行',
         ])
         box(ax, 270, 40, 140, 220, [f'{i+1}. {p}' for i, p in enumerate(pending)] + ([('折弯定位与建议顺序（先长后短）', NAVY)] + [f'{part} {row["id"]}：90° Ri{ri:g}；{row["axis"]}距A{row["a"]}/距B{row["b"]}；{row["seg_prev"]}；{row["seg_next"]}' for part in ('U','LID') for row in sorted(table_rows(bidir(rep,part),part), key=lambda row: (-next(math.dist(*b['flat_line_mm']) for b in P[part]['bend_records'] if b['id']==row['id']),row['id']))] + ['折弯方向：展开外表面朝读者，翼边背向读者。顺序随模具和夹持空间首件确认。'] if _TOP4 else []), title='工艺 / 折弯定位', fs=_fs(9.4), ec=REDC)
-        if _TOP4:
+        if _TOP_SUPPORTS:
             ta=vax(fig,18,42,(-10,125),(-12,65),1.1,'角部焊接支承片：25×25×0.8；4件；零折')
             for i,item in enumerate(_TOP4):
                 name='TAB'+str(i+1);dx=i*30
