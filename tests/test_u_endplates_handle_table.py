@@ -8,6 +8,25 @@ from unittest.mock import patch
 
 
 class LidHandleTable(unittest.TestCase):
+    def test_verified_top_fixings_reach_lid_table_without_side_fixings(self):
+        job = dict(structure='u_endplates', release='TOP4-TEST', material_cn='201',
+                   L=547.4, W=297.4, H=130, t=.8, Ri=.8, K=.4, g=.5, q=.2,
+                   long_x=[], short_y=[], top_fixings=[
+                       dict(id=i, formed=[x, y, 130], lid_clearance=4.5)
+                       for i, (x, y) in enumerate(((10.7,10.7),(10.7,286.7),
+                                                  (536.7,10.7),(536.7,286.7)),1)])
+        with tempfile.TemporaryDirectory() as directory:
+            brief = Path(directory)/'brief.json'
+            brief.write_text(json.dumps(job))
+            with patch.dict(os.environ, SM_JOB=str(brief)):
+                cfg = runpy.run_path(str(Path(__file__).resolve().parents[1] /
+                                        'pipelines/u_endplates/cfg.py'))
+        self.assertEqual(len(cfg['LID_HOLES']),4)
+        self.assertEqual(cfg['LONG_X'],[])
+        self.assertEqual(cfg['SHORT_Y'],[])
+        self.assertEqual({h['id'] for h in cfg['LID_HOLES']},{'F1','F2','F3','F4'})
+        self.assertEqual({h['d'] for h in cfg['LID_HOLES']},{4.5})
+
     def test_handle_mounting_holes_reach_pdf_table(self):
         job = dict(structure='u_endplates', release='TEST', material_cn='201',
                    L=480, W=300, H=230, t=1, Ri=.8, K=.4, g=.5, q=.2,

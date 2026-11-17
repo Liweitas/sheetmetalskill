@@ -72,6 +72,9 @@ for i, c in enumerate(LID_PORTS, 1):
             for sy in (-1, 1):
                 LID_HOLES.append({"id": f"P{i}{sx:+d}{sy:+d}", "d": float(c["d_bolt"]), "x": float(c["x"]) + sx * float(c["pitch"]) / 2, "y": float(c["y"]) + sy * float(c["pitch"]) / 2})
 LID_HOLES += [dict(h, d=D_HDL) for h in handle_holes()]
+for h in (_J.get('top_fixings') or []):
+    if not isinstance(h, dict): raise ValueError('top_fixings must contain verified coordinate records')
+    LID_HOLES.append({'id':'F'+str(h['id']), 'x':h['formed'][0], 'y':h['formed'][1], 'd':h['lid_clearance']})
 JOB = _J
 # PDF/DOC page layout (pdf.py, docs.py narrative) is a hand-laid template validated ONLY for this geometry:
 TEMPLATE_DIMS = dict(L=400.0, W=220.0, H=150.0, t=1.0, ri=0.8, g=0.5, skirt=15.0, handles=2)
