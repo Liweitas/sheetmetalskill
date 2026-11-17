@@ -11,6 +11,7 @@ from cfg import *
 from bidir import bidir, table_rows, EDGE_CN
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+from PIL import Image
 from matplotlib.backends.backend_pdf import PdfPages
 from mpl_toolkits.mplot3d.art3d import Poly3DCollection
 from matplotlib import font_manager as fm
@@ -796,8 +797,18 @@ else:
             (_prev / f'{VER}_EXPLODED_iso.png').write_bytes(_exp_png.read_bytes())
         except Exception:
             pass
-        # embed assembly iso (primary); small exploded below if space
-        a3d = fig.add_axes([0.51, 0.23, 0.25, 0.28])
+        # Customer source stays unmodified; actual model remains beside the review views.
+        customer_image = JOB.get('customer_image')
+        if customer_image:
+            customer_path = Path(customer_image)
+            if not customer_path.is_file():
+                raise ValueError('Customer image missing: '+str(customer_path))
+            customer_ax = fig.add_axes([.51, 75/PH, .25, 90/PH])
+            customer_ax.imshow(np.asarray(Image.open(customer_path)), interpolation="none", resample=False); customer_ax.set_axis_off()
+            customer_ax.set_title('客户原图（原样）', fontsize=FS_TITLE, loc='left')
+            a3d = fig.add_axes([270/PW, 17/PH, 50/PW, 43/PH])
+        else:
+            a3d = fig.add_axes([0.51, 0.23, 0.25, 0.28])
         a3d.imshow(plt.imread(str(_iso_png))); a3d.set_axis_off()
         a3d.set_title(f'装配轴测  {OUTER_L:g}×{OUTER_W:g}×{H:g}', fontsize=_fs(9.4), loc='left')
         if _TOP4:
@@ -807,7 +818,7 @@ else:
             dimv(ha,-42.5,42.5,-15,0,0,'85')
             dimv(ha,-31,31,45,30,30,'62')
             dimh(ha,0,30,-52,-42.5,-31,'30')
-        else:
+        elif not customer_image:
             a3e = fig.add_axes([0.51, 0.06, 0.25, 0.15])
             a3e.imshow(plt.imread(str(_exp_png))); a3e.set_axis_off()
             a3e.set_title('爆炸轴测（示意）', fontsize=_fs(9.4), loc='left')
@@ -826,6 +837,7 @@ else:
             f'· 件4 盖裙{skirt:g} 03角缝候选0.2',
             *(['· 件5-8：4块25×25×0.8角部支承片'] if _TOP4 else []),
             f'· 把手：{_HDL_LINE}',
+            *([JOB['customer_image_note']] if JOB.get('customer_image_note') else []),
             f'· 盖顶孔共{len(LID_HOLES)}个（含把手及固定）',
             '· 功能孔及把手坐标见附页' if _PANEL else '· 端板功能孔见第3页',
             ('· 盖顶4×Ø4.5；支承片Ø3.3攻M4' if _TOP4 else '· 仍开盖-体M4（规则4/23）'),
