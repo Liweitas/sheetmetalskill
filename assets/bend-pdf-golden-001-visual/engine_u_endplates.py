@@ -65,6 +65,8 @@ def panel_handle_row_note(holes):
     return f'宽排{wide:g} Z{wz:g}{"在上" if wz>nz else "在下"}；窄排{narrow:g} Z{nz:g}{"在下" if wz>nz else "在上"}'
 
 _PANEL_HANDLES = [h for h in _PANEL if h.get('purpose') == 'handle']
+if JOB.get('compact_panel_review') and (_RECTS or _PANEL_HANDLES or any(h['part_id']!='U' for h in _PANEL)):
+    raise ValueError('compact_panel_review only supports U front circular holes without panel handles or rectangles')
 if _PANEL_HANDLES:
     _HDL_LINE = '两端板居中；85/62/30；朝向见端板图'
 # flange summary for this dual Φ16.5+4×Φ4.5 pattern (or generic)
@@ -112,7 +114,7 @@ FS_HEADER_TITLE = 13.0
 FS_HEADER_META = 9.4
 FS_FOOT = 9.4
 NPAGES = 5  # ASSEMBLY / U / END / LID / Checks  (may grow; never hard-cap at 4)
-if _PANEL:
+if _PANEL and not JOB.get('compact_panel_review'):
     NPAGES += 2
 
 def _fs(x):
@@ -712,8 +714,21 @@ else:
         dimh(a, 0, L, -22, 0, 0, f'{L:g} 箱体外长（已确认）', fs=_fs(9.4))
         for x in LONG_X:
             a.plot([x], [ZH], '+', color=BLU, ms=5, mew=0.8)
-        a.text(L * 0.12, Hb*.4 if _PANEL else ZH - 28, (('盖顶四角4×M4；焊接支承片见第5页' if _TOP_SUPPORTS else '盖顶四角4孔；螺钉承接结构未定') if _TOP4 else f'长边每侧 M4×{len(LONG_X)}  Z={ZH:g}（Ø3.3攻 / 盖Ø4.5）'), fontsize=_fs(9.4), color=BLU)
-        a.text(L * 0.12, 35, f'盖裙下沿 Z={H - skirt:g}；箱体顶 Z={Hb:g}；顶隙 q={q:g}', fontsize=_fs(9.4))
+        if not JOB.get('compact_panel_review'):
+            a.text(L * 0.12, Hb*.4 if _PANEL else ZH - 28, (('盖顶四角4×M4；焊接支承片见第5页' if _TOP_SUPPORTS else '盖顶四角4孔；螺钉承接结构未定') if _TOP4 else f'长边每侧 M4×{len(LONG_X)}  Z={ZH:g}（Ø3.3攻 / 盖Ø4.5）'), fontsize=_fs(9.4), color=BLU)
+        if not JOB.get('compact_panel_review'):
+            a.text(L * 0.12, 35, f'盖裙下沿 Z={H - skirt:g}；箱体顶 Z={Hb:g}；顶隙 q={q:g}', fontsize=_fs(9.4))
+        if JOB.get('compact_panel_review'):
+            front=sorted([h for h in _PANEL if h['part_id']=='U'],key=lambda h:h['point'][0])
+            for i,h in enumerate(front):
+                xx,_,zz=h['point']
+                dimh(a,-OH,xx,92-24*i,-OH,zz,f'{xx+OH:g}')
+            if front:
+                xx,_,zz=front[0]['point']
+                dimv(a,0,zz,L*.74,xx,xx,f'{zz:g}')
+                a.text(L*.58,H*.62,f'{len(front)}×Ø{front[0]["diameter"]:g}',fontsize=FS_NOTE,color=BLU)
+            for left,right in zip(front,front[1:]):
+                dimh(a,left['point'][0],right['point'][0],128,left['point'][2],right['point'][2],f'{right["point"][0]-left["point"][0]:g}')
         # --- 左/端板侧视图 right: width × height (same y/scale as front; clear header) ---
         sR = min(sF, 110 / (W + 105))
         a2 = vax(fig, 210, yF, (-50, W + 55), (-35, H + 55), sR,
@@ -879,7 +894,7 @@ else:
             f'BD={BD:.4f}；U展开宽公式 {W:g}+2×{Hb:g}−2×BD = {W+2*Hb-2*BD:.2f}',
             f'视觉：参考 S-201-1-20261031-001-v1；字号≥{MINPT}pt；拥挤则加页不缩字',
             '处理面朝外（规则31）；展开外表面朝读者',
-        ], title='U 说明（右栏）', fs=FS_BOX)
+        ] + (['展开孔表：平坯左下为原点，X / Y / Φ'] + [f'{a[0]:.3f} / {a[1]:.3f} / {a[2]:g}' for a in P['U']['flat_circles']] if JOB.get('compact_panel_review') else []), title='U 说明（右栏）', fs=FS_BOX)
         save_page(pdf, fig)
 
         # PAGE 3 — END_R (+ END_L note) alone
@@ -1018,7 +1033,7 @@ else:
                 title='K值 / 折弯扣除 / 折弯表（原生编号，非机台工序）', fs=_fs(9.4))
         save_page(pdf, fig)
 
-        if _PANEL:
+        if _PANEL and not JOB.get('compact_panel_review'):
             def circle_table(canvas, name, x, y, width, step=6.5):
                 rows = sorted(P[name]['flat_circles'], key=lambda row: (row[1], row[0], row[2]))
                 canvas.text(x, y, f'{name} CUT孔表：展开左下角为原点，全部圆孔', fontsize=FS_TITLE, color=NAVY)
