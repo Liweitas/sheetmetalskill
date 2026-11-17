@@ -1,5 +1,7 @@
 # 参数、范围与来源
 
+用户最新默认（2026-11-17）：**长宽是不含盖子的箱体外尺寸，高是含盖、不含把手的总高**。默认 `body_outer`；盖长宽与合盖最大外包单独标注，不能扣盖裙/板厚/间隙缩小箱体。裸箱体STEP核长宽，合盖STEP核总高；本条覆盖历史相反默认。用户明确内尺寸或含把手高度时按本单来源处理。
+
 源STEP事实存`step_facts`，用户目标存`requirements`，工程候选用`status=assumed`及独立来源。禁止把用户要求的材料牌号直接写成“源材质实测”，或把旧同名文件当本次附件。先核附件身份、字节数、原件SHA、单位转换与实体，再决定何处重建。没有板厚/Ri圆柱弯面不能猜Ri=0；尖角可能只是名义外观。
 
 每个业务参数是`value/unit/source/status/note`。未知`value=null,status=unknown`；不适用也null但给原因。known/measured/confirmed需来源；历史引用和工程假设不能自己升为confirmed。`source`链接provenance记录，记录真实消息时间（不可得则null）和记录时间。结构ID、列表名、schema版本不是测量参数。严格结构见[project.schema.json](project.schema.json)，不允许多余字段或把数字写成含单位字符串。

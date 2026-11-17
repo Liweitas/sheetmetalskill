@@ -42,7 +42,7 @@ def pipe_brief(brief, code):
         fail("dimensions and thickness must be finite positive numbers")
     if str(brief.get('material', '201')) != '201':
         fail('this adapter supports 201 stainless only')
-    basis = brief.get('dim_basis', 'finished_outer')
+    basis = brief.get('dim_basis', 'body_outer')
     if basis not in ('finished_outer', 'body_outer'):
         fail('dim_basis must be finished_outer or body_outer')
     ri, g = float(brief.get('Ri', .8)), float(brief.get('g', .5))

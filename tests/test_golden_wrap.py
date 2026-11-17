@@ -10,6 +10,28 @@ spec.loader.exec_module(entry)
 
 
 class GoldenWrap(unittest.TestCase):
+    def test_default_width_length_exclude_lid_height_includes_it(self):
+        brief = self.brief()
+        brief.pop('dim_basis')
+        brief.update(dimensions=dict(length=450, width=380, height=220),
+                     rect_cutouts=[], handles=dict(profile='handle-85-62-30-v1',
+                                                  cx=[115.5, 340.5], cy=193))
+        job = entry.pipe_brief(brief, 'BODY-DATUM')
+        self.assertEqual([job['L'], job['W'], job['H']], [450, 380, 220])
+        self.assertEqual(job['finished_outer_mm'], [453, 383, 220])
+        self.assertEqual(job['handles'], brief['handles'])
+
+    def test_explicit_finished_outer_remains_an_explicit_exception(self):
+        brief = self.brief()
+        brief.update(dim_basis='finished_outer',
+                     dimensions=dict(length=450, width=380, height=220),
+                     rect_cutouts=[], handles=dict(profile='handle-85-62-30-v1',
+                                                  cx=[115.5, 340.5], cy=193))
+        job = entry.pipe_brief(brief, 'EXPLICIT-FINISHED')
+        self.assertEqual([job['L'], job['W'], job['H']], [447, 377, 220])
+        self.assertEqual(job['finished_outer_mm'], [450, 380, 220])
+        self.assertEqual(job['handles']['cx'], [114, 339])
+
     def brief(self):
         return {'dimensions': {'length': 202, 'width': 192, 'height': 350},
                 'customer_requirement_text': '长20.5cm宽19.5cm高35cm；盖子上面一个把手。',
