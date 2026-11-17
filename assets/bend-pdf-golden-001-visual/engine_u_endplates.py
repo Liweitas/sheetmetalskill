@@ -111,6 +111,12 @@ if JOB.get('lid_pair_end_review'):
     _END_SUMMARY=f'{_ep}：2×Ø{_PANEL[0]["diameter"]:g}，孔心高{_PANEL[0]["point"][2]:g}；对端无孔'
     _SKIRT_NOTE=f'侧孔上缘至盖裙下沿 {H-skirt-max(h["point"][2]+h["diameter"]/2 for h in _PANEL):g} mm'
 
+if JOB.get('lid_two_circle_review'):
+    if (STRUCTURE!='u_endplates' or len(JOB.get('lid_ports') or [])!=2 or len(HANDLE_CX)!=1 or
+            _PANEL or _RECTS or len(_TOP4)!=4 or _TOP_SUPPORTS):
+        raise ValueError('lid_two_circle_review requires two lid circles, one lid handle, four lid-only fixing holes')
+    _END_SUMMARY=f'箱体无功能孔；盖顶{len(JOB["lid_ports"])}功能孔/{len(rep["handle_holes"])}把手孔/{len(_TOP4)}固定孔'
+
 Hb = H - t - q
 PW, PH = 420, 297  # A3 mm landscape via figsize
 NAVY = (0.10, 0.22, 0.45); REDC = (0.82, 0.10, 0.10); DIMC = (0.0, 0.20, 0.65)
@@ -832,9 +838,9 @@ else:
             dimh(a, 0, L, -22, 0, 0, f'{L:g} 箱体外长（已确认）', fs=_fs(9.4))
             for x in LONG_X:
                 a.plot([x], [ZH], '+', color=BLU, ms=5, mew=0.8)
-            if not JOB.get('compact_panel_review') and not JOB.get('handle_pair_review'):
+            if not JOB.get('compact_panel_review') and not JOB.get('handle_pair_review') and not JOB.get('lid_two_circle_review'):
                 a.text(L * 0.12, Hb*.4 if (_PANEL or JOB.get('handle_pair_review')) else ZH - 28, (('盖顶四角4×M4；焊接支承片见第5页' if _TOP_SUPPORTS else '盖顶四角4孔；螺钉承接结构未定') if _TOP4 else f'长边每侧 M4×{len(LONG_X)}  Z={ZH:g}（Ø3.3攻 / 盖Ø4.5）'), fontsize=_fs(9.4), color=BLU)
-            if not JOB.get('compact_panel_review') and not JOB.get('handle_pair_review'):
+            if not JOB.get('compact_panel_review') and not JOB.get('handle_pair_review') and not JOB.get('lid_two_circle_review'):
                 a.text(L * 0.12, 35, f'盖裙下沿 Z={H - skirt:g}；箱体顶 Z={Hb:g}；顶隙 q={q:g}', fontsize=_fs(9.4))
             if JOB.get('compact_panel_review'):
                 front=sorted([h for h in _PANEL if h['part_id']=='U'],key=lambda h:h['point'][0])
@@ -892,7 +898,7 @@ else:
                 a3.text(cx, HANDLE_CY + 55, (f'把手\n盖左下({cx+OH:g},{HANDLE_CY+OH:g})' if _TOP4 else f'把手\n({cx:g},{HANDLE_CY:g})'), fontsize=_fs(9.4), ha='center', color=BLU)
             for h in LID_HOLES:
                 a3.add_patch(Circle((h['x'], h['y']), h['d'] / 2, fill=False, ec=REDC, lw=0.6))
-            if not JOB.get('handle_pair_review'):
+            if not JOB.get('handle_pair_review') and not JOB.get('lid_two_circle_review'):
                 hole_labels(a3, [h for h in LID_HOLES if not (_TOP4 and h["id"].startswith("F"))])
             if _TOP4:
                 for item in _TOP4:
@@ -900,7 +906,18 @@ else:
                     a3.add_patch(Circle((xx,yy),2.25,fill=False,ec=REDC))
                 # Actual baseline/chain dimensions; all values use this order's geometry.
                 ports=sorted(JOB.get('lid_ports') or [],key=lambda h:h['y'])
-                if ports:
+                if ports and JOB.get('lid_two_circle_review'):
+                    if len(ports)!=2 or len(HANDLE_CX)!=1 or _PANEL or _RECTS or _TOP_SUPPORTS:
+                        raise ValueError('lid_two_circle_review requires two lid circles, one lid handle, and lid-only fixings')
+                    lower,upper=ports
+                    for i,port in enumerate(ports):
+                        xx,yy=port['x'],port['y']
+                        dimh(a3,-OH,xx,-12 if i==0 else W+4,-OH,yy,f'{xx+OH:g}')
+                        dimv(a3,-OH if i==0 else yy,yy if i==0 else W+OH,xx+29,xx,xx,f'{yy+OH if i==0 else W+OH-yy:g}')
+                        a3.annotate(f'P{i+1} Ø{port["d"]:g}',(xx,yy),(xx+(35 if i==0 else 90),yy+(20 if i==0 else -2)),fontsize=FS_NOTE,color=REDC,arrowprops=dict(arrowstyle='-',color=REDC,lw=.4))
+                    dimv(a3,lower['y'],upper['y'],upper['x']+59,lower['x'],upper['x'],f'Y心距{upper["y"]-lower["y"]:g}')
+                    a3.annotate(f'两孔X差{abs(upper["x"]-lower["x"]):g}',(upper['x'],upper['y']),(-30,W*.66),fontsize=FS_NOTE,color=BLU,arrowprops=dict(arrowstyle='-',color=BLU,lw=.4))
+                elif ports:
                     xx=ports[0]['x']; ys=[h['y'] for h in ports]
                     dimh(a3,-OH,xx,24,-OH,ys[0],f'{xx+OH:g}')
                     for low,high in zip([-OH]+ys,ys):
@@ -908,7 +925,7 @@ else:
                     if len(ys)>1: dimv(a3,ys[0],ys[-1],xx+65,xx,xx,f'{ys[-1]-ys[0]:g}')
                     a3.text(xx+48,ys[-1]+15,f'{len(ports)}×Ø{ports[0]["d"]:g}',fontsize=FS_NOTE,color=BLU)
                 for i,cx in enumerate(HANDLE_CX):
-                    dimh(a3,-OH,cx,(-14-20*i if JOB.get('handle_pair_review') else (-60-18*i if JOB.get('lid_rectangles') else 42+24*i)),-OH,HANDLE_CY,f'{cx+OH:g}')
+                    dimh(a3,-OH,cx,(-42 if JOB.get('lid_two_circle_review') else (-14-20*i if JOB.get('handle_pair_review') else (-60-18*i if JOB.get('lid_rectangles') else 42+24*i))),-OH,HANDLE_CY,f'{cx+OH:g}')
                     if not JOB.get('handle_pair_review'):
                         dimv(a3,-OH,HANDLE_CY,cx+70,cx,cx,f'{HANDLE_CY+OH:g}')
                 if JOB.get('handle_pair_review'):
@@ -916,7 +933,7 @@ else:
                     dimv(a3,-OH,HANDLE_CY,L+14,centers[-1],centers[-1],f'{HANDLE_CY+OH:g}')
                     for left,right in zip(centers,centers[1:]):
                         dimh(a3,left,right,W+16,HANDLE_CY,HANDLE_CY,f'心距{right-left:g}')
-                if not JOB.get('lid_rectangles') and not JOB.get('handle_pair_review'):
+                if not JOB.get('lid_rectangles') and not JOB.get('handle_pair_review') and not JOB.get('lid_two_circle_review'):
                     a3.text(L*.22,W*.9,'4×Ø6.6；宽排85/窄排62/排距30',fontsize=FS_NOTE,color=BLU)
                 for i,rect in enumerate(JOB.get('lid_rectangles') or []):
                     xx,yy=rect['center'];ww,hh=rect['size']
@@ -997,7 +1014,7 @@ else:
                 *([JOB['customer_image_note']] if JOB.get('customer_image_note') else []),
                 *([JOB['review_datum_note']] if JOB.get('review_datum_note') else []),
                 f'· 盖顶孔共{len(LID_HOLES)}个（含把手及固定）',
-                '· 功能孔及把手坐标见附页' if _PANEL else ('· 箱体无孔；L件展开见第3页' if STRUCTURE=='u_l_t7u' else '· 端板功能孔见第3页'),
+                '· 功能孔及把手坐标见附页' if _PANEL else ('· 箱体无孔；L件展开见第3页' if STRUCTURE=='u_l_t7u' else ('· 功能孔仅盖顶；端板无孔' if JOB.get('lid_two_circle_review') else '· 端板功能孔见第3页')),
                 (('· 盖顶4×Ø4.5；支承片Ø3.3攻M4' if _TOP_SUPPORTS else '· 盖顶4×Ø4.5；承接结构未定 HOLD') if _TOP4 else '· 仍开盖-体M4（规则4/23）'),
                 f'· {_SKIRT_NOTE}',
                 ('待确认', REDC),
@@ -1037,7 +1054,7 @@ else:
             f'视觉：参考 S-201-1-20261031-001-v1；字号≥{MINPT}pt；拥挤则加页不缩字',
             '处理面朝外（规则31）；展开外表面朝读者',
         ] + (['展开孔表：平坯左下为原点，X / Y / Φ'] + [f'{a[0]:.3f} / {a[1]:.3f} / {a[2]:g}' for a in P['U']['flat_circles']] if JOB.get('compact_panel_review') else []), title='U 说明（右栏）', fs=FS_BOX)
-        if JOB.get('compact_wrap_review') or JOB.get('lid_pair_end_review'):
+        if JOB.get('compact_wrap_review') or JOB.get('lid_pair_end_review') or JOB.get('lid_two_circle_review'):
             up=render_assy_iso_png(R/'PREVIEW'/f'{VER}_U_iso.png',['U'])
             ui=fig.add_axes([275/PW,45/PH,125/PW,110/PH]);ui.imshow(plt.imread(up));ui.axis('off');ui.set_title('U件实际成形轴测',fontsize=FS_TITLE,loc='left')
         save_page(pdf, fig)
@@ -1109,9 +1126,11 @@ else:
         lfx, lfy = P['LID']['flat_size']
         a = vax(fig, 15, 35, (-50, lfx + 40), (-40, lfy + 35), min(.48, 245/(lfx+90), 190/(lfy+75)), f'件{3 if STRUCTURE=="u_l_t7u" else 4} 上盖展开 {lfx:.2f}×{lfy:.2f}（外表面朝读者；双向尺寸）')
         flatdraw(a, 'LID')
-        if JOB.get('handle_pair_review') or JOB.get('lid_pair_end_review'):
+        if JOB.get('handle_pair_review') or JOB.get('lid_pair_end_review') or JOB.get('lid_two_circle_review'):
             for i,(xx,yy,dd) in enumerate(sorted(P['LID']['flat_circles']),1):
-                a.annotate(f'F{i:02}',(xx,yy),(xx+(12 if xx<lfx/2 else -12)/a.s,yy+(3 if yy<lfy/2 else -3)/a.s),fontsize=FS_NOTE,color=BLU,ha='left' if xx<lfx/2 else 'right',arrowprops=dict(arrowstyle='-',color=BLU,lw=.35))
+                delta=(12 if xx<lfx/2 else -12)
+                if JOB.get('lid_two_circle_review') and abs(dd-6.6)<1e-6:delta=-delta
+                a.annotate(f'F{i:02}',(xx,yy),(xx+delta/a.s,yy+(3 if yy<lfy/2 else -3)/a.s),fontsize=FS_NOTE,color=BLU,ha='left' if delta>0 else 'right',arrowprops=dict(arrowstyle='-',color=BLU,lw=.35))
         BL = bidir(rep, 'LID')
         for i, sg in enumerate(BL.get('X_seg', [])):
             dimh(a, sg[0], sg[1], lfy + 6 + (i % 2) * 5, lfy + 1, lfy + 1, f'{sg[2]:.2f}', fs=_fs(9.4))
@@ -1119,9 +1138,9 @@ else:
             dimv(a, sg[0], sg[1], -6 - (i % 2) * 7, -1, -1, f'{sg[2]:.2f}', fs=_fs(9.4))
         dimh(a, 0, lfx, -22, 0, 0, f'{lfx:.2f}'); dimv(a, 0, lfy, lfx + 12, lfx, lfx, f'{lfy:.2f}')
         bilateral_dims(a, BL)
-        if JOB.get('compact_wrap_review') or JOB.get('lid_pair_end_review'):
+        if JOB.get('compact_wrap_review') or JOB.get('lid_pair_end_review') or JOB.get('lid_two_circle_review'):
             lp=render_assy_iso_png(R/'PREVIEW'/f'{VER}_LID_iso.png',['LID'])
-            li=fig.add_axes([20/PW,175/PH,160/PW,75/PH]);li.imshow(plt.imread(lp));li.axis('off');li.set_title('盖件实际成形轴测',fontsize=FS_TITLE,loc='left')
+            li=fig.add_axes([20/PW,(216 if JOB.get('lid_two_circle_review') else 175)/PH,160/PW,(34 if JOB.get('lid_two_circle_review') else 75)/PH]);li.imshow(plt.imread(lp));li.axis('off');li.set_title('盖件实际成形轴测',fontsize=FS_TITLE,loc='left')
         # formed lid top sketch
         a2 = vax(fig, 280, 180, (-20, L + 20), (-20, W + 20), min(.25, 120/(L+40), 65/(W+40)), ('盖顶俯视（本单成形坐标）' if _TOP4 else '盖顶俯视（成形坐标，孔位待确认）'))
         a2.add_patch(Rectangle((-g, -g), L + 2 * g, W + 2 * g, fill=False, ec=GRN, lw=0.9))
@@ -1135,12 +1154,12 @@ else:
         hole_labels(a2, [h for h in LID_HOLES if not (_TOP4 and h['id'].startswith('F'))])
         for rr in JOB.get('lid_rectangles') or []:
             xx,yy=rr['center'];ww,hh=rr['size'];a2.add_patch(Rectangle((xx-ww/2,yy-hh/2),ww,hh,fill=False,ec=REDC));a2.text(xx,yy,rr['id'],fontsize=FS_NOTE,color=REDC,ha='center')
-        if JOB.get('handle_pair_review') or JOB.get('lid_pair_end_review'):
+        if JOB.get('handle_pair_review') or JOB.get('lid_pair_end_review') or JOB.get('lid_two_circle_review'):
             box(ax,280,25,125,145,[
                 '展开孔心：平坯左/右、下/上；mm',
             ]+[f'F{i:02} Ø{dd:g} X{xx:.2f}/{lfx-xx:.2f} Y{yy:.2f}/{lfy-yy:.2f}' for i,(xx,yy,dd) in enumerate(sorted(P['LID']['flat_circles']),1)]+[
                 '各孔F号与本页展开对应；成形位置见首页。',
-                '无功能孔；8把手孔＋4角部固定孔。',
+                f'功能孔{len(JOB.get("lid_ports") or [])}；把手孔{len(rep.get("handle_holes") or [])}；角部孔{len(_TOP4)}。',
                 '盖顶螺钉承接结构未定HOLD。',
                 '外表面朝读者，展开未镜像。',
             ],title='实际CUT全部圆孔双向尺寸',fs=_fs(9.4),ec=REDC)
