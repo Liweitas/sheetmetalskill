@@ -807,8 +807,8 @@ else:
                 xx,yy=rect['center'];ww,hh=rect['size']
                 dimh(a3,xx-ww/2,xx+ww/2,yy+hh/2+12,yy+hh/2,yy+hh/2,f'{ww:g}')
                 dimv(a3,yy-hh/2,yy+hh/2,xx-ww/2-12,xx-ww/2,xx-ww/2,f'{hh:g}')
-                dimh(a3,0,xx,-18-i*18,0,yy,f'X{xx:g}')
-                dimv(a3,0,yy,xx+ww/2+12+i*18,xx,xx,f'Y{yy:g}')
+                dimh(a3,-OH,xx,-18-i*18,-OH,yy,f'{xx+OH:g}')
+                dimv(a3,-OH,yy,xx+ww/2+12+i*18,xx,xx,f'{yy+OH:g}')
                 a3.text(xx,yy,rect['id'],fontsize=FS_NOTE,color=REDC,ha='center')
             rr=JOB.get('lid_rectangles') or []
             if len(rr)==2:
