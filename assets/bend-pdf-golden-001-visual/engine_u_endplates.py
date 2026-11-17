@@ -87,6 +87,10 @@ if _PANEL:
 _SIDE_TITLE = (f'侧视图 {EF_PART}（端板功能孔；ASSEMBLY 沿X投影）' if _END_HOLES else f'侧视图（外封端板侧）')
 _TOP_CAPTION = f'盖顶功能孔 {len(LID_HOLES)} 个，坐标/孔径见第4页孔表'
 _TOP_EXTRA = '孔位见第4页；盖-体固定 M4'
+if _TOP4:
+    _END_SUMMARY = 'END_L/END_R均无孔；M4固定在盖顶及角部支承片'
+    _TOP_EXTRA = '盖顶四角M4；孔位直接标注'
+
 
 Hb = H - t - q
 PW, PH = 420, 297  # A3 mm landscape via figsize
@@ -921,7 +925,7 @@ else:
         dimh(a, 0, lfx, -22, 0, 0, f'{lfx:.2f}'); dimv(a, 0, lfy, lfx + 12, lfx, lfx, f'{lfy:.2f}')
         bilateral_dims(a, BL)
         # formed lid top sketch
-        a2 = vax(fig, 280, 180, (-20, L + 20), (-20, W + 20), min(.25, 120/(L+40), 65/(W+40)), '盖顶俯视（成形坐标，孔位待确认）')
+        a2 = vax(fig, 280, 180, (-20, L + 20), (-20, W + 20), min(.25, 120/(L+40), 65/(W+40)), ('盖顶俯视（本单JSON坐标）' if _TOP4 else '盖顶俯视（成形坐标，孔位待确认）'))
         a2.add_patch(Rectangle((-g, -g), L + 2 * g, W + 2 * g, fill=False, ec=GRN, lw=0.9))
         a2.add_patch(Rectangle((0, 0), L, W, fill=False, ec='0.5', lw=0.4, ls='--'))
         for cx in (HANDLE_CX if HANDLE_MOUNT not in ('END_L+END_R','END_R','END_L') else []):
@@ -972,7 +976,7 @@ else:
             '1.0 板攻 M4 约 1 扣，压铆或拉铆未定',
             '确认稿，production_release=false，非生产放行',
         ])
-        box(ax, 270, 40, 140, 220, [f'{i+1}. {p}' for i, p in enumerate(pending)] + ([('折弯定位与建议顺序（先长后短）', NAVY)] + [f'{part} {row["id"]}：90° Ri{ri:g}；{row["axis"]}距A{row["a"]}/距B{row["b"]}；{row["seg_prev"]}；{row["seg_next"]}' for part in ('U','LID') for row in table_rows(bidir(rep,part),part)] + ['折弯方向：展开外表面朝读者，翼边背向读者。顺序随模具和夹持空间首件确认。'] if _TOP4 else []), title='工艺 / 折弯定位', fs=_fs(9.4), ec=REDC)
+        box(ax, 270, 40, 140, 220, [f'{i+1}. {p}' for i, p in enumerate(pending)] + ([('折弯定位与建议顺序（先长后短）', NAVY)] + [f'{part} {row["id"]}：90° Ri{ri:g}；{row["axis"]}距A{row["a"]}/距B{row["b"]}；{row["seg_prev"]}；{row["seg_next"]}' for part in ('U','LID') for row in sorted(table_rows(bidir(rep,part),part), key=lambda row: (-next(math.dist(*b['flat_line_mm']) for b in P[part]['bend_records'] if b['id']==row['id']),row['id']))] + ['折弯方向：展开外表面朝读者，翼边背向读者。顺序随模具和夹持空间首件确认。'] if _TOP4 else []), title='工艺 / 折弯定位', fs=_fs(9.4), ec=REDC)
         if _TOP4:
             ta=vax(fig,18,42,(-10,125),(-12,65),1.1,'角部焊接支承片：25×25×0.8；4件；零折')
             for i,item in enumerate(_TOP4):
