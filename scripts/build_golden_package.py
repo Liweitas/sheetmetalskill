@@ -8,6 +8,7 @@ import csv, hashlib, json, math, os, shutil, subprocess, sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
+if str(HERE) not in sys.path: sys.path.insert(0,str(HERE))
 SK = HERE.parent
 PIPE = SK / "pipelines" / "u_endplates"
 GOLD = SK / "assets" / "bend-pdf-golden-001-visual" / "engine_u_endplates.py"
@@ -61,14 +62,21 @@ def pipe_brief(brief, code):
     k = float(brief.get('K', ((2*(ri+t)-bd)/(math.pi/2)-ri)/t))
     if not math.isfinite(k) or not 0 <= k <= 1:
         fail('K must be between 0 and 1')
+    from plan_lid_fixings import plan_side_fixings
+    try:
+        auto_fixings=plan_side_fixings(L,W,overhang=offset,edge_inset=brief.get('fixing_edge_inset',12.0),max_pitch=brief.get('fixing_max_pitch',200.0))
+    except ValueError as ex:
+        fail(str(ex))
     fixings = {}
-    for key, limit, default in (("long_x", L, [20, L / 2, L - 20]),
-                                ("short_y", W, [20, W / 2, W - 20])):
+    for key, limit, default in (("long_x", L, auto_fixings["long_x"]),
+                                ("short_y", W, auto_fixings["short_y"])):
         values = brief.get(key, default)
         if (not isinstance(values, list) or
                 any(type(v) not in (int, float) or not math.isfinite(v) or not 0 < v < limit for v in values) or
                 len(set(values)) != len(values)):
             fail(key + " must contain unique coordinates inside the body")
+        if any(b-a>auto_fixings["max_pitch_rule_mm"]+1e-9 for a,b in zip(sorted(values),sorted(values)[1:])):
+            fail(key+" screw spacing exceeds selected maximum; replan side connections")
         fixings[key] = values
     quantity = brief.get("quantity", 1)
     if type(quantity) is not int or quantity < 1:
@@ -203,6 +211,7 @@ def pipe_brief(brief, code):
         "corner_gap": float(brief.get("corner_gap", 0.2)),
         "corner_gap_source": "candidate",
         **fixings,
+        "fixing_plan": {**auto_fixings, **fixings, "connection_count":2*sum(len(v) for v in fixings.values())},
         "quantity": quantity,
         "confirm": brief.get("confirm") or {},
         "handles": handles,

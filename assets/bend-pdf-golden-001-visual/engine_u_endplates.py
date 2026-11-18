@@ -54,6 +54,9 @@ _HDL_LINE = (('两端板把手握把朝上' if HANDLE_MOUNT == 'END_L+END_R' els
 _PANEL = JOB.get('panel_holes') or []
 _RECTS = JOB.get('rect_cutouts') or []
 _TOP4 = rep.get('top_fixings') or []
+_BATTERY_SIDE=bool(JOB.get('battery_side_connection_review'))
+if _BATTERY_SIDE and (not JOB.get('battery_lid_region_review') or _TOP4 or len(rep.get('holes') or [])!=2*(len(LONG_X)+len(SHORT_Y))):
+    raise ValueError('battery side connection adapter requires zero roof corner holes and actual side connections matching the planned rows')
 _TOP_SUPPORTS = bool(_TOP4) and all('TAB'+str(i+1) in P for i in range(len(_TOP4)))
 
 def fixing_edge_coordinates(fixings, offset):
@@ -618,8 +621,8 @@ def flatdraw(ax, name, show_holes=True):
         mx, my = (x1+x2)/2, (y1+y2)/2
         dx = (3 if mx < fx/2 else -6)/ax.s if abs(x1-x2) < 1e-4 else 0
         dy = (3 if my < fy/2 else -6)/ax.s if abs(y1-y2) < 1e-4 else 0
-        label=(bend['id']+f' 背向读者90° Ri{ri:g}') if _TOP4 else bend['id']
-        ax.text(mx+dx, my+dy, label, fontsize=FS_DIM, color=REDC, rotation=90 if _TOP4 and abs(x1-x2)<1e-4 else 0, ha='center' if _TOP4 else 'left', va='center' if _TOP4 else 'baseline')
+        label=(bend['id']+f' 背向读者90° Ri{ri:g}') if (_TOP4 or _BATTERY_SIDE) else bend['id']
+        ax.text(mx+dx, my+dy, label, fontsize=FS_DIM, color=REDC, rotation=90 if (_TOP4 or _BATTERY_SIDE) and abs(x1-x2)<1e-4 else 0, ha='center' if (_TOP4 or _BATTERY_SIDE) else 'left', va='center' if (_TOP4 or _BATTERY_SIDE) else 'baseline')
     if show_holes:
         for c in P[name].get('flat_circles', []):
             # [x,y,d] or [x,y,r]?
@@ -831,14 +834,15 @@ def draw_dual_end_parts(pdf):
 
 def battery_lid_edge_items():
     if (STRUCTURE!='u_endplates' or HANDLE_CX or _PANEL or _RECTS or len(JOB.get('lid_ports') or [])!=7 or
-            len(JOB.get('lid_rectangles') or [])!=2 or len(_TOP4)!=4 or _TOP_SUPPORTS):
-        raise ValueError('battery_lid_edge_review requires seven roof circles, two roof rectangles, no handle, four lid-only fixing holes')
+            len(JOB.get('lid_rectangles') or [])!=2 or len(_TOP4)!=(0 if _BATTERY_SIDE else 4) or _TOP_SUPPORTS):
+        raise ValueError('battery_lid_edge_review requires seven roof circles, two roof rectangles, no handle, verified side or top fixing coordinates')
     datum=rep['lid_opening_region_origin'] if JOB.get('battery_lid_region_review') else rep['lid_edge_datum'];items=[]
     for i,h in enumerate(JOB['lid_ports'],1):items.append(dict(id='C'+str(i),type='circle',x=h['x']-datum[0],y=h['y']-datum[1],d=h['d']))
     for h in JOB['lid_rectangles']:items.append(dict(id=h['id'],type='rect',x=h['center'][0]-datum[0],y=h['center'][1]-datum[1],w=h['size'][0],h=h['size'][1]))
     if sorted(h['d'] for h in items if h['type']=='circle')!=[11,11,16,20,20,20,22]:
         raise ValueError('battery_lid_edge_review circle families do not match the verified layout')
     return datum,items
+
 
 
 def draw_battery_lid_edge_overview():
@@ -849,10 +853,16 @@ def draw_battery_lid_edge_overview():
     ia=fig.add_axes([12/PW,138/PH,155/PW,107/PH]);ia.imshow(np.asarray(Image.open(JOB['customer_image'])),interpolation='none',resample=False);ia.axis('off');ia.set_title('客户原图（原样）',fontsize=FS_TITLE,loc='left')
     ax.text(12,129,f'箱体{L:g}×{W:g}×含盖高{H:g}；201/t{t:g}；无把手',fontsize=FS_NOTE,color=BLU)
     if region:ax.text(12,29,f'源JSON盒高不含盖；本单制造含盖高{H:g}沿用约定',fontsize=FS_NOTE,color=BLU)
-    ax.text(12,22,'HOLD：四角螺钉承接结构未设计；Ri/K待首件',fontsize=FS_NOTE,color=REDC)
+    ax.text(12,22,(f'盖裙侧面{len(rep["holes"])}处连接；1mm板攻M4及Ri/K待首件' if _BATTERY_SIDE else 'HOLD：四角螺钉承接结构未设计；Ri/K待首件'),fontsize=FS_NOTE,color=REDC)
     for name,px,xx,title,fn in [('front',12,L,'正视：长不含盖',lambda u,v:(v,-u)),('right',112,W,'右视：宽不含盖',lambda u,v:(-v,u))]:
         ea=vax(fig,px,37,(-40,xx+40),(-40,H+45),.22,title)
         view(ea,'ASSEMBLY',name,fn,hidden=False);dimh(ea,0,xx,-23,0,0,f'{xx:g} 箱体');dimv(ea,0,H,-25,0,0,f'{H:g} 含盖')
+        if _BATTERY_SIDE and name=='front':
+            for lane,x in enumerate(LONG_X):dimh(ea,0,x,100-25*lane,0,ZH,f'{x:g}')
+
+            for x0,x1 in zip(LONG_X,LONG_X[1:]):dimh(ea,x0,x1,25,ZH,ZH,f'{x1-x0:g}')
+            dimv(ea,0,ZH,-45,LONG_X[0],LONG_X[0],f'{ZH:g} 孔高')
+            ea.text(L/2,175,f'盖Ø4.5 / 体Ø3.3攻M4\n前后各{len(LONG_X)}处同轴连接',fontsize=FS_NOTE,color=REDC,ha='center')
     ax.text(195,252,(f'孔心X/Y从可开孔区O量；O世界坐标{datum[0]:g}/{datum[1]:g}' if region else '孔心X/Y＝距实际盖左/下；不再加3mm或盖外伸'),fontsize=FS_NOTE,color=REDC)
     ax.text(195,245,(f'实际盖边距＝图示X/Y＋{-ex:g}；盖外{cl:g}×{cw:g}' if region else f'盖外{cl:g}×{cw:g}另列；箱体{L:g}×{W:g}不含盖'),fontsize=FS_NOTE,color=BLU)
     a=vax(fig,195,45,(-85,cl+75),(-100,cw+110),.42,('盖顶俯视：O为可开孔区左下；绿色框为源可开孔区' if region else '盖顶俯视：尺寸原点O为盖板实际左下外边'))
@@ -888,11 +898,13 @@ def draw_battery_lid_edge_overview():
         oa.plot([0,0,20],[20,0,0],color='k',lw=.7);oa.plot(-ex,-ey,'+',color=GRN,ms=5)
         dimh(oa,0,-ex,20,0,-ey,f'{-ex:g}');dimv(oa,0,-ey,20,-ex,0,f'{-ey:g}')
         oa.text(-ex+2,-ey+2,'O',fontsize=FS_NOTE,color=GRN)
-    inset=_FIX_X[0];ca=vax(fig,350,232,(-4,28),(-4,28),.60,'角孔')
-    ca.plot([0,0,25],[25,0,0],color='k',lw=.7);ca.add_patch(Circle((inset,inset),2.25,fill=False,ec=REDC));dimh(ca,0,inset,24,0,inset,f'{inset:g}');dimv(ca,0,inset,24,inset,0,f'{inset:g}')
-    ax.text(295,229,f'4×Ø4.5（加工候选），盖边距{inset:g}',fontsize=FS_NOTE,color=BLU)
+    if not _BATTERY_SIDE:
+        inset=_FIX_X[0];ca=vax(fig,350,232,(-4,28),(-4,28),.60,'角孔')
+        ca.plot([0,0,25],[25,0,0],color='k',lw=.7);ca.add_patch(Circle((inset,inset),2.25,fill=False,ec=REDC));dimh(ca,0,inset,24,0,inset,f'{inset:g}');dimv(ca,0,inset,24,inset,0,f'{inset:g}')
+        ax.text(295,229,f'4×Ø4.5（加工候选），盖边距{inset:g}',fontsize=FS_NOTE,color=BLU)
     path=render_assy_iso_png(R/'PREVIEW'/f'{VER}_ASSEMBLY_iso.png',list(P));render_assy_iso_png(R/'PREVIEW'/f'{VER}_EXPLODED_iso.png',list(P),exploded=True)
     return fig
+
 
 
 
@@ -1300,8 +1312,8 @@ else:
             dimh(aL, 0, efxL, -12, 0, 0, f'{efxL:.2f}'); dimv(aL, 0, efyL, efxL + 12, efxL, efxL, f'{efyL:.2f}')
             box(ax, 250, 40, 155, 100, [
                 f'端板：零折平板，外轮廓={W:g}×{Hb:g}，底角R{ro:g}与U外圆同心',
-                ('本单两端板均无孔，零折' if _TOP4 else ('两端板把手居中；坐标及孔表见附页' if _PANEL_HANDLES else 'END_R：功能孔见左图；END_L：通常仅M4（以本单为准）')),
-                (('支承片Φ3.3攻M4；盖顶Φ4.5，见首页与第5页' if _TOP_SUPPORTS else '仅盖顶Φ4.5固定孔；螺钉承接结构未定') if _TOP4 else '仍开盖-体 M4（规则23）：端板短边 Y 上攻丝 Ø3.3'),
+                ('本单两端板均无孔，零折' if (_TOP4 or _BATTERY_SIDE) else ('两端板把手居中；坐标及孔表见附页' if _PANEL_HANDLES else 'END_R：功能孔见左图；END_L：通常仅M4（以本单为准）')),
+                ('连接孔在前后长侧壁，不在端板' if _BATTERY_SIDE else (('支承片Φ3.3攻M4；盖顶Φ4.5，见首页与第5页' if _TOP_SUPPORTS else '仅盖顶Φ4.5固定孔；螺钉承接结构未定') if _TOP4 else '仍开盖-体 M4（规则23）：端板短边 Y 上攻丝 Ø3.3')),
                 '规则31：处理面朝外；DXF与PDF同手性',
                 'NEST：端板可旋转90°塞进单张2440×1220；单件CUT未旋转',
             ], title='端板说明（右栏）', fs=FS_BOX)
@@ -1317,7 +1329,11 @@ else:
             for i,(xx,yy,dd) in enumerate(sorted(P['LID']['flat_circles']),1):
                 delta=(12 if xx<lfx/2 else -12)
                 if (JOB.get('lid_two_circle_review') or JOB.get('dual_end_interfaces_review') or (JOB.get('battery_lid_edge_review') or JOB.get('battery_lid_region_review'))) and abs(dd-6.6)<1e-6:delta=-delta
-                a.annotate(f'F{i:02}',(xx,yy),(xx+delta/a.s,yy+(3 if yy<lfy/2 else -3)/a.s),fontsize=FS_NOTE,color=BLU,ha='left' if delta>0 else 'right',arrowprops=dict(arrowstyle='-',color=BLU,lw=.35))
+                if _BATTERY_SIDE and abs(dd-4.5)<1e-6:
+                    delta=8 if xx<lfx/2 else -8
+                    a.annotate(f'F{i:02}',(xx,yy),(xx+delta/a.s,yy),fontsize=FS_NOTE,color=BLU,va='center',ha='left' if delta>0 else 'right',arrowprops=dict(arrowstyle='-',color=BLU,lw=.35))
+                else:
+                    a.annotate(f'F{i:02}',(xx,yy),(xx+delta/a.s,yy+(3 if yy<lfy/2 else -3)/a.s),fontsize=FS_NOTE,color=BLU,ha='left' if delta>0 else 'right',arrowprops=dict(arrowstyle='-',color=BLU,lw=.35))
         if (JOB.get('battery_lid_edge_review') or JOB.get('battery_lid_region_review')):
             for i,(x0,y0,x1,y1) in enumerate(sorted(P['LID'].get('flat_rectangles') or []),1):
                 a.text((x0+x1)/2,(y0+y1)/2,f'R{i}',fontsize=FS_NOTE,color=BLU,ha='center',va='center')
@@ -1332,7 +1348,7 @@ else:
             lp=render_assy_iso_png(R/'PREVIEW'/f'{VER}_LID_iso.png',['LID'])
             li=fig.add_axes([20/PW,(216 if (JOB.get('lid_two_circle_review') or JOB.get('dual_end_interfaces_review') or (JOB.get('battery_lid_edge_review') or JOB.get('battery_lid_region_review'))) else 175)/PH,160/PW,(34 if (JOB.get('lid_two_circle_review') or JOB.get('dual_end_interfaces_review') or (JOB.get('battery_lid_edge_review') or JOB.get('battery_lid_region_review'))) else 75)/PH]);li.imshow(plt.imread(lp));li.axis('off');li.set_title('盖件实际成形轴测',fontsize=FS_TITLE,loc='left')
         # formed lid top sketch
-        a2 = vax(fig, 280, 180, (-20, L + 20), (-20, W + 20), min(.25, 120/(L+40), 65/(W+40)), ('盖顶俯视（本单成形坐标）' if _TOP4 else '盖顶俯视（成形坐标，孔位待确认）'))
+        a2 = vax(fig, 280, 180, (-20, L + 20), (-20, W + 20), min(.25, 120/(L+40), 65/(W+40)), ('盖顶俯视（本单成形坐标）' if (_TOP4 or _BATTERY_SIDE) else '盖顶俯视（成形坐标，孔位待确认）'))
         a2.add_patch(Rectangle((-g, -g), L + 2 * g, W + 2 * g, fill=False, ec=GRN, lw=0.9))
         a2.add_patch(Rectangle((0, 0), L, W, fill=False, ec='0.5', lw=0.4, ls='--'))
         for cx in (HANDLE_CX if HANDLE_MOUNT not in ('END_L+END_R','END_R','END_L') else []):
@@ -1351,7 +1367,7 @@ else:
             ]+[f'R{i} {x1-x0:g}×{y1-y0:g} 心X{(x0+x1)/2:.2f}/{lfx-(x0+x1)/2:.2f} Y{(y0+y1)/2:.2f}/{lfy-(y0+y1)/2:.2f}' for i,(x0,y0,x1,y1) in enumerate(sorted(P['LID'].get('flat_rectangles') or []),1)]+[
                 '各孔F号与本页展开对应；成形位置见首页。',
                 f'功能圆孔{len(JOB.get("lid_ports") or [])}；方口{len(JOB.get("lid_rectangles") or [])}；把手孔{len(rep.get("handle_holes") or [])}；角部孔{len(_TOP4)}。',
-                '盖顶螺钉承接结构未定HOLD。',
+                (f'{len(rep["holes"])}个Ø4.5位于盖裙侧面，非盖顶角孔。' if _BATTERY_SIDE else '盖顶螺钉承接结构未定HOLD。'),
                 '外表面朝读者，展开未镜像。',
             ],title='实际CUT全部孔双向尺寸',fs=_fs(9.4),ec=REDC)
         else:
@@ -1382,7 +1398,7 @@ else:
         box(ax, 12, 150, 250, 110, [
             ('【计算检查】CAD，非实物；native03结果见本次报告', REDC),
             f'· 模型：箱体{L:g}×{W:g}×{Hb:g}；盖约{L+2*(g+t):g}×{W+2*(g+t):g}×{skirt:g}；总高{H:g}',
-            ((f'· 盖顶/支承片 M4孔{len(_TOP4)}对；同轴见实际STEP回读报告' if _TOP_SUPPORTS else '· 仅盖顶四角孔已建模；螺钉承接结构尚未设计') if _TOP4 else f'· M4孔盖↔箱体 {len(rep["holes"])}/{len(rep["holes"])} 同轴 {"通过" if coax else "见报告"}'),
+            (f'· 盖裙与体侧壁{len(rep["holes"])}处M4连接；顶面无额外角孔' if _BATTERY_SIDE else ((f'· 盖顶/支承片 M4孔{len(_TOP4)}对；同轴见实际STEP回读报告' if _TOP_SUPPORTS else '· 仅盖顶四角孔已建模；螺钉承接结构尚未设计') if _TOP4 else f'· M4孔盖↔箱体 {len(rep["holes"])}/{len(rep["holes"])} 同轴 {"通过" if coax else "见报告"}')),
             (f'· 端板把手孔{len(_PANEL_HANDLES)}；STEP/DXF回读见cad_verification' if _PANEL_HANDLES else (f'· 把手孔 {len(rep.get("handle_holes") or [])} 通透核验、85/62/30、镜像 {"通过" if hok else "见报告"}' if HAS_HANDLES else '· 不要把手，无把手孔')),
             f'· {_END_SUMMARY}；{_SKIRT_NOTE}',
             f'· DXF CUT/BEND/NEST 门禁：{"通过" if allpass else "见 dxf_checks"}',
