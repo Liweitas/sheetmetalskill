@@ -43,8 +43,8 @@ def pipe_brief(brief, code):
     if str(brief.get('material', '201')) != '201':
         fail('this adapter supports 201 stainless only')
     basis = brief.get('dim_basis', 'body_outer')
-    if basis not in ('finished_outer', 'body_outer'):
-        fail('dim_basis must be finished_outer or body_outer')
+    if basis != 'body_outer':
+        fail('长宽永远为不含盖子的箱体外尺寸；dim_basis必须为body_outer，历史含盖稿需重建')
     ri, g = float(brief.get('Ri', .8)), float(brief.get('g', .5))
     if not all(math.isfinite(v) and v >= 0 for v in (ri, g)) or ri == 0:
         fail('Ri must be positive and g nonnegative')
@@ -140,8 +140,8 @@ def pipe_brief(brief, code):
                 abs(sum(p[0] for p in pts)/4-(H-t-brief.get('q', .2))/2)>1e-6):
             fail('panel handle must be centered 85/62/30, wide row up or down, 4x6.6')
     for h in rects:
-        if h.get('part_id') != 'U':
-            fail('rectangular openings currently require the U front face')
+        if h.get('part_id') not in ('U','END_L','END_R'):
+            fail('rectangular openings require a supported U or external endplate face')
         size, radius = h.get('size_xy'), h.get('corner_radius', 0)
         if (not isinstance(size, list) or len(size) != 2 or
                 any(type(v) not in (int, float) or not math.isfinite(v) or v <= 0 for v in size) or

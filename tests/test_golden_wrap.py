@@ -21,16 +21,34 @@ class GoldenWrap(unittest.TestCase):
         self.assertEqual(job['finished_outer_mm'], [453, 383, 220])
         self.assertEqual(job['handles'], brief['handles'])
 
-    def test_explicit_finished_outer_remains_an_explicit_exception(self):
+    def test_finished_outer_is_rejected_even_when_explicit(self):
         brief = self.brief()
         brief.update(dim_basis='finished_outer',
                      dimensions=dict(length=450, width=380, height=220),
                      rect_cutouts=[], handles=dict(profile='handle-85-62-30-v1',
                                                   cx=[115.5, 340.5], cy=193))
-        job = entry.pipe_brief(brief, 'EXPLICIT-FINISHED')
-        self.assertEqual([job['L'], job['W'], job['H']], [447, 377, 220])
-        self.assertEqual(job['finished_outer_mm'], [450, 380, 220])
-        self.assertEqual(job['handles']['cx'], [114, 339])
+        with self.assertRaises(SystemExit):
+            entry.pipe_brief(brief, 'EXPLICIT-FINISHED')
+
+    def test_body_length_width_do_not_shrink_with_lid_overhang(self):
+        for thickness in (.8, 1, 1.2):
+            for clearance in (.5, 1):
+                brief = self.brief() | dict(dimensions=dict(length=430,width=245,height=170),
+                    thickness=thickness,g=clearance,rect_cutouts=[],
+                    handles=dict(profile='handle-85-62-30-v1',cx=[215],cy=122.5))
+                job=entry.pipe_brief(brief,'FIXED-BODY')
+                self.assertEqual([job['L'],job['W'],job['H']],[430,245,170])
+                self.assertEqual(job['finished_outer_mm'],
+                    [430+2*(thickness+clearance),245+2*(thickness+clearance),170])
+
+    def test_external_end_rectangle_stays_on_declared_outer_face(self):
+        brief=self.brief() | dict(dimensions=dict(length=430,width=245,height=170),
+            handles=dict(profile='handle-85-62-30-v1',cx=[215],cy=122.5),
+            rect_cutouts=[dict(id='R1',part_id='END_R',center=[430,53,145],
+                axis=[1,0,0],size_xy=[26.5,18])])
+        self.assertEqual(entry.pipe_brief(brief,'RIGHT-END')['rect_cutouts'],brief['rect_cutouts'])
+        brief['rect_cutouts'][0]['center'][0]=429
+        with self.assertRaises(SystemExit):entry.pipe_brief(brief,'WRONG-FACE')
 
     def brief(self):
         return {'dimensions': {'length': 202, 'width': 192, 'height': 350},

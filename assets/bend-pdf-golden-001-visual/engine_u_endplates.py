@@ -117,6 +117,10 @@ if JOB.get('lid_two_circle_review'):
         raise ValueError('lid_two_circle_review requires two lid circles, one lid handle, four lid-only fixing holes')
     _END_SUMMARY=f'箱体无功能孔；盖顶{len(JOB["lid_ports"])}功能孔/{len(rep["handle_holes"])}把手孔/{len(_TOP4)}固定孔'
 
+if JOB.get('dual_end_interfaces_review'):
+    _END_SUMMARY='左端6圆孔；右端4圆孔＋2方口；无盖裙固定孔'
+    _SKIRT_NOTE=f'右方口上缘至盖裙 {H-skirt-max(h["center"][2]+h["size_xy"][1]/2 for h in _RECTS):g} mm；首件待核'
+
 Hb = H - t - q
 PW, PH = 420, 297  # A3 mm landscape via figsize
 NAVY = (0.10, 0.22, 0.45); REDC = (0.82, 0.10, 0.10); DIMC = (0.0, 0.20, 0.65)
@@ -135,7 +139,7 @@ FS_HEADER_TITLE = 13.0
 FS_HEADER_META = 9.4
 FS_FOOT = 9.4
 NPAGES = 5  # ASSEMBLY / U / END / LID / Checks  (may grow; never hard-cap at 4)
-if _PANEL and not JOB.get('compact_panel_review') and not JOB.get('lid_pair_end_review'):
+if _PANEL and not JOB.get('dual_end_interfaces_review') and not JOB.get('compact_panel_review') and not JOB.get('lid_pair_end_review'):
     NPAGES += 2
 
 def _fs(x):
@@ -715,6 +719,107 @@ def draw_lid_pair_end_parts(pdf):
     save_page(pdf,fig)
 
 
+def check_dual_end_interfaces():
+    cc_left=[h for h in _PANEL if h['part_id']=='END_L']
+    cc_right=[h for h in _PANEL if h['part_id']=='END_R']
+    zl=sorted({h['point'][2] for h in cc_left})
+    if (STRUCTURE!='u_endplates' or len(_RECTS)!=2 or any(r['part_id']!='END_R' or r['size_xy']!=[26.5,18] for r in _RECTS) or
+            len(cc_right)!=4 or any(abs(h['diameter']-4.2)>1e-6 for h in cc_right) or len(cc_left)!=6 or
+            len({h['point'][1] for h in cc_left})!=2 or len(zl)!=3 or
+            len({h['point'][2] for h in cc_right}|{r['center'][2] for r in _RECTS})!=1 or
+            len(HANDLE_CX)!=1 or (JOB.get('handles') or {}).get('rotations')!=[270] or
+            len(_TOP4)!=4 or _TOP_SUPPORTS or JOB.get('lid_ports')):
+        raise ValueError('dual_end_interfaces_review requires right two26.5x18/four4.2, left two columns/three rows, one270 lid handle and four top fixings')
+    expected=[[4.5,4.5],[12.5,12.5],[4.2,4.5]]
+    if any(sorted(h['diameter'] for h in cc_left if h['point'][2]==z)!=ds for z,ds in zip(zl,expected)):
+        raise ValueError('dual_end_interfaces_review left diameter rows do not match the verified pattern')
+
+
+def dual_end_features(part):
+    local=lambda yy:W-yy if part=='END_L' else yy
+    cc=sorted((local(h['point'][1]),h['point'][2],h['diameter']) for h in _PANEL if h['part_id']==part)
+    rr=sorted((local(h['center'][1]),h['center'][2],*h['size_xy']) for h in _RECTS if h['part_id']==part)
+    return cc,rr
+
+
+def draw_dual_end_overview():
+    check_dual_end_interfaces()
+    fig=plt.figure(figsize=(PW/25.4,PH/25.4),dpi=120);ax=fig.add_axes([0,0,1,1]);header(ax,1);foot(ax)
+    ax.text(12,257,f'订单{JOB.get("order_id","")} / {VER.split("-")[-2]} / {MATERIAL_CN} t{t:g} / {JOB.get("quantity",1)}套',fontsize=FS_NOTE,color=NAVY)
+    ia=fig.add_axes([12/PW,161/PH,104/PW,84/PH]);ia.imshow(np.asarray(Image.open(JOB['customer_image'])),interpolation='none',resample=False);ia.axis('off');ia.set_title('客户原图（原样）',fontsize=FS_TITLE,loc='left')
+    fa=vax(fig,12,87,(-45,L+55),(-40,H+50),.25,'正视图：长宽不含盖，高度含盖')
+    view(fa,'ASSEMBLY','front',lambda u,v:(v,-u),hidden=False)
+    dimh(fa,0,L,-22,0,0,f'{L:g} 箱体外长');dimv(fa,0,H,-29,0,0,f'{H:g} 含盖高')
+    dimv(fa,0,Hb,L+27,L,L,f'{Hb:g} 箱体高')
+    a=vax(fig,12,17,(-40,L+60),(-35,W+50),.20,'盖顶俯视：以实际盖左下为尺寸基准')
+    view(a,'LID','top',lambda u,v:(u,v),hidden=False)
+    dimh(a,-OH,L+OH,-22,-OH,-OH,f'{LOL:g} 盖外长');dimv(a,-OH,W+OH,-24,-OH,-OH,f'{LOW:g} 盖外宽')
+    cx=HANDLE_CX[0];cy=HANDLE_CY;a.plot(cx,cy,'+',color=BLU,ms=5)
+    dimh(a,-OH,cx,51,-OH,cy,f'{cx+OH:g}');dimv(a,-OH,cy,cx+72,cx,cx,f'{cy+OH:g}')
+    ax.text(12,79,f'方口至盖裙{H-skirt-max(h["center"][2]+h["size_xy"][1]/2 for h in _RECTS):g}mm；箱体螺钉承接未定HOLD',fontsize=FS_NOTE,color=REDC)
+    ha=vax(fig,145,18,(-25,65),(-65,65),.44,'把手270°：4×Ø6.6')
+    hh=rep['handle_holes'];x0=min(h['x'] for h in hh)
+    for h in hh:ha.add_patch(Circle((h['x']-x0,h['y']-cy),h['d']/2,fill=False,ec=BLU))
+    dimv(ha,-42.5,42.5,-15,0,0,'85');dimv(ha,-31,31,45,30,30,'62');dimh(ha,0,30,-52,-42.5,-31,'30')
+    inset=_FIX_X[0];cd=_TOP4[0]['lid_clearance']
+    ca=vax(fig,167,101,(-4,31),(-4,31),1.0,f'盖顶四角同形：4×Ø{cd:g}')
+    ca.plot([0,0,27],[27,0,0],color='k',lw=.7);ca.add_patch(Circle((inset,inset),cd/2,fill=False,ec=REDC))
+    dimh(ca,0,inset,25,0,inset,f'{inset:g}');dimv(ca,0,inset,25,inset,0,f'{inset:g}')
+    for part,py in [('END_R',140),('END_L',17)]:
+        right=part=='END_R';ea=vax(fig,220,py,(-45,W+70),(-40,H+45),.44,('右端外视：2个26.5×18，4个Ø4.2' if right else '左端外视：全部6孔，按实际孔径'))
+        if right:view(ea,part,'right',lambda u,v:(-v,u),hidden=False)
+        else:view(ea,part,'left',lambda u,v:(W+v,-u),hidden=False)
+        cc,rr=dual_end_features(part)
+        dimh(ea,0,W,-25,0,0,f'{W:g} 箱体外宽')
+        ea.axhline(H-skirt,color=REDC,ls=':',lw=.45)
+        if right:
+            z=cc[0][1]
+            for i,(xx,zz,dd) in enumerate(cc):dimh(ea,0,xx,65-17*i,0,zz,f'{xx:g}')
+            for i,(xx,zz,ww,hh) in enumerate(rr):
+                dimh(ea,0,xx,110-18*i,0,zz,f'心{xx:g}')
+                dimh(ea,xx-ww/2,xx+ww/2,178,zz+hh/2,zz+hh/2,f'{ww:g}')
+            xx,zz,ww,hh=rr[-1];dimv(ea,zz-hh/2,zz+hh/2,xx+ww/2+21,xx+ww/2,xx+ww/2,f'{hh:g}')
+            dimv(ea,0,z,-28,0,0,f'孔心高{z:g}')
+            ea.annotate(f'{len(cc)}×Ø{cc[0][2]:g}',(cc[-1][0],z),(W+18,105),fontsize=FS_NOTE,color=REDC,arrowprops=dict(arrowstyle='-',color=REDC,lw=.4))
+        else:
+            xs=sorted({h[0] for h in cc});zs=sorted({h[1] for h in cc})
+            for i,xx in enumerate(xs):dimh(ea,0,xx,50-22*i,0,zs[0],f'{xx:g}')
+            for i,zz in enumerate(zs):dimv(ea,0,zz,W+20+18*i,0,0,f'{zz:g}')
+            for i,(z0,z1) in enumerate(zip(zs,zs[1:])):dimv(ea,z0,z1,W/2+(-11 if i==0 else 11),xs[0],xs[-1],f'{z1-z0:g}')
+            large=[q for q in cc if abs(q[2]-12.5)<1e-6]
+            for k,(xx,zz,dd) in enumerate(large):
+                ea.annotate('2×Ø12.5' if k==0 else '',(xx,zz),(W/2,98),fontsize=FS_NOTE,color=REDC,ha='center',arrowprops=dict(arrowstyle='-',color=REDC,lw=.4))
+            low=[q for q in cc if q[1]==zs[0]]
+            for k,(xx,zz,dd) in enumerate(low):ea.annotate('2×Ø4.5 下排' if k==0 else '',(xx,zz),(W/2,75),fontsize=FS_NOTE,color=REDC,ha='center',arrowprops=dict(arrowstyle='-',color=REDC,lw=.4))
+            for xx,zz,dd in [q for q in cc if q[1]==zs[-1]]:
+                ea.annotate(f'Ø{dd:g}',(xx,zz),(xx+(-20 if xx<W/2 else -4),184),fontsize=FS_NOTE,color=REDC,arrowprops=dict(arrowstyle='-',color=REDC,lw=.4))
+    render_assy_iso_png(R/'PREVIEW'/f'{VER}_ASSEMBLY_iso.png',list(P));render_assy_iso_png(R/'PREVIEW'/f'{VER}_EXPLODED_iso.png',list(P),exploded=True)
+    return fig
+
+
+def draw_dual_end_parts(pdf):
+    check_dual_end_interfaces()
+    fig=plt.figure(figsize=(PW/25.4,PH/25.4),dpi=120);ax=fig.add_axes([0,0,1,1]);header(ax,3);foot(ax)
+    for part,px in [('END_L',12),('END_R',217)]:
+        fx,fy=P[part]['flat_size'];ea=vax(fig,px,125,(-40,fx+45),(-35,fy+45),.48,f'{part} 实际CUT外视展开；零折')
+        flatdraw(ea,part);dimh(ea,0,fx,-20,0,0,f'{fx:g}');dimv(ea,0,fy,fx+22,fx,fx,f'{fy:g}')
+        cc=sorted(P[part]['flat_circles']);rr=sorted(P[part].get('flat_rectangles') or [])
+        for i,(xx,yy,dd) in enumerate(cc,1):
+            dx=-17 if xx<fx/2 else 17;middle=sorted({q[1] for q in cc})[len({q[1] for q in cc})//2];dy=15 if part=='END_R' else (-15 if yy<middle else (15 if yy>middle else 0))
+            ea.annotate(f'F{i:02}',(xx,yy),(xx+dx,yy+dy),fontsize=FS_NOTE,color=BLU,ha='right' if dx<0 else 'left',arrowprops=dict(arrowstyle='-',color=BLU,lw=.35))
+        for i,(x0,y0,x1,y1) in enumerate(rr,1):
+            ea.text((x0+x1)/2,y0-18,f'R{i}',fontsize=FS_NOTE,color=REDC,ha='center')
+        lines=['X距左/右，Y距下/上；孔心mm。']+[f'F{i:02} Ø{dd:g} X{xx:g}/{fx-xx:g} Y{yy:g}/{fy-yy:g}' for i,(xx,yy,dd) in enumerate(cc,1)]
+        for i,(x0,y0,x1,y1) in enumerate(rr,1):
+            cx=(x0+x1)/2;cy=(y0+y1)/2
+            lines += [f'R{i} {x1-x0:g}×{y1-y0:g} 心X{cx:g}/{fx-cx:g} Y{cy:g}/{fy-cy:g}',f'R{i} 边界X{x0:g}～{x1:g}；Y{y0:g}～{y1:g}']
+        lines += [("外侧映射X′=W−Y，Y′=Z" if part=='END_L' else "外侧映射X′=Y，Y′=Z"),'孔径按输入保留；端板无新增盖裙固定孔。']
+        box(ax,px,18,188,103,lines,title=part+' 全部圆孔/方口双向尺寸',fs=FS_NOTE)
+        path=render_assy_iso_png(R/'PREVIEW'/f'{VER}_{part}_iso.png',[part]);ia=fig.add_axes([(px+126)/PW,237/PH,60/PW,23/PH]);ia.imshow(plt.imread(path));ia.axis('off')
+    save_page(pdf,fig)
+
+
+
 # ---- page builders ----
 _probe_fig = plt.figure(figsize=(PW/25.4, PH/25.4), dpi=120)
 _probe_ax = _probe_fig.add_axes([0, 0, 1, 1])
@@ -812,7 +917,9 @@ if STRUCTURE == 'u_l_t7u' and not JOB.get('compact_wrap_review'):
 else:
 
     with PdfPages(_candidate) as pdf:
-        if JOB.get('lid_pair_end_review'):
+        if JOB.get('dual_end_interfaces_review'):
+            fig=draw_dual_end_overview();save_page(pdf,fig)
+        elif JOB.get('lid_pair_end_review'):
             fig=draw_lid_pair_end_overview();save_page(pdf,fig)
         else:
             # PAGE 1 — overview WITH orthographic outer dims (fix: bare iso had no L/W/H labels)
@@ -1054,7 +1161,7 @@ else:
             f'视觉：参考 S-201-1-20261031-001-v1；字号≥{MINPT}pt；拥挤则加页不缩字',
             '处理面朝外（规则31）；展开外表面朝读者',
         ] + (['展开孔表：平坯左下为原点，X / Y / Φ'] + [f'{a[0]:.3f} / {a[1]:.3f} / {a[2]:g}' for a in P['U']['flat_circles']] if JOB.get('compact_panel_review') else []), title='U 说明（右栏）', fs=FS_BOX)
-        if JOB.get('compact_wrap_review') or JOB.get('lid_pair_end_review') or JOB.get('lid_two_circle_review'):
+        if JOB.get('dual_end_interfaces_review') or JOB.get('compact_wrap_review') or JOB.get('lid_pair_end_review') or JOB.get('lid_two_circle_review'):
             up=render_assy_iso_png(R/'PREVIEW'/f'{VER}_U_iso.png',['U'])
             ui=fig.add_axes([275/PW,45/PH,125/PW,110/PH]);ui.imshow(plt.imread(up));ui.axis('off');ui.set_title('U件实际成形轴测',fontsize=FS_TITLE,loc='left')
         save_page(pdf, fig)
@@ -1074,6 +1181,8 @@ else:
             path=render_assy_iso_png(R/'PREVIEW'/f'{VER}_L_iso.png',['L'])
             ai=fig.add_axes([275/PW,38/PH,125/PW,85/PH]);ai.imshow(plt.imread(path));ai.axis('off');ai.set_title('L件实际成形轴测',fontsize=FS_TITLE,loc='left')
             save_page(pdf,fig)
+        elif JOB.get('dual_end_interfaces_review'):
+            draw_dual_end_parts(pdf)
         elif JOB.get('lid_pair_end_review'):
             draw_lid_pair_end_parts(pdf)
         else:
@@ -1126,10 +1235,10 @@ else:
         lfx, lfy = P['LID']['flat_size']
         a = vax(fig, 15, 35, (-50, lfx + 40), (-40, lfy + 35), min(.48, 245/(lfx+90), 190/(lfy+75)), f'件{3 if STRUCTURE=="u_l_t7u" else 4} 上盖展开 {lfx:.2f}×{lfy:.2f}（外表面朝读者；双向尺寸）')
         flatdraw(a, 'LID')
-        if JOB.get('handle_pair_review') or JOB.get('lid_pair_end_review') or JOB.get('lid_two_circle_review'):
+        if JOB.get('dual_end_interfaces_review') or JOB.get('handle_pair_review') or JOB.get('lid_pair_end_review') or JOB.get('lid_two_circle_review'):
             for i,(xx,yy,dd) in enumerate(sorted(P['LID']['flat_circles']),1):
                 delta=(12 if xx<lfx/2 else -12)
-                if JOB.get('lid_two_circle_review') and abs(dd-6.6)<1e-6:delta=-delta
+                if (JOB.get('lid_two_circle_review') or JOB.get('dual_end_interfaces_review')) and abs(dd-6.6)<1e-6:delta=-delta
                 a.annotate(f'F{i:02}',(xx,yy),(xx+delta/a.s,yy+(3 if yy<lfy/2 else -3)/a.s),fontsize=FS_NOTE,color=BLU,ha='left' if delta>0 else 'right',arrowprops=dict(arrowstyle='-',color=BLU,lw=.35))
         BL = bidir(rep, 'LID')
         for i, sg in enumerate(BL.get('X_seg', [])):
@@ -1138,9 +1247,9 @@ else:
             dimv(a, sg[0], sg[1], -6 - (i % 2) * 7, -1, -1, f'{sg[2]:.2f}', fs=_fs(9.4))
         dimh(a, 0, lfx, -22, 0, 0, f'{lfx:.2f}'); dimv(a, 0, lfy, lfx + 12, lfx, lfx, f'{lfy:.2f}')
         bilateral_dims(a, BL)
-        if JOB.get('compact_wrap_review') or JOB.get('lid_pair_end_review') or JOB.get('lid_two_circle_review'):
+        if JOB.get('dual_end_interfaces_review') or JOB.get('compact_wrap_review') or JOB.get('lid_pair_end_review') or JOB.get('lid_two_circle_review'):
             lp=render_assy_iso_png(R/'PREVIEW'/f'{VER}_LID_iso.png',['LID'])
-            li=fig.add_axes([20/PW,(216 if JOB.get('lid_two_circle_review') else 175)/PH,160/PW,(34 if JOB.get('lid_two_circle_review') else 75)/PH]);li.imshow(plt.imread(lp));li.axis('off');li.set_title('盖件实际成形轴测',fontsize=FS_TITLE,loc='left')
+            li=fig.add_axes([20/PW,(216 if (JOB.get('lid_two_circle_review') or JOB.get('dual_end_interfaces_review')) else 175)/PH,160/PW,(34 if (JOB.get('lid_two_circle_review') or JOB.get('dual_end_interfaces_review')) else 75)/PH]);li.imshow(plt.imread(lp));li.axis('off');li.set_title('盖件实际成形轴测',fontsize=FS_TITLE,loc='left')
         # formed lid top sketch
         a2 = vax(fig, 280, 180, (-20, L + 20), (-20, W + 20), min(.25, 120/(L+40), 65/(W+40)), ('盖顶俯视（本单成形坐标）' if _TOP4 else '盖顶俯视（成形坐标，孔位待确认）'))
         a2.add_patch(Rectangle((-g, -g), L + 2 * g, W + 2 * g, fill=False, ec=GRN, lw=0.9))
@@ -1154,7 +1263,7 @@ else:
         hole_labels(a2, [h for h in LID_HOLES if not (_TOP4 and h['id'].startswith('F'))])
         for rr in JOB.get('lid_rectangles') or []:
             xx,yy=rr['center'];ww,hh=rr['size'];a2.add_patch(Rectangle((xx-ww/2,yy-hh/2),ww,hh,fill=False,ec=REDC));a2.text(xx,yy,rr['id'],fontsize=FS_NOTE,color=REDC,ha='center')
-        if JOB.get('handle_pair_review') or JOB.get('lid_pair_end_review') or JOB.get('lid_two_circle_review'):
+        if JOB.get('dual_end_interfaces_review') or JOB.get('handle_pair_review') or JOB.get('lid_pair_end_review') or JOB.get('lid_two_circle_review'):
             box(ax,280,25,125,145,[
                 '展开孔心：平坯左/右、下/上；mm',
             ]+[f'F{i:02} Ø{dd:g} X{xx:.2f}/{lfx-xx:.2f} Y{yy:.2f}/{lfy-yy:.2f}' for i,(xx,yy,dd) in enumerate(sorted(P['LID']['flat_circles']),1)]+[
@@ -1233,7 +1342,7 @@ else:
                 title='K值 / 折弯扣除 / 折弯表（原生编号，非机台工序）', fs=_fs(9.4))
         save_page(pdf, fig)
 
-        if _PANEL and not JOB.get('compact_panel_review') and not JOB.get('lid_pair_end_review'):
+        if _PANEL and not JOB.get('dual_end_interfaces_review') and not JOB.get('compact_panel_review') and not JOB.get('lid_pair_end_review'):
             def circle_table(canvas, name, x, y, width, step=6.5):
                 rows = sorted(P[name]['flat_circles'], key=lambda row: (row[1], row[0], row[2]))
                 canvas.text(x, y, f'{name} CUT孔表：展开左下角为原点，全部圆孔', fontsize=FS_TITLE, color=NAVY)
