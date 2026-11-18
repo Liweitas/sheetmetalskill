@@ -121,6 +121,10 @@ if JOB.get('dual_end_interfaces_review'):
     _END_SUMMARY='左端6圆孔；右端4圆孔＋2方口；无盖裙固定孔'
     _SKIRT_NOTE=f'右方口上缘至盖裙 {H-skirt-max(h["center"][2]+h["size_xy"][1]/2 for h in _RECTS):g} mm；首件待核'
 
+if JOB.get('battery_lid_edge_review'):
+    _END_SUMMARY='正常箱体，盖顶7圆孔＋2方口，无把手'
+    _SKIRT_NOTE='孔心距实际盖外边，不以箱体投影边代替'
+
 Hb = H - t - q
 PW, PH = 420, 297  # A3 mm landscape via figsize
 NAVY = (0.10, 0.22, 0.45); REDC = (0.82, 0.10, 0.10); DIMC = (0.0, 0.20, 0.65)
@@ -820,6 +824,64 @@ def draw_dual_end_parts(pdf):
 
 
 
+def battery_lid_edge_items():
+    if (STRUCTURE!='u_endplates' or HANDLE_CX or _PANEL or _RECTS or len(JOB.get('lid_ports') or [])!=7 or
+            len(JOB.get('lid_rectangles') or [])!=2 or len(_TOP4)!=4 or _TOP_SUPPORTS):
+        raise ValueError('battery_lid_edge_review requires seven roof circles, two roof rectangles, no handle, four lid-only fixing holes')
+    datum=rep['lid_edge_datum'];items=[]
+    for i,h in enumerate(JOB['lid_ports'],1):items.append(dict(id='C'+str(i),type='circle',x=h['x']-datum[0],y=h['y']-datum[1],d=h['d']))
+    for h in JOB['lid_rectangles']:items.append(dict(id=h['id'],type='rect',x=h['center'][0]-datum[0],y=h['center'][1]-datum[1],w=h['size'][0],h=h['size'][1]))
+    if sorted(h['d'] for h in items if h['type']=='circle')!=[11,11,16,20,20,20,22]:
+        raise ValueError('battery_lid_edge_review circle families do not match the verified layout')
+    return datum,items
+
+
+def draw_battery_lid_edge_overview():
+    datum,items=battery_lid_edge_items();cl=L+2*OH;cw=W+2*OH
+    fig=plt.figure(figsize=(PW/25.4,PH/25.4),dpi=120);ax=fig.add_axes([0,0,1,1]);header(ax,1);foot(ax)
+    ax.text(12,257,f'订单{JOB.get("order_id","")} / {VER.split("-")[-2]} / 201不锈钢 t{t:g} / {JOB.get("quantity",1)}套',fontsize=FS_NOTE,color=NAVY)
+    ia=fig.add_axes([12/PW,138/PH,155/PW,107/PH]);ia.imshow(np.asarray(Image.open(JOB['customer_image'])),interpolation='none',resample=False);ia.axis('off');ia.set_title('客户原图（原样）',fontsize=FS_TITLE,loc='left')
+    ax.text(12,129,f'箱体{L:g}×{W:g}×含盖高{H:g}；201/t{t:g}；无把手',fontsize=FS_NOTE,color=BLU)
+    ax.text(12,22,'HOLD：四角螺钉承接结构未设计；Ri/K待首件',fontsize=FS_NOTE,color=REDC)
+    for name,px,xx,title,fn in [('front',12,L,'正视：长不含盖',lambda u,v:(v,-u)),('right',112,W,'右视：宽不含盖',lambda u,v:(-v,u))]:
+        ea=vax(fig,px,37,(-40,xx+40),(-40,H+45),.22,title)
+        view(ea,'ASSEMBLY',name,fn,hidden=False);dimh(ea,0,xx,-23,0,0,f'{xx:g} 箱体');dimv(ea,0,H,-25,0,0,f'{H:g} 含盖')
+    ax.text(195,252,'孔心X/Y＝距实际盖左/下；不再加3mm或盖外伸',fontsize=FS_NOTE,color=REDC)
+    ax.text(195,245,f'盖外{cl:g}×{cw:g}另列；箱体{L:g}×{W:g}不含盖',fontsize=FS_NOTE,color=BLU)
+    a=vax(fig,195,45,(-85,cl+75),(-100,cw+110),.42,'盖顶俯视：尺寸原点O为盖板实际左下外边')
+    view(a,'LID','top',lambda u,v:(u-datum[0],v-datum[1]),hidden=False)
+    a.plot(0,0,'+',color=BLU,ms=5);a.text(-5,-8,'O',fontsize=FS_NOTE,color=BLU)
+    dimh(a,0,cl,-90,0,0,f'{cl:g} 盖外长');dimv(a,0,cw,cl+65,cl,cl,f'{cw:g} 盖外宽')
+    upper=sorted([h for h in items if h.get('d')==20],key=lambda q:q['x'])
+    for i,h in enumerate(upper):dimh(a,0,h['x'],cw+27+25*i,0,h['y'],f'{h["x"]:g}')
+    ytop=upper[0]['y'];dimv(a,0,ytop,cl+20,upper[-1]['x'],upper[-1]['x'],f'{ytop:g}')
+    for i,h in enumerate(upper):a.annotate('3×Ø20' if i==0 else '',(h['x'],h['y']),(128,cw-12),fontsize=FS_NOTE,color=REDC,arrowprops=dict(arrowstyle='-',color=REDC,lw=.4))
+    middle=sorted([h for h in items if h.get('d')==11],key=lambda q:q['x'])
+    for i,h in enumerate(middle):
+        dimh(a,0,h['x'],-15-25*i,0,h['y'],f'{h["x"]:g}')
+        a.annotate('2×Ø11' if i==0 else '',(h['x'],h['y']),(143,112),fontsize=FS_NOTE,color=REDC,arrowprops=dict(arrowstyle='-',color=REDC,lw=.4))
+    dimv(a,0,middle[0]['y'],cl+42,middle[-1]['x'],middle[-1]['x'],f'{middle[0]["y"]:g}')
+    lower=sorted([h for h in items if h['y']<min(q['y'] for q in middle)],key=lambda q:q['x'])
+    xs=[0]+[h['x'] for h in lower]+[cl]
+    for x0,x1 in zip(xs,xs[1:]):dimh(a,x0,x1,-65,0,0,f'{x1-x0:g}')
+    for i,yy in enumerate(sorted({h['y'] for h in lower})):dimv(a,0,yy,-60+20*i,0,0,f'{yy:g}')
+    rr=0
+    for h in lower:
+        if h['type']=='rect':
+            ww,hh=h['w'],h['h'];xx,yy=h['x'],h['y'];x0=xx-ww/2;x1=xx+ww/2;y0=yy-hh/2;y1=yy+hh/2
+            dimh(a,x0,x1,y1+10,y1,y1,f'{ww:g}');dimv(a,y0,y1,x1+10,x1,x1,f'{hh:g}')
+            a.annotate(f'{ww:g}×{hh:g}\nX{xx:g} Y{yy:g}',(xx,yy),(76 if rr==0 else 166,5),fontsize=FS_NOTE,color=REDC,arrowprops=dict(arrowstyle='-',color=REDC,lw=.4));rr+=1
+        else:
+            xx,yy=h['x'],h['y'];target=(6,80) if h['d']==22 else (237,78)
+            a.annotate(f'Ø{h["d"]:g}\nX{xx:g} Y{yy:g}',(xx,yy),target,fontsize=FS_NOTE,color=REDC,arrowprops=dict(arrowstyle='-',color=REDC,lw=.4))
+    inset=_FIX_X[0];ca=vax(fig,350,232,(-4,28),(-4,28),.60,'角孔')
+    ca.plot([0,0,25],[25,0,0],color='k',lw=.7);ca.add_patch(Circle((inset,inset),2.25,fill=False,ec=REDC));dimh(ca,0,inset,24,0,inset,f'{inset:g}');dimv(ca,0,inset,24,inset,0,f'{inset:g}')
+    ax.text(306,229,f'4×Ø4.5，距两邻盖边{inset:g}',fontsize=FS_NOTE,color=BLU)
+    path=render_assy_iso_png(R/'PREVIEW'/f'{VER}_ASSEMBLY_iso.png',list(P));render_assy_iso_png(R/'PREVIEW'/f'{VER}_EXPLODED_iso.png',list(P),exploded=True)
+    return fig
+
+
+
 # ---- page builders ----
 _probe_fig = plt.figure(figsize=(PW/25.4, PH/25.4), dpi=120)
 _probe_ax = _probe_fig.add_axes([0, 0, 1, 1])
@@ -917,7 +979,9 @@ if STRUCTURE == 'u_l_t7u' and not JOB.get('compact_wrap_review'):
 else:
 
     with PdfPages(_candidate) as pdf:
-        if JOB.get('dual_end_interfaces_review'):
+        if JOB.get('battery_lid_edge_review'):
+            fig=draw_battery_lid_edge_overview();save_page(pdf,fig)
+        elif JOB.get('dual_end_interfaces_review'):
             fig=draw_dual_end_overview();save_page(pdf,fig)
         elif JOB.get('lid_pair_end_review'):
             fig=draw_lid_pair_end_overview();save_page(pdf,fig)
@@ -1161,7 +1225,7 @@ else:
             f'视觉：参考 S-201-1-20261031-001-v1；字号≥{MINPT}pt；拥挤则加页不缩字',
             '处理面朝外（规则31）；展开外表面朝读者',
         ] + (['展开孔表：平坯左下为原点，X / Y / Φ'] + [f'{a[0]:.3f} / {a[1]:.3f} / {a[2]:g}' for a in P['U']['flat_circles']] if JOB.get('compact_panel_review') else []), title='U 说明（右栏）', fs=FS_BOX)
-        if JOB.get('dual_end_interfaces_review') or JOB.get('compact_wrap_review') or JOB.get('lid_pair_end_review') or JOB.get('lid_two_circle_review'):
+        if JOB.get('battery_lid_edge_review') or JOB.get('dual_end_interfaces_review') or JOB.get('compact_wrap_review') or JOB.get('lid_pair_end_review') or JOB.get('lid_two_circle_review'):
             up=render_assy_iso_png(R/'PREVIEW'/f'{VER}_U_iso.png',['U'])
             ui=fig.add_axes([275/PW,45/PH,125/PW,110/PH]);ui.imshow(plt.imread(up));ui.axis('off');ui.set_title('U件实际成形轴测',fontsize=FS_TITLE,loc='left')
         save_page(pdf, fig)
@@ -1235,11 +1299,14 @@ else:
         lfx, lfy = P['LID']['flat_size']
         a = vax(fig, 15, 35, (-50, lfx + 40), (-40, lfy + 35), min(.48, 245/(lfx+90), 190/(lfy+75)), f'件{3 if STRUCTURE=="u_l_t7u" else 4} 上盖展开 {lfx:.2f}×{lfy:.2f}（外表面朝读者；双向尺寸）')
         flatdraw(a, 'LID')
-        if JOB.get('dual_end_interfaces_review') or JOB.get('handle_pair_review') or JOB.get('lid_pair_end_review') or JOB.get('lid_two_circle_review'):
+        if JOB.get('battery_lid_edge_review') or JOB.get('dual_end_interfaces_review') or JOB.get('handle_pair_review') or JOB.get('lid_pair_end_review') or JOB.get('lid_two_circle_review'):
             for i,(xx,yy,dd) in enumerate(sorted(P['LID']['flat_circles']),1):
                 delta=(12 if xx<lfx/2 else -12)
-                if (JOB.get('lid_two_circle_review') or JOB.get('dual_end_interfaces_review')) and abs(dd-6.6)<1e-6:delta=-delta
+                if (JOB.get('lid_two_circle_review') or JOB.get('dual_end_interfaces_review') or JOB.get('battery_lid_edge_review')) and abs(dd-6.6)<1e-6:delta=-delta
                 a.annotate(f'F{i:02}',(xx,yy),(xx+delta/a.s,yy+(3 if yy<lfy/2 else -3)/a.s),fontsize=FS_NOTE,color=BLU,ha='left' if delta>0 else 'right',arrowprops=dict(arrowstyle='-',color=BLU,lw=.35))
+        if JOB.get('battery_lid_edge_review'):
+            for i,(x0,y0,x1,y1) in enumerate(sorted(P['LID'].get('flat_rectangles') or []),1):
+                a.text((x0+x1)/2,(y0+y1)/2,f'R{i}',fontsize=FS_NOTE,color=BLU,ha='center',va='center')
         BL = bidir(rep, 'LID')
         for i, sg in enumerate(BL.get('X_seg', [])):
             dimh(a, sg[0], sg[1], lfy + 6 + (i % 2) * 5, lfy + 1, lfy + 1, f'{sg[2]:.2f}', fs=_fs(9.4))
@@ -1247,9 +1314,9 @@ else:
             dimv(a, sg[0], sg[1], -6 - (i % 2) * 7, -1, -1, f'{sg[2]:.2f}', fs=_fs(9.4))
         dimh(a, 0, lfx, -22, 0, 0, f'{lfx:.2f}'); dimv(a, 0, lfy, lfx + 12, lfx, lfx, f'{lfy:.2f}')
         bilateral_dims(a, BL)
-        if JOB.get('dual_end_interfaces_review') or JOB.get('compact_wrap_review') or JOB.get('lid_pair_end_review') or JOB.get('lid_two_circle_review'):
+        if JOB.get('battery_lid_edge_review') or JOB.get('dual_end_interfaces_review') or JOB.get('compact_wrap_review') or JOB.get('lid_pair_end_review') or JOB.get('lid_two_circle_review'):
             lp=render_assy_iso_png(R/'PREVIEW'/f'{VER}_LID_iso.png',['LID'])
-            li=fig.add_axes([20/PW,(216 if (JOB.get('lid_two_circle_review') or JOB.get('dual_end_interfaces_review')) else 175)/PH,160/PW,(34 if (JOB.get('lid_two_circle_review') or JOB.get('dual_end_interfaces_review')) else 75)/PH]);li.imshow(plt.imread(lp));li.axis('off');li.set_title('盖件实际成形轴测',fontsize=FS_TITLE,loc='left')
+            li=fig.add_axes([20/PW,(216 if (JOB.get('lid_two_circle_review') or JOB.get('dual_end_interfaces_review') or JOB.get('battery_lid_edge_review')) else 175)/PH,160/PW,(34 if (JOB.get('lid_two_circle_review') or JOB.get('dual_end_interfaces_review') or JOB.get('battery_lid_edge_review')) else 75)/PH]);li.imshow(plt.imread(lp));li.axis('off');li.set_title('盖件实际成形轴测',fontsize=FS_TITLE,loc='left')
         # formed lid top sketch
         a2 = vax(fig, 280, 180, (-20, L + 20), (-20, W + 20), min(.25, 120/(L+40), 65/(W+40)), ('盖顶俯视（本单成形坐标）' if _TOP4 else '盖顶俯视（成形坐标，孔位待确认）'))
         a2.add_patch(Rectangle((-g, -g), L + 2 * g, W + 2 * g, fill=False, ec=GRN, lw=0.9))
@@ -1263,15 +1330,16 @@ else:
         hole_labels(a2, [h for h in LID_HOLES if not (_TOP4 and h['id'].startswith('F'))])
         for rr in JOB.get('lid_rectangles') or []:
             xx,yy=rr['center'];ww,hh=rr['size'];a2.add_patch(Rectangle((xx-ww/2,yy-hh/2),ww,hh,fill=False,ec=REDC));a2.text(xx,yy,rr['id'],fontsize=FS_NOTE,color=REDC,ha='center')
-        if JOB.get('dual_end_interfaces_review') or JOB.get('handle_pair_review') or JOB.get('lid_pair_end_review') or JOB.get('lid_two_circle_review'):
+        if JOB.get('battery_lid_edge_review') or JOB.get('dual_end_interfaces_review') or JOB.get('handle_pair_review') or JOB.get('lid_pair_end_review') or JOB.get('lid_two_circle_review'):
             box(ax,280,25,125,145,[
                 '展开孔心：平坯左/右、下/上；mm',
             ]+[f'F{i:02} Ø{dd:g} X{xx:.2f}/{lfx-xx:.2f} Y{yy:.2f}/{lfy-yy:.2f}' for i,(xx,yy,dd) in enumerate(sorted(P['LID']['flat_circles']),1)]+[
+            ]+[f'R{i} {x1-x0:g}×{y1-y0:g} 心X{(x0+x1)/2:.2f}/{lfx-(x0+x1)/2:.2f} Y{(y0+y1)/2:.2f}/{lfy-(y0+y1)/2:.2f}' for i,(x0,y0,x1,y1) in enumerate(sorted(P['LID'].get('flat_rectangles') or []),1)]+[
                 '各孔F号与本页展开对应；成形位置见首页。',
                 f'功能孔{len(JOB.get("lid_ports") or [])}；把手孔{len(rep.get("handle_holes") or [])}；角部孔{len(_TOP4)}。',
                 '盖顶螺钉承接结构未定HOLD。',
                 '外表面朝读者，展开未镜像。',
-            ],title='实际CUT全部圆孔双向尺寸',fs=_fs(9.4),ec=REDC)
+            ],title='实际CUT全部孔双向尺寸',fs=_fs(9.4),ec=REDC)
         else:
             box(ax, 280, 25, 125, 145, [
                 '孔号 / 直径 / 成形X / 成形Y（mm）',
