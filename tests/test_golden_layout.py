@@ -29,7 +29,7 @@ class GoldenLayout(unittest.TestCase):
         tree = ast.parse(ENGINE.read_text())
         functions = [n for n in tree.body if isinstance(n, ast.FunctionDef)]
         self.ns = dict(FancyBboxPatch=FancyBboxPatch, Text=Text, MINPT=9.4,
-                       FS_BOX=9.4, FS_NOTE=9.4, NAVY='navy', REDC='red', DIMC='blue', PW=420, PH=297)
+                       FS_BOX=9.4, FS_NOTE=9.4, NAVY='navy', REDC='red', DIMC='blue', BLU='blue', PW=420, PH=297)
         exec(compile(ast.Module(body=functions, type_ignores=[]), str(ENGINE), 'exec'), self.ns)
         self.fig, self.ax = plt.subplots(figsize=(8, 6))
         self.ax.set(xlim=(0, 420), ylim=(0, 297))

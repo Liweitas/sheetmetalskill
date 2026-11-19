@@ -370,8 +370,8 @@ def customer_requirement_pages(ax, job):
     for title, text in sections:
         rows.append((title, REDC))
         printable = text.replace('\r\n', '\n').replace('\r', '\n').expandtabs(4)
-        rows += [(line, 'black') for line in wrap_text(ax, printable, FS_NOTE, 188 if job.get('battery_lid_region_review') else 390)]
-    capacity=60 if job.get('battery_lid_region_review') else 30
+        rows += [(line, 'black') for line in wrap_text(ax, printable, FS_NOTE, 188 if (job.get('ordinary_side_fixings_review') or job.get('battery_lid_region_review')) else 390)]
+    capacity=60 if (job.get('ordinary_side_fixings_review') or job.get('battery_lid_region_review')) else 30
     return [rows[i:i+capacity] for i in range(0, len(rows), capacity)]
 
 
@@ -380,7 +380,7 @@ def draw_customer_requirements(pdf):
         fig = plt.figure(figsize=(PW/25.4, PH/25.4), dpi=120)
         ax = fig.add_axes([0, 0, 1, 1])
         header(ax, NPAGES-len(_REQ_PAGES)+1+i); foot(ax)
-        if JOB.get('battery_lid_region_review'):
+        if JOB.get('ordinary_side_fixings_review') or JOB.get('battery_lid_region_review'):
             box(ax,12,26,194,222,rows[:30],title=f'客户原文（{i+1}/{len(_REQ_PAGES)}）左栏→右栏',fs=FS_NOTE)
             box(ax,212,26,194,222,rows[30:],title='客户原文（续）',fs=FS_NOTE)
         else:
@@ -908,6 +908,579 @@ def draw_battery_lid_edge_overview():
 
 
 
+def ordinary_new_page(page):
+    fig=plt.figure(figsize=(PW/25.4,PH/25.4),dpi=120);ax=fig.add_axes([0,0,1,1]);header(ax,page);foot(ax);return fig,ax
+
+def ordinary_number(x):
+    return f'{x:.2f}'.rstrip('0').rstrip('.')
+
+def ordinary_iso(fig,name,x,y,w,h):
+    path=render_assy_iso_png(R/'PREVIEW'/f'{VER}_{name}_ordinary_iso.png',list(P) if name=='ASSEMBLY' else [name])
+    a=fig.add_axes([x/PW,y/PH,w/PW,h/PH]);a.imshow(plt.imread(path));a.axis('off');a.set_title('实际装配轴测' if name=='ASSEMBLY' else name+' 实际成形轴测',fontsize=FS_NOTE,loc='left')
+
+def ordinary_feature_rows():
+    rows=[f'订单{JOB.get("order_id","")}；每套{len(P)}件；{MATERIAL_CN} t{t:g}',f'箱体外{L:g}×{W:g}；含盖总高{H:g}',f'盖外{L+2*OH:g}×{W+2*OH:g}；四边裙高{skirt:g}',f'四边{len(rep["holes"])}对M4，箱Ø3.3攻丝、盖裙Ø4.5',f'长侧X：'+ '/'.join(ordinary_number(v) for v in LONG_X),f'短侧Y：'+ '/'.join(ordinary_number(v) for v in SHORT_Y),f'各固定孔心距箱底Z{ZH:g}；盖顶角孔取消']
+    for i,h in enumerate(JOB.get('panel_holes') or [],1):
+        x,y,z=h['point'];face='左端外视' if h['part_id']=='END_L' else '右端外视' if h['part_id']=='END_R' else '前板外视';s=W-y if h['part_id']=='END_L' else y if h['part_id']=='END_R' else x
+        rows.append(f'{face} Ø{h["diameter"]:g}：距左{ordinary_number(s)}，距底{ordinary_number(z)}')
+    for i,h in enumerate(JOB.get('lid_ports') or [],1):rows.append(f'盖P{i} Ø{h["d"]:g}：实际左{ordinary_number(h["x"]+OH)}、下{ordinary_number(h["y"]+OH)}')
+    for i,h in enumerate(JOB.get('lid_rectangles') or [],1):rows.append(f'盖R{i} {h["size"][0]:g}×{h["size"][1]:g}：中心左{ordinary_number(h["center"][0]+OH)}、下{ordinary_number(h["center"][1]+OH)}')
+    for h in JOB.get('rect_cutouts') or []:
+        x,y,z=h['center'];s=W-y if h['part_id']=='END_L' else y if h['part_id']=='END_R' else x
+        rows.append(f'{h["part_id"]}方口{h["size_xy"][0]:g}×{h["size_xy"][1]:g}：外视左{ordinary_number(s)}、底{ordinary_number(z)}')
+    for i,cx in enumerate(HANDLE_CX):rows.append(f'把手{i+1}：实际盖左{ordinary_number(cx+OH)}、下{ordinary_number(HANDLE_CYS[i]+OH)}；{(JOB.get("handles") or {}).get("rotations",[])[i] if (JOB.get("handles") or {}).get("rotations") else "按原版"}°')
+    if HANDLE_CX:rows.append('每把手4×Ø6.6，宽85/窄62/排距30；原位置不改')
+    if rep.get('lid_opening_region_origin'):
+        oo=rep['lid_opening_region_origin'];rows.append(f'原图可开孔区O世界{oo[0]:g}/{oo[1]:g}；本页另列实际盖边')
+    rows += ['功能孔/把手/主体外形沿用原版，仅修正盖体固定','无承接的顶角孔已取消；没有新增焊片','Ri/K/刀模/薄板攻丝及承载须首件确认']
+    return rows
+
+def ordinary_overview(pdf):
+    fig,ax=ordinary_new_page(1)
+    ip=Path(JOB['customer_image']);ia=fig.add_axes([12/PW,191/PH,112/PW,62/PH]);ia.imshow(np.asarray(Image.open(ip)));ia.axis('off');ia.set_title('客户原图（原样）',fontsize=FS_NOTE,loc='left')
+    ordinary_iso(fig,'ASSEMBLY',132,191,105,62)
+    for label,px,py,ww,hh,title,fn in [('front',12,99,L,H,'正视：箱体长/含盖高',lambda u,v:(v,-u)),('right',129,99,W,H,'右端外视：宽/高',lambda u,v:(-v,u)),('left',12,20,W,H,'左端外视：宽/高',lambda u,v:(W+v,-u)),('top',129,20,L,W,'俯视：箱体长宽不含盖',lambda u,v:(u,v))]:
+        a=vax(fig,px,py,(-40,ww+45),(-40,hh+45),min(100/(ww+85),62/(hh+85)),title)
+        view(a,'ASSEMBLY',label,fn,hidden=False);dimh(a,0,ww,-22,0,0,f'{ww:g}');dimv(a,0,hh,ww+20,ww,ww,f'{hh:g}')
+    box(ax,246,22,162,234,ordinary_feature_rows(),title='本版连接及功能孔位置；单位mm',fs=FS_NOTE)
+    save_page(pdf,fig)
+
+def ordinary_circle_table(ax,name,x,y,w):
+    fx,fy=P[name]['flat_size'];circles=sorted(P[name]['flat_circles']);cols=2 if len(circles)>8 else 1;per=math.ceil(len(circles)/cols) if circles else 0
+    ax.text(x,y,'孔心：X距左/右；Y距下/上（CUT坐标）',fontsize=FS_NOTE,color=BLU)
+    for i,(xx,yy,dd) in enumerate(circles):
+        column=i//per if per else 0;row=i%per if per else 0
+        txt=f'F{i+1:02} Ø{dd:g} X{ordinary_number(xx)}/{ordinary_number(fx-xx)} Y{ordinary_number(yy)}/{ordinary_number(fy-yy)}'
+        ax.text(x+column*w/cols,y-8-row*6,txt,fontsize=FS_NOTE,color='k')
+    yy=y-10-per*6
+    for i,(x0,y0,x1,y1) in enumerate(sorted(P[name].get('flat_rectangles') or []),1):
+        ax.text(x,yy,f'R{i} {ordinary_number(x1-x0)}×{ordinary_number(y1-y0)}：孔边X{ordinary_number(x0)}/{ordinary_number(fx-x1)}',fontsize=FS_NOTE,color=REDC);yy-=6
+        ax.text(x,yy,f'孔边Y{ordinary_number(y0)}/{ordinary_number(fy-y1)}；中心X{ordinary_number((x0+x1)/2)} Y{ordinary_number((y0+y1)/2)}',fontsize=FS_NOTE,color=REDC);yy-=7
+    return yy
+
+def ordinary_flat_labels(a,name):
+    fx,fy=P[name]['flat_size'];cs=sorted(P[name]['flat_circles']);groups=[[(i,q) for i,q in enumerate(cs,1) if q[0]<fx/2],[(i,q) for i,q in enumerate(cs,1) if q[0]>=fx/2]]
+    for side,group in enumerate(groups):
+        group.sort(key=lambda q:q[1][1])
+        for rank,(i,(xx,yy,dd)) in enumerate(group):
+            tx=-6/a.s if side==0 else fx+5/a.s;ty=fy/2+(rank-(len(group)-1)/2)*6/a.s
+            a.annotate(f'F{i:02}',(xx,yy),(tx,ty),fontsize=FS_NOTE,color=BLU,ha='right' if side==0 else 'left',arrowprops=dict(arrowstyle='-',lw=.3,color=BLU))
+    for i,(x0,y0,x1,y1) in enumerate(sorted(P[name].get('flat_rectangles') or []),1):a.text((x0+x1)/2,(y0+y1)/2,f'R{i}',fontsize=FS_NOTE,color=REDC,ha='center')
+
+def ordinary_piece_page(pdf,name,page):
+    fig,ax=ordinary_new_page(page);fx,fy=P[name]['flat_size'];ax.text(12,252,f'{name} 真实展开 {fx:.2f}×{fy:.2f}；外表面朝读者',fontsize=FS_TITLE,color=NAVY)
+    a=vax(fig,12,47,(-45,fx+90),(-45,fy+45),min(218/(fx+135),170/(fy+90)),'')
+    flatdraw(a,name);ordinary_flat_labels(a,name);dimh(a,0,fx,-25/a.s,0,0,f'{fx:.2f}');dimv(a,0,fy,fx+22/a.s,fx,fx,f'{fy:.2f}')
+    ordinary_iso(fig,name,145,232,82,22)
+    yy=ordinary_circle_table(ax,name,248,245,160)-7
+    BB=bidir(rep,name)
+    ax.text(248,yy,'折弯中心双向定位；90°；按本单原生方向',fontsize=FS_NOTE,color=BLU);yy-=8
+    rows=table_rows(BB,name)
+    for row in sorted(rows,key=lambda r:-next(math.dist(*b['flat_line_mm']) for b in P[name]['bend_records'] if b['id']==r['id'])):
+        ax.text(248,yy,f'{row["id"]} {row["axis"]} A{row["a"]}/B{row["b"]} {row["dir"]} 90°',fontsize=FS_NOTE,color=BLU);yy-=6
+        for text in wrap_text(ax,f'{row["seg_prev"]}；{row["seg_next"]}',FS_NOTE,160):ax.text(248,yy,text,fontsize=FS_NOTE);yy-=6
+    for text in [f'Ri{ri:g}，K{K:.5f}，BD{BD:.3f}（候选）','盖裙向内折；先长后短，先外后内。','表为几何中心距，机床挡料须按实际靠面校准。','CUT仅切割；BEND含折线；不能重复下料。']:
+        for line in wrap_text(ax,text,FS_NOTE,160):ax.text(248,yy,line,fontsize=FS_NOTE,color=REDC if '机床' in text else 'k');yy-=6
+    ax.text(12,18,f'{MATERIAL_CN} t{t:g}；每套{name}×1；固定孔：箱体Ø3.3攻M4／盖裙Ø4.5。',fontsize=FS_NOTE,color=BLU)
+    save_page(pdf,fig)
+
+def ordinary_end_page(pdf):
+    fig,ax=ordinary_new_page(3)
+    for name,x in [('END_L',12),('END_R',220)]:
+        fx,fy=P[name]['flat_size'];a=vax(fig,x,151,(-25,fx+35),(-25,fy+30),min(165/(fx+60),75/(fy+55)),name+' 零折；外表面朝读者')
+        flatdraw(a,name);ordinary_flat_labels(a,name);dimh(a,0,fx,-16/a.s,0,0,f'{fx:g}');dimv(a,0,fy,fx+19/a.s,fx,fx,f'{fy:g}')
+        ordinary_iso(fig,name,x+130,234,54,20)
+        ordinary_circle_table(ax,name,x,123,188)
+    ax.text(12,28,'左端外视展开X′=W−Y，右端X′=Y；两侧Y′=Z，不镜像套用。',fontsize=FS_NOTE,color=BLU)
+    ax.text(12,19,f'固定孔高Z{ZH:g}；Ø3.3攻M4，盖裙对应Ø4.5；功能孔按原版实际几何保留。',fontsize=FS_NOTE,color=REDC)
+    save_page(pdf,fig)
+
+def ordinary_process_page(pdf):
+    fig,ax=ordinary_new_page(5)
+    rows=[f'四边共{len(rep["holes"])}对；一一同轴；外形和功能孔不改',f'箱体Ø3.3攻M4；盖裙Ø4.5；Z{ZH:g}',f'长边最大心距{max(np.diff(LONG_X)) if len(LONG_X)>1 else 0:g}',f'短边最大心距{max(np.diff(SHORT_Y)) if len(SHORT_Y)>1 else 0:g}']
+    for h in rep['holes']:rows.append(f'{h["id"]} {h["body_part"]} X{ordinary_number(h["point"][0])} Y{ordinary_number(h["point"][1])} Z{ordinary_number(h["point"][2])}')
+    rows += ['表中为箱体外表面孔心，盖裙孔同轴。','薄板攻丝有效牙数少，反复拆装和承重须首件核验。','需要压铆/拉铆螺母时另定工艺，不擅自放大孔。']
+    rows += list((JOB.get('confirm') or {}).get('pending_cn') or [])
+    box(ax,12,27,193,229,rows,title='盖裙—箱体固定孔；单位mm',fs=FS_NOTE)
+    ordinary_iso(fig,'ASSEMBLY',220,151,188,95)
+    box(ax,219,27,189,105,[f'本版共有{len(P)}块主板件，实际CAD和原生展开一一对应。','盖为一体折弯件，四边裙高15；不保留无承接的顶角孔。','功能孔和把手不移位，不因连接修正重新换算图片坐标。','实际逐对孔轴、区域外几何、原生03、CUT/BEND/NEST分别核验。','工装、Ri/K/回弹、薄板螺纹及把手承重尚未实物验证。','首件试折试装确认后再批量；production_release=false。'],title='本版边界及首件确认',fs=FS_NOTE)
+    save_page(pdf,fig)
+
+def ordinary_side_fixing_pages(pdf):
+    if _TOP4 or len(rep.get('holes') or [])<8 or len({h['side'] for h in rep['holes']})!=4:
+        raise ValueError('ordinary side-fixing review requires actual paired holes on four walls and no roof corner holes')
+    if JOB.get('full_first_page_dimensions'):full_first_page_overview(pdf)
+    else:ordinary_overview(pdf)
+    ordinary_piece_page(pdf,'U',2)
+    if STRUCTURE=='u_l_t7u':ordinary_piece_page(pdf,'L',3)
+    else:ordinary_end_page(pdf)
+    ordinary_piece_page(pdf,'LID',4);ordinary_process_page(pdf);draw_customer_requirements(pdf)
+
+od_old_piece=ordinary_piece_page
+od_old_end=ordinary_end_page
+od_old_overview=ordinary_overview
+od_old_process=ordinary_process_page
+
+# Direct, geometry-derived dimensions for the audited ordinary-box layout.
+def od_n(x):
+    return ordinary_number(0.0 if abs(float(x))<0.005 else float(x))
+
+def od_note(ax,a,point,xy,text,color=BLU,ha='left'):
+    # Arrow and number share one annotation; no separate F-only lookup.
+    ax.annotate('',xy=point,xycoords=a.transData,xytext=xy,textcoords=ax.transData,
+                annotation_clip=False,zorder=1,arrowprops=dict(arrowstyle='-',lw=.32,color=color,
+                connectionstyle='angle,angleA=0,angleB=90,rad=0'))
+    ax.text(*xy,text,fontsize=FS_NOTE,color=color,ha=ha,va='center',linespacing=1.12,
+            zorder=5,bbox=dict(facecolor='white',edgecolor='none',pad=.5))
+
+def od_items(name):
+    fx,fy=P[name]['flat_size'];out=[]
+    for i,(x,y,d) in enumerate(sorted(P[name]['flat_circles']),1):
+        out.append((x,y,f'F{i:02} Ø{od_n(d)}\n左{od_n(x)} / 右{od_n(fx-x)}\n下{od_n(y)} / 上{od_n(fy-y)}',3))
+    for i,(x0,y0,x1,y1) in enumerate(sorted(P[name].get('flat_rectangles') or []),1):
+        x=(x0+x1)/2;y=(y0+y1)/2
+        out.append((x,y,f'R{i} {od_n(x1-x0)}×{od_n(y1-y0)}\n心左{od_n(x)} / 右{od_n(fx-x)}\n心下{od_n(y)} / 上{od_n(fy-y)}\n边左{od_n(x0)} / 右{od_n(fx-x1)}\n边下{od_n(y0)} / 上{od_n(fy-y1)}',5))
+    return out
+
+def od_fan(ax,a,items,columns,low,high):
+    for group,(tx,ha) in zip(columns,[(12,'left'),(334,'left')]):
+        group=sorted(group,key=lambda q:q[1]);heights=[q[3]*3.7+1.0 for q in group]
+        if sum(heights)>high-low:raise ValueError('direct dimension callout column exceeds page height')
+        # order-preserving, independent physical-mm lanes.
+        start=(low+high-sum(heights))/2
+        for q,h in zip(group,heights):
+            x,y,txt,_=q;od_note(ax,a,(x,y),(tx,start+h/2),txt);start+=h
+
+def od_hole_chains(a,name,include_fixings=False):
+    # Direct centre-distance chains within real aligned functional rows/columns.
+    pts=[(x,y) for x,y,d in P[name]['flat_circles'] if include_fixings or d>=8]
+    pts += [((x0+x1)/2,(y0+y1)/2) for x0,y0,x1,y1 in P[name].get('flat_rectangles',[])]
+    fx,fy=P[name]['flat_size']
+    for axis in (0,1):
+        groups={}
+        for pt in pts:groups.setdefault(round(pt[1-axis],4),[]).append(pt[axis])
+        for fixed,vals in groups.items():
+            vals=sorted(set(round(v,4) for v in vals))
+            if len(vals)<2:continue
+            if include_fixings:vals=[0]+vals+[fx if axis==0 else fy]
+            lane=(fy*.30 if axis==0 else fx*.50) if include_fixings else fixed+(10/a.s if fixed<(fy if axis==0 else fx)/2 else -10/a.s)
+            for u,v in zip(vals,vals[1:]):
+                if abs(v-u)<.001:continue
+                if axis==0:dimh(a,u,v,lane,fixed,fixed,od_n(v-u))
+                else:dimv(a,u,v,lane,fixed,fixed,od_n(v-u))
+
+def od_bend_dims(ax,a,name):
+    fx,fy=P[name]['flat_size'];BB=bidir(rep,name)
+    for axis in ('X','Y'):
+        vals=BB[axis]
+        for i,b in enumerate(vals):
+            pos=b['pos'];s=a.s
+            if axis=='X':
+                dimh(a,0,pos,-(14+7*i)/s,0,0,f'{b["id"]} 左{od_n(pos)}')
+                dimh(a,pos,fx,fy+(14+7*i)/s,fy,fy,f'{b["id"]} 右{od_n(fx-pos)}')
+            else:
+                dimv(a,0,pos,-(12+7*i)/s,0,0,f'{b["id"]} 下{od_n(pos)}')
+                dimv(a,pos,fy,fx+(14+7*i)/s,fx,fx,f'{b["id"]} 上{od_n(fy-pos)}')
+        # All same-axis combinations, not only adjacent pairs.
+        k=0
+        for i,b in enumerate(vals):
+            for c in vals[i+1:]:
+                if abs(c['pos']-b['pos'])<1e-6:continue
+                txt=f'{b["id"]}–{c["id"]} {od_n(abs(c["pos"]-b["pos"]))}'
+                if axis=='X':dimh(a,b['pos'],c['pos'],fy+(30+7*k)/a.s,fy,fy,txt)
+                else:dimv(a,b['pos'],c['pos'],fx+(30+7*k)/a.s,fx,fx,txt)
+                k+=1
+    records=sorted(P[name]['bend_records'],key=lambda b:-math.dist(*b['flat_line_mm']))
+    for i,b in enumerate(records):
+        p,q=b['flat_line_mm'];pt=((p[0]+q[0])/2,(p[1]+q[1])/2)
+        dx=abs(p[0]-q[0]);axis='Y' if dx>1e-4 else 'X';v=next(x for x in BB[axis] if x['id']==b['id'])
+        line=f'{i+1}. {b["id"]} {b["direction"]} 90°；线长{od_n(math.dist(p,q))}\n'+(('左 / 右 ' if axis=='X' else '下 / 上 ')+f'{od_n(v["a"])} / {od_n(v["b"])}')
+        od_note(ax,a,pt,(12+i*100,33),line)
+    ax.text(12,19,f'Ri{od_n(ri)} / Ro{od_n(ri+t)}；K{K:.5f}；BD{BD:.3f}。图为展开中心尺寸；实际机床靠面/挡料须首件校准。',fontsize=FS_NOTE,color=REDC)
+
+def ordinary_piece_page(pdf,name,page):
+    if not JOB.get('ordinary_dimensioned_review'):return od_old_piece(pdf,name,page)
+    fig,ax=ordinary_new_page(page);fx,fy=P[name]['flat_size'];ax.text(12,252,f'{name} 真实展开；全部尺寸直接引到本件；单位mm',fontsize=FS_TITLE,color=NAVY)
+    ax.text(12,242,'孔心距展开外包四边；方孔另给孔边距。外表面朝读者，UP朝读者／DOWN背向读者。',fontsize=FS_NOTE,color=BLU)
+    s=min(178/fx,100/fy);px=210-fx*s/2;py=130-fy*s/2
+    a=vax(fig,px,py,(0,fx),(0,fy),s,'');flatdraw(a,name);od_hole_chains(a,name)
+    dimh(a,0,fx,-7/s,0,0,f'展开长 {od_n(fx)}');dimv(a,0,fy,fx+7/s,fx,fx,f'展开宽 {od_n(fy)}')
+    items=od_items(name);seq=sorted(items,key=lambda q:q[0]);cut=min(range(len(seq)+1),key=lambda k:abs(sum(q[3]*3.7+1 for q in seq[:k])-sum(q[3]*3.7+1 for q in seq)/2));groups=[seq[:cut],seq[cut:]]
+    od_fan(ax,a,items,groups,56,233);od_bend_dims(ax,a,name)
+    for label in a.texts:label.set_bbox(dict(facecolor='white',edgecolor='none',pad=.4))
+    ip=render_assy_iso_png(R/'PREVIEW'/f'{VER}_{name}_dimension_iso.png',[name]);ia=fig.add_axes([180/PW,216/PH,60/PW,18/PH]);ia.imshow(plt.imread(ip));ia.axis('off')
+    ax.text(180,235,'实际成形；'+('四边裙高均15' if name=='LID' else f't{od_n(t)}'),fontsize=FS_NOTE,color=REDC)
+    save_page(pdf,fig)
+
+def ordinary_end_page(pdf):
+    if not JOB.get('ordinary_dimensioned_review'):return od_old_end(pdf)
+    fig,ax=ordinary_new_page(3);ax.text(12,252,'两端板真实展开；每个孔完整双向尺寸直接引出',fontsize=FS_TITLE,color=NAVY)
+    for name,ox in [('END_L',12),('END_R',222)]:
+        fx,fy=P[name]['flat_size'];s=min(138/fx,79/fy);px=ox+90-fx*s/2;py=185-fy*s/2
+        a=vax(fig,px,py,(0,fx),(0,fy),s,'');flatdraw(a,name);od_hole_chains(a,name)
+        dimh(a,0,fx,-9/s,0,0,f'{od_n(fx)}');dimv(a,0,fy,fx+9/s,fx,fx,f'{od_n(fy)}')
+        ax.text(ox,236,f'{name}；零折；外表面朝读者',fontsize=FS_NOTE,color=NAVY)
+        items=od_items(name)
+        for i,(x,y,txt,n) in enumerate(items):
+            col=i%3;row=i//3;od_note(ax,a,(x,y),(ox+col*63,128-row*27),txt)
+        ordinary_iso(fig,name,ox+133,224,53,19)
+    ax.text(12,27,'END_L 外视X′=W−Y；END_R 外视X′=Y；Y′=Z。四边尺寸以本件真实展开外包为准。',fontsize=FS_NOTE,color=BLU)
+    ax.text(12,18,f'Ø3.3为攻M4底孔；功能孔按本版原尺寸；t{t:g}；底角内R{ri:g}、外R{ri+t:g}。',fontsize=FS_NOTE,color=REDC)
+    save_page(pdf,fig)
+
+def ordinary_overview(pdf):
+    if not JOB.get('ordinary_dimensioned_review'):return od_old_overview(pdf)
+    fig,ax=ordinary_new_page(1)
+    ia=fig.add_axes([12/PW,191/PH,111/PW,62/PH]);ia.imshow(np.asarray(Image.open(JOB['customer_image'])));ia.axis('off');ia.set_title('客户原图（原样）',fontsize=FS_NOTE,loc='left')
+    ordinary_iso(fig,'ASSEMBLY',130,191,104,62)
+    views={}
+    for label,px,py,ww,hh,title,fn in [('front',24,109,L,H,'正视 长×含盖高',lambda u,v:(v,-u)),('right',136,109,W,H,'右端外视',lambda u,v:(-v,u)),('left',24,32,W,H,'左端外视',lambda u,v:(W+v,-u)),('top',136,32,L+2*OH,W+2*OH,'俯视（实际盖边）',lambda u,v:(u+OH,v+OH))]:
+        s=min(85/ww,53/hh);a=vax(fig,px,py,(0,ww),(0,hh),s,'');view(a,'ASSEMBLY',label,fn,hidden=False)
+        ax.text(px,py+hh*s+12,title,fontsize=FS_NOTE,color=NAVY)
+        dimh(a,0,ww,-9/s,0,0,od_n(ww));dimv(a,0,hh,ww+9/s,ww,ww,od_n(hh));views[label]=a
+    notes=[]
+    for i,h in enumerate(JOB.get('panel_holes') or [],1):
+        x,y,z=h['point'];face='left' if h['part_id']=='END_L' else 'right' if h['part_id']=='END_R' else 'front';u=W-y if face=='left' else y if face=='right' else x;ww=W if face in ('left','right') else L
+        notes.append((face,(u,z),f'孔{i} Ø{od_n(h["diameter"])}\n左{od_n(u)} / 右{od_n(ww-u)}\n底{od_n(z)} / 顶{od_n(rep["params"]["Hb"]-z)}'))
+    for i,h in enumerate(JOB.get('rect_cutouts') or [],1):
+        x,y,z=h['center'];face='left' if h['part_id']=='END_L' else 'right' if h['part_id']=='END_R' else 'front';u=W-y if face=='left' else y if face=='right' else x;ww=W if face in ('left','right') else L
+        notes.append((face,(u,z),f'方{i} {od_n(h["size_xy"][0])}×{od_n(h["size_xy"][1])}\n心左{od_n(u)} / 右{od_n(ww-u)}\n底{od_n(z)} / 顶{od_n(rep["params"]["Hb"]-z)}'))
+    for i,h in enumerate(JOB.get('lid_ports') or [],1):
+        x=h['x']+OH;y=h['y']+OH;notes.append(('top',(x,y),f'盖P{i} Ø{od_n(h["d"])}\n左{od_n(x)} / 右{od_n(LOL-x)}\n下{od_n(y)} / 上{od_n(LOW-y)}'))
+    for i,h in enumerate(JOB.get('lid_rectangles') or [],1):
+        x=h['center'][0]+OH;y=h['center'][1]+OH;notes.append(('top',(x,y),f'盖R{i} {od_n(h["size"][0])}×{od_n(h["size"][1])}\n心左{od_n(x)} / 右{od_n(LOL-x)}\n下{od_n(y)} / 上{od_n(LOW-y)}'))
+    for i,cx in enumerate(HANDLE_CX):
+        x=cx+OH;y=HANDLE_CYS[i]+OH;notes.append(('top',(x,y),f'把手{i+1} 4×Ø6.6\n心左{od_n(x)} / 右{od_n(LOL-x)}\n下{od_n(y)} / 上{od_n(LOW-y)}\n孔距85/62/30；朝向见p5'))
+    notes += [('front',(LONG_X[0],ZH),f'前后各{len(LONG_X)}对M4\n箱Ø3.3 / 裙Ø4.5\nX：'+ '/'.join(od_n(x) for x in LONG_X)+'\n孔心高'+od_n(ZH)),('right',(SHORT_Y[0],ZH),f'左右各{len(SHORT_Y)}对M4\n箱Ø3.3 / 裙Ø4.5\nY：'+ '/'.join(od_n(x) for x in SHORT_Y)+'\n孔心高'+od_n(ZH))]
+    ax.text(248,252,f'全部功能位置；实际外边基准；t{t:g}',fontsize=FS_NOTE,color=NAVY)
+    # In this audited family at most 13 individual feature groups + two fixing rows.
+    for j,txt in enumerate([f'订单{JOB.get("order_id","")}；数量{JOB.get("quantity",1)}',f'箱体外{L:g}×{W:g}×高{od_n(rep["params"]["Hb"])}',f'含盖总高{H:g}；罩盖外{LOL:g}×{LOW:g}',f'一体四边裙15；共{len(rep["holes"])}对实际侧面连接',f'Ri{ri:g}、K{K:.5f}及薄板攻丝须首件确认']):
+        ax.text(248,240-j*6,txt,fontsize=FS_NOTE,color=NAVY)
+    per=math.ceil(len(notes)/2)
+    for i,(face,pt,txt) in enumerate(notes):
+        col=i//per;row=i%per;od_note(ax,views[face],pt,(248+col*81,184-row*22),txt)
+    ax.text(12,18,f'箱体高{od_n(rep["params"]["Hb"])}；盖高15；含盖{H:g}。四边{len(rep["holes"])}对；原图坐标与实际盖边区别保留。',fontsize=FS_NOTE,color=REDC)
+    save_page(pdf,fig)
+
+def ordinary_process_page(pdf):
+    if not JOB.get('ordinary_dimensioned_review'):return od_old_process(pdf)
+    fig,ax=ordinary_new_page(5);ax.text(12,252,'四边固定链尺寸、把手安装孔与03盖角放大；单位mm',fontsize=FS_TITLE,color=NAVY)
+    for ox,span,coords,label in [(20,L,LONG_X,'前/后长壁，每面'),(228,W,SHORT_Y,'左/右短壁，每面')]:
+        s=min(166/span,.65);a=vax(fig,ox,191,(0,span),(0,30),s,'')
+        a.plot([0,span,span,0,0],[0,0,30,30,0],color='k',lw=.6)
+        for u in coords:a.add_patch(Circle((u,15),2.25,fill=False,ec=REDC))
+        pts=[0]+list(coords)+[span]
+        for u,v in zip(pts,pts[1:]):dimh(a,u,v,-9/s,0,0,od_n(v-u))
+        dimh(a,0,span,-18/s,0,0,od_n(span))
+        ax.text(ox,233,f'{label}{len(coords)}对，孔排示意链',fontsize=FS_NOTE,color=NAVY)
+        od_note(ax,a,(coords[0],15),(ox,220),f'箱Ø3.3攻M4／盖裙Ø4.5；Z{od_n(ZH)}\n箱上边{od_n(rep["params"]["Hb"]-ZH)}；裙下边7.5')
+    # Native cut edge shape: enlarge exact lower-left 03 corner, no guessed redrawing.
+    a=vax(fig,22,84,(0,23),(0,23),2.1,'');
+    for wire in flats['LID']['wires']:pl(a,wire+[wire[0]],lw=.8)
+    for b in P['LID']['bend_records']:pl(a,b['flat_line_mm'],color=REDC,lw=.6)
+    pts=[]
+    for x,y in flats['LID']['wires'][0]:
+        if -.001<=x<=23 and -.001<=y<=23 and not any(math.dist((x,y),q)<.001 for q in pts):pts.append((x,y))
+    if len(pts)>12:raise ValueError('corner requires separate arc treatment')
+    ax.text(12,151,'03角：本版真实CUT局部 ×2.1',fontsize=FS_NOTE,color=NAVY)
+    for i,pt in enumerate(sorted(pts),1):
+        col=(i-1)%2;row=(i-1)//2;od_note(ax,a,pt,(12+col*51,69-row*10),f'C{i} X{od_n(pt[0])}\nY{od_n(pt[1])}')
+    # Exact, pre-existing native STEP section, cropped at the front top corner.
+    ax.text(112,151,'盖—体实际STEP剖面局部',fontsize=FS_NOTE,color=NAVY)
+    s=3.1;a=vax(fig,127,85,(-4,17),(-1,20),s,'')
+    for part,paths in sec.items():
+        for path in paths:pl(a,[(y,z-(H-20)) for y,z in path],color='k',lw=.8)
+    bodytop=20-(t+rep['params']['q'])
+    dimv(a,5,20,10,-g-t,-g-t,'裙15')
+    od_note(ax,a,(t/2,bodytop/2),(112,64),f'板厚t{od_n(t)}；内R{od_n(ri)}／外R{od_n(ri+t)}\n侧净隙g{od_n(g)}；顶净隙q{od_n(rep["params"]["q"])}\n孔轴Z{od_n(ZH)}；裙下边高Z{od_n(H-15)}')
+    # All four handle holes, actual orientation, dimensioned from physical arrangement.
+    for i,cx in enumerate(HANDLE_CX):
+        cy=HANDLE_CYS[i];hh=[(h['x'],h['y']) for h in rep.get('handle_holes',[]) if abs(h['x']-cx)<60 and abs(h['y']-cy)<60]
+        pts=[(x-cx,y-cy) for x,y in hh];ox=240+i*90
+        if len(pts)!=4:raise ValueError('actual handle group must have exactly four points')
+        xs=[p[0] for p in pts];ys=[p[1] for p in pts];sc=.62
+        a=vax(fig,ox,89,(min(xs)-8,max(xs)+8),(min(ys)-8,max(ys)+8),sc,'')
+        for x,y in pts:a.add_patch(Circle((x,y),3.3,fill=False,ec=REDC))
+        if len(set(round(x,5) for x in xs))==2:
+            xx=sorted(set(round(x,5) for x in xs))
+            for j,x in enumerate(xx):
+                yy=sorted(y for px,y in pts if abs(px-x)<1e-4);dimv(a,yy[0],yy[-1],x+(-8 if j==0 else 8)/sc,x,x,od_n(yy[-1]-yy[0]))
+            dimh(a,xx[0],xx[-1],min(ys)-9/sc,min(ys),min(ys),'30')
+        else:
+            yy=sorted(set(round(y,5) for y in ys))
+            for j,y in enumerate(yy):
+                xx=sorted(x for x,py in pts if abs(py-y)<1e-4);dimh(a,xx[0],xx[-1],y+(-8 if j==0 else 8)/sc,y,y,od_n(xx[-1]-xx[0]))
+            dimv(a,yy[0],yy[-1],max(xs)+9/sc,max(xs),max(xs),'30')
+        ax.text(ox-6,151,f'把手{i+1} 实际方向\n4×Ø6.6；孔距85/62/30',fontsize=FS_NOTE,color=NAVY)
+        od_note(ax,a,(0,0),(ox-6,57),f'中心实际盖左{od_n(cx+OH)}\n下{od_n(cy+OH)}；原孔不移')
+    ax.text(112,33,'先长后短、先外后内为建议；逐道顺序与UP/DOWN在对应展开页。',fontsize=FS_NOTE,color=BLU)
+    ax.text(112,25,'薄板攻M4牙数少；刀模、回弹、03角与合盖/承重须首件确认。',fontsize=FS_NOTE,color=REDC)
+    ax.text(112,17,('本版含尺寸/连接修正；实际CAD、展开、CUT/BEND/NEST同步。' if JOB.get('batch_geometry_changed') else '本版仅补图上尺寸；CAD / CUT / BEND / NEST的实际几何保持。'),fontsize=FS_NOTE,color=REDC)
+    save_page(pdf,fig)
+
+def review_face_features(face):
+    features=[]
+    if face=='top':
+        for i,h in enumerate(LID_HOLES,1):
+            features.append(dict(x=h['x']+OH,y=h['y']+OH,label=f'Ø{h["d"]:g}'+(' M6过孔' if abs(h['d']-6.6)<1e-6 else '')+f'\nX{h["x"]+OH:g} Y{h["y"]+OH:g}'))
+        for i,h in enumerate(JOB.get('lid_rectangles') or [],1):
+            x,y=h['center'];w,hg=h['size'];features.append(dict(x=x+OH,y=y+OH,label=f'{w:g}×{hg:g}'+(f' R{h["corner_radius"]:g}' if h.get('corner_radius') else '')+f'\nX{x+OH:g} Y{y+OH:g}'))
+        centers=[(x,y) for x,y in zip(HANDLE_CX,HANDLE_CYS)]
+        centers += [tuple(h['center']) for h in JOB.get('roof_handle_groups') or []]
+        for i,(x,y) in enumerate(centers,1):features.append(dict(x=x+OH,y=y+OH,label=f'把手{i}中心\nX{x+OH:g} Y{y+OH:g}',center_mark=True))
+        return features
+    for h in JOB.get('panel_holes') or []:
+        x,y,z=h['point'];axis=h['axis'];ok=(face=='front' and abs(axis[1])>.9 and abs(y)<1e-6) or (face=='right' and abs(axis[0])>.9 and abs(x-L)<1e-6) or (face=='left' and abs(axis[0])>.9 and abs(x)<1e-6)
+        if ok:
+            u=x if face=='front' else y if face=='right' else W-y
+            features.append(dict(x=u,y=z,label=f'Ø{h["diameter"]:g}\nX{u:g} Z{z:g}'))
+    for h in JOB.get('rect_cutouts') or []:
+        x,y,z=h['center'];axis=h['axis'];ok=(face=='front' and abs(axis[1])>.9 and abs(y)<1e-6) or (face=='right' and abs(axis[0])>.9 and abs(x-L)<1e-6) or (face=='left' and abs(axis[0])>.9 and abs(x)<1e-6)
+        if ok:
+            u=x if face=='front' else y if face=='right' else W-y;ww,hh=h['size_xy'];features.append(dict(x=u,y=z,label=f'{ww:g}×{hh:g}'+(f' R{h["corner_radius"]:g}' if h.get('corner_radius') else '')+f'\nX{u:g} Z{z:g}'))
+    for h in rep.get('holes') or []:
+        x,y,z=h['point'];axis=h['axis'];ok=(face=='front' and abs(axis[1])>.9 and abs(y)<1e-6) or (face=='right' and abs(axis[0])>.9 and abs(x-L)<1e-6) or (face=='left' and abs(axis[0])>.9 and abs(x)<1e-6)
+        if ok:
+            u=x if face=='front' else y if face=='right' else W-y
+            features.append(dict(x=u,y=z,label=f'M4：体Ø3.3/盖Ø4.5\nX{u:g} Z{z:g}'))
+    return features
+
+
+def review_dimensioned_face(fig,face,px,py,pw,ph):
+    ww=(L+2*OH if face=='top' else L if face=='front' else W);hh=W+2*OH if face=='top' else H
+    a=fig.add_axes([px/PW,py/PH,pw/PW,ph/PH]);a.set(xlim=(0,pw),ylim=(0,ph));a.axis('off');a.s=1
+    title={'front':'正视｜孔心距箱体左/底','right':'右外视｜孔心距面左/底','left':'左外视｜孔心距面左/底','top':'盖顶俯视｜孔心距实际盖左/下'}[face]
+    a.text(pw/2,ph-2,title,ha='center',va='top',fontsize=FS_NOTE,color=NAVY)
+    scale=min((pw-76)/ww,(ph-30)/hh);gx=(pw-ww*scale)/2;gy=(ph-hh*scale)/2-1
+    mappings={'front':lambda u,v:(v,-u),'right':lambda u,v:(-v,u),'left':lambda u,v:(W+v,-u),'top':lambda u,v:(u+OH,v+OH)}
+    def mapping(u,v):
+        x,y=mappings[face](u,v);return (gx+x*scale,gy+y*scale)
+    view(a,'LID' if face=='top' else 'ASSEMBLY',face,mapping,hidden=False)
+    dimh(a,gx,gx+ww*scale,gy-5,gy,gy,f'{ww:g}'+(' 盖' if face=='top' else ' 箱体'))
+    dimv(a,gy,gy+hh*scale,gx+ww*scale+5,gx+ww*scale,gx+ww*scale,f'{hh:g}')
+    ff=review_face_features(face)
+    for f in ff:
+        first=f['label'].split('\n')[0];f['category']='mount' if first.startswith('M4') else 'rect' if '×' in first else 'circle'
+    for f in ff:
+        if f.get('center_mark'):
+            a.plot(gx+f['x']*scale,gy+f['y']*scale,'+',color=GRN,ms=4)
+            continue
+        if face=='top' and f['label'].startswith('Ø6.6'):continue
+        right=sorted([q['x']-f['x'] for q in ff if not q.get('center_mark') and q['category']==f['category'] and not (face=='top' and q['label'].startswith('Ø6.6')) and abs(q['y']-f['y'])<1e-6 and q['x']>f['x']+1e-6])
+        lower=sorted([f['y']-q['y'] for q in ff if not q.get('center_mark') and q['category']==f['category'] and not (face=='top' and q['label'].startswith('Ø6.6')) and abs(q['x']-f['x'])<1e-6 and q['y']<f['y']-1e-6])
+        relation=[]
+        if right:relation.append(f'右邻{right[0]:g}')
+        if lower:relation.append(f'下邻{lower[0]:g}')
+        if relation:f['label']+='\n'+' '.join(relation)
+    ordered=sorted(ff,key=lambda h:(h['x'],h['y']));weights=[len(h['label'].split('\n')) for h in ordered]
+    split=min(range(len(ordered)+1),key=lambda k:abs(sum(weights[:k])-sum(weights)/2))
+    groups=[ordered[:split],ordered[split:]]
+    for side,group in enumerate(groups):
+        group.sort(key=lambda h:(-h['y'],h['x']))
+        if not group:continue
+        heights=[]
+        for h in group:
+            probe=a.text(0,0,h['label'],fontsize=FS_NOTE,va='center',parse_math=False);fig.canvas.draw();heights.append(probe.get_window_extent(fig.canvas.get_renderer()).height/fig.dpi*25.4+1.6);probe.remove()
+        if sum(heights)>ph-20:raise ValueError(str((face,side,sum(heights),[(h['label'],height) for h,height in zip(group,heights)])))
+        top=(ph+sum(heights))/2
+        for h,height in zip(group,heights):
+            ty=top-height/2;top-=height;tx=1 if side==0 else pw-1
+            a.annotate(h['label'],(gx+h['x']*scale,gy+h['y']*scale),(tx,ty),fontsize=FS_NOTE,color=GRN if h.get('center_mark') else BLU,va='center',ha='left' if side==0 else 'right',arrowprops=dict(arrowstyle='-',lw=.35,color=BLU),parse_math=False)
+    if face=='top' and (HANDLE_CX or JOB.get('roof_handle_groups')):
+        a.text(pw/2,ph-10,'每组把手：宽排85 / 窄排62 / 排距30，4×Ø6.6 M6过孔',ha='center',fontsize=FS_NOTE,color=BLU)
+    if not ff:a.text(pw/2,ph/2,'本面无功能孔',ha='center',fontsize=FS_NOTE,color='0.35')
+    if face=='top' and rep.get('lid_opening_region_origin'):
+        ox,oy=rep['lid_opening_region_origin'];a.plot(gx+(ox+OH)*scale,gy+(oy+OH)*scale,'+',color=GRN,ms=5)
+        a.text(pw/2,1,f'源可开孔区O距实际盖边{ox+OH:g}/{oy+OH:g}；上图另用实际盖边',ha='center',fontsize=FS_NOTE,color=GRN)
+
+
+def full_first_page_overview(pdf):
+    fig,ax=ordinary_new_page(1)
+    image=fig.add_axes([12/PW,182/PH,95/PW,64/PH]);image.imshow(np.asarray(Image.open(JOB['customer_image'])),interpolation='none',resample=False);image.axis('off');image.set_title('客户原图（原样）',fontsize=FS_NOTE,loc='left')
+    ax.text(12,256,f'订单{JOB.get("order_id","")}｜{MATERIAL_CN} t{t:g}',fontsize=FS_NOTE,color=NAVY)
+    ax.text(12,176,f'箱体{L:g}×{W:g}｜含盖高{H:g}',fontsize=FS_NOTE,color=BLU)
+    ax.text(12,169,f'盖外{L+2*OH:g}×{W+2*OH:g}｜盖裙{skirt:g}',fontsize=FS_NOTE,color=BLU)
+    notes=JOB.get('customer_image_note') or ''
+    lines=wrap_text(ax,notes,FS_NOTE,95)
+    if len(lines)>4:raise ValueError('source-datum note requires more room on first review page')
+    for i,line in enumerate(lines):ax.text(12,162-i*5,line,fontsize=FS_NOTE,color=REDC)
+    review_dimensioned_face(fig,'top',120,150,288,110)
+    review_dimensioned_face(fig,'front',12,22,126,124)
+    review_dimensioned_face(fig,'right',147,22,126,124)
+    review_dimensioned_face(fig,'left',282,22,126,124)
+    xx=max(np.diff(sorted(LONG_X))) if len(LONG_X)>1 else 0;yy=max(np.diff(sorted(SHORT_Y))) if len(SHORT_Y)>1 else 0
+    ax.text(12,15,f'盖体连接{len(rep.get("holes") or [])}对；长边最大心距{xx:g}、短边{yy:g}；体Ø3.3攻M4/盖裙Ø4.5；{t:g}mm薄板与Ri/K须首件核验。',fontsize=FS_NOTE,color=REDC)
+    save_page(pdf,fig)
+
+# Scoped revision: dimensions remain in each view's own physical panel.
+_ld_old_overview=ordinary_overview
+_ld_old_piece=ordinary_piece_page
+_ld_old_end=ordinary_end_page
+_LD_RECORDS=[]
+
+def ld_axes(fig,x,y,w,h):
+    a=fig.add_axes([x/PW,y/PH,w/PW,h/PH]);a.set(xlim=(0,w),ylim=(0,h));a.axis('off');a.s=1
+    return a
+
+def ld_chain(a,values,origin,scale,fixed,axis,offset):
+    vv=sorted({round(float(v),5) for v in values});last=-100
+    for i,(u,v) in enumerate(zip(vv,vv[1:])):
+        if v-u<1e-4:continue
+        # Very short intervals use a second nearby lane, rather than overlapping figures.
+        lane=offset+(6 if (v-u)*scale<8 and i%2 else 0)
+        if axis=='X':dimh(a,origin+u*scale,origin+v*scale,fixed-lane,fixed,fixed,od_n(v-u))
+        else:dimv(a,origin+u*scale,origin+v*scale,fixed+lane,fixed,fixed,od_n(v-u))
+
+def ld_label(a,point,text,bounds):
+    # Glyph-aware local placement; every leader stays within one panel.
+    a.figure.canvas.draw();renderer=a.figure.canvas.get_renderer()
+    occupied=[q.get_window_extent(renderer) for q in a.texts if q.get_text()]
+    best=None
+    for dx,dy,ha in [(5,5,'left'),(-5,5,'right'),(5,-7,'left'),(-5,-7,'right'),(0,10,'center'),(0,-12,'center'),(9,12,'left'),(-9,12,'right'),(9,-14,'left'),(-9,-14,'right')]:
+        tx,ty=point[0]+dx,point[1]+dy
+        probe=a.text(tx,ty,text,fontsize=FS_NOTE,ha=ha,va='center',linespacing=1.1);a.figure.canvas.draw();bb=probe.get_window_extent(renderer);probe.remove()
+        inv=a.transData.inverted();lo,hi=inv.transform([[bb.x0,bb.y0],[bb.x1,bb.y1]])
+        outside=max(0,bounds[0]-lo[0])+max(0,hi[0]-bounds[1])+max(0,bounds[2]-lo[1])+max(0,hi[1]-bounds[3])
+        collisions=sum(bb.overlaps(b) for b in occupied);score=outside*100+collisions*1000+math.hypot(dx,dy)
+        if best is None or score<best[0]:best=(score,tx,ty,ha)
+        if outside==0 and collisions==0:break
+    _,tx,ty,ha=best
+    a.annotate('',point,(tx,ty),zorder=1,arrowprops=dict(arrowstyle='-',lw=.35,color=BLU))
+    a.text(tx,ty,text,fontsize=FS_NOTE,color=BLU,ha=ha,va='center',linespacing=1.1,zorder=5,bbox=dict(facecolor='white',edgecolor='none',pad=.6))
+    _LD_RECORDS.append(dict(kind='local_label',text=text,leader_mm=math.hypot(tx-point[0],ty-point[1]),local_panel=True))
+
+def ld_face_data(face):
+    out=[]
+    for f in review_face_features(face):
+        # Handle centres define the complete repeated mounting pattern on page5.
+        if face=='top' and f['label'].startswith('Ø6.6'):continue
+        first=f['label'].split('\n')[0]
+        kind='handle' if f.get('center_mark') else 'fix' if first.startswith('M4') else 'feature'
+        out.append(dict(x=f['x'],y=f['y'],text=first,kind=kind))
+    return out
+
+def ld_face_panel(fig,face,ox,oy,cw,ch):
+    a=ld_axes(fig,ox,oy,cw,ch);ww=LOL if face=='top' else L if face=='front' else W;hh=LOW if face=='top' else H;fs=ld_face_data(face)
+    functional=[f for f in fs if f['kind']=='feature'];ym=0
+    if face in ('left','right') and len(functional)>4 and min(f['y'] for f in functional)>hh*.5:
+        ym=max(0,min(f['y'] for f in functional)-18)
+    ymax=hh;scale=min((cw-58)/ww,(ch-39)/(ymax-ym));gx=(cw-ww*scale)/2;gy=24
+    title={'front':'正视','right':'右端外视','left':'左端外视','top':'盖顶俯视'}[face]
+    a.text(cw/2,ch-2,title+('｜上部放大，Z仍自箱底' if ym else ''),fontsize=FS_NOTE,ha='center',va='top',color=NAVY)
+    fn={'front':lambda u,v:(v,-u),'right':lambda u,v:(-v,u),'left':lambda u,v:(W+v,-u),'top':lambda u,v:(u+OH,v+OH)}[face]
+    # Clip projection to the local diagram, not to unrelated dimensions.
+    va=fig.add_axes([(ox+gx)/PW,(oy+gy)/PH,ww*scale/PW,(ymax-ym)*scale/PH]);va.set(xlim=(0,ww),ylim=(ym,ymax));va.axis('off');va.s=scale
+    view(va,'LID' if face=='top' else 'ASSEMBLY',face,fn,hidden=False)
+    coordsx=[0,ww]+[f['x'] for f in fs];coordsy=[ym,ymax]+[f['y'] for f in fs if f['y']>=ym]
+    ld_chain(a,coordsx,gx,scale,gy,'X',6)
+    ld_chain(a,coordsy,gy-ym*scale,scale,gx+ww*scale,'Y',7)
+    dimh(a,gx,gx+ww*scale,gy-19,gy,gy,f'{od_n(ww)}'+(' 盖外' if face=='top' else ' 箱体'))
+    # Unique diameter/shape group, not a separate four-line leader for every identical hole.
+    groups={}
+    for f in fs:
+        if f['kind']=='fix':continue
+        groups.setdefault(f['text'],[]).append(f)
+    for text,group in groups.items():
+        f=min(group,key=lambda q:abs(q['x']-ww/2));pt=(gx+f['x']*scale,gy+(f['y']-ym)*scale)
+        label=(f'{len(group)}×' if len(group)>1 else '')+text
+        if f['kind']=='handle':label+='\n4×Ø6.6；85/62/30'
+        ld_label(a,pt,label,(0,cw,21,ch-7))
+    mounts=[f for f in fs if f['kind']=='fix']
+    if mounts:a.text(2,ch-10,f'本面{len(mounts)}对M4；体Ø3.3／裙Ø4.5',fontsize=FS_NOTE,color=BLU)
+    if ym:
+        for z in sorted({f['y'] for f in functional}):
+            zz=gy+(z-ym)*scale;a.plot([gx-2,gx],[zz,zz],color=BLU,lw=.4);a.text(gx-3,zz,'Z'+od_n(z),fontsize=FS_NOTE,color=BLU,ha='right',va='center')
+        a.plot([gx-2,gx,gx+2],[gy-1,gy+1,gy-1],color='k',lw=.6);a.text(2,16,f'下截面Z{od_n(ym)}，非零点',fontsize=FS_NOTE,color=BLU)
+    _LD_RECORDS.append(dict(kind='face',face=face,chain_x=sorted(set(coordsx)),chain_y=sorted(set(coordsy)),panel=[ox,oy,cw,ch],crop_y=ym))
+    for txt in a.texts:txt.set_bbox(dict(facecolor='white',edgecolor='none',pad=.4))
+
+def ordinary_overview(pdf):
+    if not JOB.get('ordinary_local_dimensions_review'):return _ld_old_overview(pdf)
+    fig,ax=ordinary_new_page(1)
+    ia=fig.add_axes([12/PW,211/PH,92/PW,43/PH]);ia.imshow(np.asarray(Image.open(JOB['customer_image'])));ia.axis('off');ia.set_title('客户原图',fontsize=FS_NOTE,loc='left')
+    ordinary_iso(fig,'ASSEMBLY',112,211,82,43)
+    for i,txt in enumerate([f'订单{JOB.get("order_id","")}；数量{JOB.get("quantity",1)}',f'箱体外{L:g}×{W:g}；体高{od_n(rep["params"]["Hb"])}；含盖{H:g}',f'盖外{LOL:g}×{LOW:g}；四边裙15；材质201 t{t:g}',f'四边{len(rep["holes"])}对M4；孔距按各面尺寸链', '孔心定位；盖从实际外边量；mm。把手孔型见第5页。']):ax.text(210,250-i*7,txt,fontsize=FS_NOTE,color=NAVY)
+    for f,x,y in [('front',12,114),('right',218,114),('left',12,22),('top',218,22)]:ld_face_panel(fig,f,x,y,190,87)
+    save_page(pdf,fig)
+
+def ld_native_features(name):
+    p=P[name];allc=sorted(p['flat_circles']);features=[];handle_points=[]
+    for i,(x,y,d) in enumerate(allc,1):
+        if name=='LID' and abs(d-6.6)<1e-5:handle_points.append((x,y,d));continue
+        features.append(dict(x=x,y=y,text=f'Ø{od_n(d)}',id=f'F{i:02}',kind='fix' if abs(d-(4.5 if name=='LID' else 3.3))<1e-5 else 'feature'))
+    # Preserve independent rotations; centre average is the actual four-hole pattern centre.
+    remaining=handle_points[:]
+    while remaining:
+        seed=remaining[0];group=sorted(remaining,key=lambda q:math.dist(q[:2],seed[:2]))[:4]
+        if len(group)!=4:raise ValueError('handle group incomplete')
+        for q in group:remaining.remove(q)
+        cx=sum(q[0] for q in group)/4;cy=sum(q[1] for q in group)/4
+        features.append(dict(x=cx,y=cy,text=f'把手 {len([f for f in features if f["kind"]=="handle"])+1}',kind='handle',holes=group))
+    for i,(x0,y0,x1,y1) in enumerate(sorted(p.get('flat_rectangles') or []),1):features.append(dict(x=(x0+x1)/2,y=(y0+y1)/2,text=f'R{i} {od_n(x1-x0)}×{od_n(y1-y0)}',kind='feature'))
+    return features
+
+def ld_native_panel(fig,name,ox,oy,cw,ch,with_bends=True):
+    a=ld_axes(fig,ox,oy,cw,ch);fx,fy=P[name]['flat_size'];scale=min((cw-80)/fx,(ch-69)/fy);gx=(cw-fx*scale)/2;gy=34
+    for wire in flats[name]['wires']:pl(a,[(gx+x*scale,gy+y*scale) for x,y in wire+[wire[0]]],lw=.7)
+    features=ld_native_features(name)
+    xs=[0,fx]+[f['x'] for f in features];ys=[0,fy]+[f['y'] for f in features]
+    ld_chain(a,xs,gx,scale,gy,'X',6);ld_chain(a,ys,gy,scale,gx+fx*scale,'Y',7)
+    dimh(a,gx,gx+fx*scale,gy-21,gy,gy,f'展开长{od_n(fx)}');dimv(a,gy,gy+fy*scale,gx-8,gx,gx,f'展开宽{od_n(fy)}')
+    if with_bends:
+        BB=bidir(rep,name)
+        for axis in ('X','Y'):
+            vals=BB[axis]
+            # Only a few native fold lines: each gets both edge offsets at the local side.
+            for i,b in enumerate(vals):
+                pos=b['pos']
+                if axis=='X':
+                    dimh(a,gx,gx+pos*scale,gy+fy*scale+8+i*7,gy+fy*scale,gy+fy*scale,f'{b["id"]}左{od_n(pos)}')
+                    dimh(a,gx+pos*scale,gx+fx*scale,gy-28-i*7,gy,gy,f'右{od_n(fx-pos)}')
+                else:
+                    dimv(a,gy,gy+pos*scale,gx-17-i*7,gx,gx,f'{b["id"]}下{od_n(pos)}')
+                    dimv(a,gy+pos*scale,gy+fy*scale,gx+fx*scale+20+i*7,gx+fx*scale,gx+fx*scale,f'上{od_n(fy-pos)}')
+            if len(vals)==2:
+                u,v=vals
+                if axis=='X':dimh(a,gx+u['pos']*scale,gx+v['pos']*scale,gy+fy*scale+24,gy+fy*scale,gy+fy*scale,f'{u["id"]}–{v["id"]} {od_n(v["pos"]-u["pos"])}')
+                else:dimv(a,gy+u['pos']*scale,gy+v['pos']*scale,gx+fx*scale+35,gx+fx*scale,gx+fx*scale,f'{u["id"]}–{v["id"]} {od_n(v["pos"]-u["pos"])}')
+        for b in P[name]['bend_records']:
+            p,q=b['flat_line_mm'];sp=[(gx+x*scale,gy+y*scale) for x,y in (p,q)];pl(a,sp,color=REDC,lw=.8)
+            pt=((sp[0][0]+sp[1][0])/2,(sp[0][1]+sp[1][1])/2)
+            # B number printed directly beside its own line; no long sequence-card leader.
+            a.text(pt[0]+2,pt[1]+2,b['id'],fontsize=FS_NOTE,color=REDC)
+    groups={}
+    for f in features:groups.setdefault(f['text'],[]).append(f)
+    for text,group in groups.items():
+        # Each diameter or repeated pattern labelled next to an actual feature, no page-wide fans.
+        f=min(group,key=lambda q:abs(q['x']-fx/2)+abs(q['y']-fy/2));label=(f'{len(group)}×' if len(group)>1 else '')+text
+        if f['kind']=='handle':label+='\n4×Ø6.6，孔型见第5页'
+        ld_label(a,(gx+f['x']*scale,gy+f['y']*scale),label,(1,cw-1,gy-1,ch-6))
+    for txt in a.texts:txt.set_bbox(dict(facecolor='white',edgecolor='none',pad=.4))
+    _LD_RECORDS.append(dict(kind='native',part=name,circle_count=len(P[name]['flat_circles']),rect_count=len(P[name].get('flat_rectangles',[])),chain_x=sorted(set(xs)),chain_y=sorted(set(ys)),handle_groups=[f for f in features if f['kind']=='handle'],panel=[ox,oy,cw,ch]))
+
+def ordinary_piece_page(pdf,name,page):
+    if not JOB.get('ordinary_local_dimensions_review'):return _ld_old_piece(pdf,name,page)
+    fig,ax=ordinary_new_page(page);ax.text(12,252,f'{name} 真实展开｜尺寸按位置围绕本图排列｜外表面朝读者',fontsize=FS_TITLE,color=NAVY)
+    ax.text(12,241,'孔心链尺寸含两端板边；相同孔径共用数量标注。把手按中心定位＋第5页完整孔型。单位mm。',fontsize=FS_NOTE,color=BLU)
+    ip=render_assy_iso_png(R/'PREVIEW'/f'{VER}_{name}_local_iso.png',[name]);ia=fig.add_axes([344/PW,240/PH,60/PW,16/PH]);ia.imshow(plt.imread(ip));ia.axis('off')
+    ld_native_panel(fig,name,12,49,396,184)
+    rows=sorted(P[name]['bend_records'],key=lambda b:-math.dist(*b['flat_line_mm']))
+    for i,b in enumerate(rows):
+        ax.text(12+i*99,34,f'{i+1}. {b["id"]} {b["direction"]} 90°\n折线长{od_n(math.dist(*b["flat_line_mm"]))}',fontsize=FS_NOTE,color=BLU)
+    ax.text(12,18,f'Ri{ri:g} / Ro{ri+t:g}；K{K:.5f}；先长后短。UP朝读者，DOWN背向读者；机床靠面/挡料须首件校准。',fontsize=FS_NOTE,color=REDC)
+    save_page(pdf,fig)
+
+def ordinary_end_page(pdf):
+    if not JOB.get('ordinary_local_dimensions_review'):return _ld_old_end(pdf)
+    fig,ax=ordinary_new_page(3);ax.text(12,252,'两端板真实展开｜各件独立尺寸链，不跨图拉线',fontsize=FS_TITLE,color=NAVY)
+    for name,x in [('END_L',12),('END_R',218)]:
+        ax.text(x,240,name+' 外视｜零折；Y′=Z',fontsize=FS_NOTE,color=NAVY)
+        ip=render_assy_iso_png(R/'PREVIEW'/f'{VER}_{name}_local_iso.png',[name]);ia=fig.add_axes([(x+157)/PW,235/PH,30/PW,14/PH]);ia.imshow(plt.imread(ip));ia.axis('off')
+        ld_native_panel(fig,name,x,40,190,187,with_bends=False)
+    ax.text(12,24,'左端X′=W−Y；右端X′=Y；相同孔径按数量共用标注。底角内R'+od_n(ri)+'／外R'+od_n(ri+t)+'。',fontsize=FS_NOTE,color=BLU)
+    ax.text(12,16,'Ø3.3为攻M4底孔；盖裙Ø4.5。完整圆孔/方口四向坐标CSV仍随完整包保留。',fontsize=FS_NOTE,color=REDC)
+    save_page(pdf,fig)
+
 # ---- page builders ----
 _probe_fig = plt.figure(figsize=(PW/25.4, PH/25.4), dpi=120)
 _probe_ax = _probe_fig.add_axes([0, 0, 1, 1])
@@ -919,7 +1492,10 @@ out_pdf = R / f'{VER}_BEND_PDF_A3_CN.pdf'
 _PAGE_LAYOUT = []
 _candidate = R / f'.{VER}.layout-check.pdf'
 # U-wrap and L use the same primitives, colours, dimensions and layout gate as the end-plate variant.
-if STRUCTURE == 'u_l_t7u' and not JOB.get('compact_wrap_review'):
+if JOB.get('ordinary_side_fixings_review'):
+    NPAGES=5+len(_REQ_PAGES)
+    with PdfPages(_candidate) as pdf:ordinary_side_fixing_pages(pdf)
+elif STRUCTURE == 'u_l_t7u' and not JOB.get('compact_wrap_review'):
     NPAGES = 7 + len(_REQ_PAGES)
     with PdfPages(_candidate) as pdf:
         fig = plt.figure(figsize=(PW/25.4, PH/25.4), dpi=120)
