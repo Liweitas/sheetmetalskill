@@ -1024,7 +1024,8 @@ def ordinary_process_page(pdf):
 def ordinary_side_fixing_pages(pdf):
     if _TOP4 or len(rep.get('holes') or [])<8 or len({h['side'] for h in rep['holes']})!=4:
         raise ValueError('ordinary side-fixing review requires actual paired holes on four walls and no roof corner holes')
-    if JOB.get('source_side_region'):source_side_region_overview(pdf)
+    if JOB.get('image_dimension_priority_review'):image_dimension_priority_overview(pdf)
+    elif JOB.get('source_side_region'):source_side_region_overview(pdf)
     elif JOB.get('full_first_page_dimensions'):full_first_page_overview(pdf)
     else:ordinary_overview(pdf)
     ordinary_piece_page(pdf,'U',2)
@@ -1704,6 +1705,55 @@ def source_side_region_overview(pdf):
     a.text(gx-2,gy+1,'O(3,3)',fontsize=FS_NOTE,color=GRN,ha='right')
     dimv(a,gy+3*scale,gy+133*scale,gx-10,gx+3*scale,gx+58*scale,'源130',c=GRN)
     dimv(a,gy,gy+133*scale,gx-23,gx,gx+58*scale,'箱底133')
+    ax.text(12,16,'孔心尺寸，单位mm；前后固定孔同排。Ri/K、薄板M4与把手承重须首件试折试装；非批量放行。',fontsize=FS_NOTE,color=REDC)
+    save_page(pdf,fig)
+
+def image_dimension_priority_overview(pdf):
+    if STRUCTURE!='u_endplates' or (L,W,H,t)!=(445,220,160,1) or _TOP4 or len(HANDLE_CX)!=2 or JOB.get('lid_ports') or JOB.get('rect_cutouts'):
+        raise ValueError('image_dimension_priority_review is scoped to the audited445x220x160 case')
+    hs=sorted((W-h['point'][1],h['point'][2],h['diameter'])for h in JOB['panel_holes'])
+    if hs!=[(30,125,12),(60,125,10),(100,125,10)] or sorted(zip(HANDLE_CX,HANDLE_CYS))!=[(109.75,108.5),(332.25,108.5)]:
+        raise ValueError('latest physical drawing dimensions were not applied')
+    fig,ax=ordinary_new_page(1)
+    for i,path in enumerate(JOB['customer_images']):
+        ia=fig.add_axes([(12+i*51)/PW,193/PH,49/PW,61/PH]);ia.imshow(np.asarray(Image.open(path)),interpolation='none',resample=False);ia.axis('off');ia.set_title('客户原图'+str(i+1),fontsize=FS_NOTE,loc='left')
+    ax.text(12,181,f'订单{JOB["order_id"]}；序号004；201不锈钢 t{t:g}',fontsize=FS_NOTE,color=NAVY)
+    ax.text(12,174,f'箱体外{L:g}×{W:g}；含盖高{H:g}；长宽不含盖',fontsize=FS_NOTE,color=BLU)
+    ax.text(12,167,f'盖外{LOL:g}×{LOW:g}；四边裙15；盖体{len(rep["holes"])}对M4',fontsize=FS_NOTE,color=BLU)
+    ax.text(12,160,'孔位以最新客户图为准：侧孔距箱底125',fontsize=FS_NOTE,color=REDC)
+    # Actual roof projection with physical cover-edge centre dimensions.
+    a=ld_axes(fig,117,173,194,84);a.text(97,83,'盖顶俯视｜孔心距实际盖边',fontsize=FS_NOTE,color=NAVY,ha='center',va='top');sc=min(158/LOL,58/LOW);gx=(194-LOL*sc)/2;gy=18
+    view(a,'LID','top',lambda u,v:(gx+(u+OH)*sc,gy+(v+OH)*sc),hidden=False)
+    xx=[0,111.25,333.75,LOL]
+    for u,v in zip(xx,xx[1:]):dimh(a,gx+u*sc,gx+v*sc,gy-5,gy,gy,od_n(v-u))
+    dimh(a,gx,gx+LOL*sc,gy-14,gy,gy,f'{LOL:g} 盖外')
+    xend=gx+LOL*sc
+    dimv(a,gy,gy+110*sc,xend+7,xend,xend,'110')
+    dimv(a,gy+110*sc,gy+LOW*sc,xend+7,xend,xend,od_n(LOW-110))
+    dimv(a,gy,gy+LOW*sc,xend+18,xend,xend,f'{LOW:g} 盖外')
+    for cx,rot in [(111.25,270),(333.75,90)]:
+        a.plot(gx+cx*sc,gy+110*sc,'+',color=GRN,ms=4)
+        a.text(gx+cx*sc,gy+110*sc+18,str(rot)+'°',ha='center',fontsize=FS_NOTE,color=BLU)
+    # Both actual trapezoid orientations, with pitches immediately beside each pattern.
+    for ox,cx,rot,label in [(316,111.25,270,'左'),(362,333.75,90,'右')]:
+        aa=ld_axes(fig,ox,180,44,75);aa.text(22,74,label+'把手 '+str(rot)+'°',ha='center',va='top',fontsize=FS_NOTE,color=NAVY);sgn=1 if rot==90 else -1;scale=.34;xc=22;yc=42
+        xw=xc+sgn*15*scale;xn=xc-sgn*15*scale
+        for x,pitch in [(xw,85),(xn,62)]:
+            for side in [-1,1]:aa.add_patch(Circle((x,yc+side*pitch/2*scale),3.3*scale,fill=False,ec=REDC,lw=.65))
+        dimv(aa,yc-42.5*scale,yc+42.5*scale,xw+sgn*6,xw,xw,'85')
+        dimv(aa,yc-31*scale,yc+31*scale,xn-sgn*6,xn,xn,'62')
+        dimh(aa,min(xw,xn),max(xw,xn),yc-42.5*scale-7,yc-42.5*scale,yc-42.5*scale,'30')
+        aa.text(22,13,'4×Ø6.6 M6过孔',ha='center',fontsize=FS_NOTE,color=BLU)
+        aa.text(22,7,'盖左'+od_n(cx),ha='center',fontsize=FS_NOTE,color=BLU)
+        aa.text(22,1,'盖下110',ha='center',fontsize=FS_NOTE,color=BLU)
+    for face,x,w in [('front',12,125),('right',147,125),('left',282,126)]:
+        ld_face_panel(fig,face,x,23,w,127)
+        aa=next(a for a in fig.axes if getattr(a,'_ld_panel',None)==(x,23,w,127));ww=L if face=='front'else W;scale=min((w-58)/ww,(127-39)/H);gx=(w-ww*scale)/2;xe=gx+ww*scale
+        dimv(aa,24,24+H*scale,xe+20,xe,xe,f'含盖{H:g}')
+    # Explicit functional chain and absolute height, kept apart from the fixing row.
+    aa=next(a for a in fig.axes if getattr(a,'_ld_panel',None)==(282,23,126,127));sc=min((126-58)/W,(127-39)/H);gx=(126-W*sc)/2;gy=24
+    dimv(aa,gy,gy+125*sc,gx-15,gx,gx+30*sc,'孔心高125')
+    for x0,x1 in [(0,30),(30,60),(60,100)]:dimh(aa,gx+x0*sc,gx+x1*sc,gy+108*sc,gy+125*sc,gy+125*sc,od_n(x1-x0))
     ax.text(12,16,'孔心尺寸，单位mm；前后固定孔同排。Ri/K、薄板M4与把手承重须首件试折试装；非批量放行。',fontsize=FS_NOTE,color=REDC)
     save_page(pdf,fig)
 
