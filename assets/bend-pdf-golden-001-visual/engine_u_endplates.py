@@ -1392,6 +1392,9 @@ def ld_face_panel(fig,face,ox,oy,cw,ch):
     ld_chain(a,coordsx,gx,scale,gy,'X',6)
     ld_chain(a,coordsy,gy-ym*scale,scale,gx+ww*scale,'Y',7)
     dimh(a,gx,gx+ww*scale,gy-19,gy,gy,f'{od_n(ww)}'+(' 盖外' if face=='top' else ' 箱体'))
+    if JOB.get('show_review_overall_dimensions') and not ym:
+        dimv(a,gy,gy+hh*scale,gx+ww*scale+20,gx+ww*scale,gx+ww*scale,
+             f'{od_n(hh)}'+(' 盖宽' if face=='top' else ' 含盖高'))
     # Unique diameter/shape group, not a separate four-line leader for every identical hole.
     groups={}
     for f in fs:
@@ -1565,6 +1568,9 @@ def ld_face_panel(fig,face,ox,oy,cw,ch):
     ld_chain(a,coordsx,gx,scale,gy,'X',6)
     ld_chain(a,coordsy,gy-ym*scale,scale,gx+ww*scale,'Y',7)
     dimh(a,gx,gx+ww*scale,gy-19,gy,gy,f'{od_n(ww)}'+(' 盖外' if face=='top' else ' 箱体'))
+    if JOB.get('show_review_overall_dimensions') and not ym:
+        dimv(a,gy,gy+hh*scale,gx+ww*scale+20,gx+ww*scale,gx+ww*scale,
+             f'{od_n(hh)}'+(' 盖宽' if face=='top' else ' 含盖高'))
     # Unique diameter/shape group, not a separate four-line leader for every identical hole.
     groups={}
     for f in fs:
