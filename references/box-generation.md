@@ -1,4 +1,4 @@
-> R12分层说明：本页描述底层显式job或历史审核适配器。新需求优先使用 [通用brief入口](general-process.md)；其盖裙缺省固定15mm、Ri缺省0.8mm、单边g缺省0.5mm，q按本款条件计算为待确认候选，来源须保留。显式值优先，旧项目不套默认。完整中文加工册见 [R12中文作业册](R12-CN-workshop.md)，本页旧式审核PDF不代表最新制造齐套。
+> R12分层说明：本页描述底层显式job或历史审核适配器。新需求优先使用 [通用brief入口](general-process.md)；其盖裙缺省固定15mm、Ri缺省0.8mm、单边g固定0.5mm，q按本款条件计算为待确认候选，来源须保留。除g固定0.5mm外，其它显式值优先；旧项目不回写。完整中文加工册见 [R12中文作业册](R12-CN-workshop.md)，本页旧式审核PDF不代表最新制造齐套。
 
 > R07新齐套归档/板材/数量及完整ZIP门禁见[delivery-contract.md](delivery-contract.md)，优先于本页旧单次output路径说明。canonical参数schema保留2.4.1；程序版本为2.7.0。
 
@@ -19,7 +19,7 @@ U+两端板：U两折；封板零折，底部圆角随U外轮廓，沿X拼缝按
 - id：安全文件标识；units默认mm，可为mm/cm/m/inch，所有线性参数和hole.point/diameter同时换算。
 - dimensions.length/width/height：盒体名义外L/W；有盖height为闭盖金属外高H，无盖为裸盒高。不含把手五金。
 - material、thickness、Ri、K_ANSI、seam_gap：当前明确材料和名义几何/补偿输入，无工厂标定承诺。seam_gap必须小于Ri。新输入只支持ANSI K法，旧参数适配器仍保留直接BD法，禁止重复补偿。
-- lid_required：必须声明。true要求lid.skirt_height、corner_gap、roof_gap；Ri+t<裙高<裸盒高，0≤角缝<Ri。新项目g未覆盖时仅默认单边0.5mm，corner_scheme未覆盖时默认03。q没有默认，必须明确。当前CAD适配器仅03，非03显式覆盖会保留并BLOCKED，等待相应经过验证的适配器。
+- lid_required：必须声明。true要求lid.skirt_height、corner_gap、roof_gap；Ri+t<裙高<裸盒高，0≤角缝<Ri。新建/重新出图的g写死为单边0.5mm，禁止覆盖；盖外长宽＝箱体外长宽＋2×(实际盖板厚＋0.5)。corner_scheme未覆盖时默认03。q没有默认，必须明确。当前CAD适配器仅03，非03显式覆盖会保留并BLOCKED，等待相应经过验证的适配器。
 - 裸盒高=有盖H−t−q。g是盖内直壁至盒外直壁，独立于q。输入Ri0.8、g0.5、q0可能发生根部正交叠；实际求交保留数值；无本项目授权阻断完整交付，有明确现场修配授权则按site-fit.md交付并待试装，不能改q/g/Ri求通过。
 - method可显式u_external_ends或u_wrap_bottom_l。record_kind默认new；existing必须显式method和rebuild_existing_authorized=true，有盖还须显式g与corner_scheme，防止旧单套新默认。永不改原CAD或覆盖旧输出。
 - holes可省略，表示无声明孔，不能把客户要求的孔省略。每项id/part_id/diameter/point/axis，point为装配mm基准中明确选定的板面孔心；axis为单位法向量。允许的归属由结构决定：U、END_L/END_R或L，以及适用时LID。实际STEP须找到两处同轴圆边且间距等于t，曲面孔或异常贯穿会BLOCKED。孔表中的切孔直径必须有当前来源，M4不自动补孔径。

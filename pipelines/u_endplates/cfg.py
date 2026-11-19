@@ -12,7 +12,13 @@ OUTER_L, OUTER_W, OUTER_H = _J.get('finished_outer_mm', [L + 2*(_J['g']+_J['t'])
 assert _J.get('dim_basis', 'body_outer') == 'body_outer' and _J.get('height_basis', 'total_incl_lid') == 'total_incl_lid'
 t = float(_J['t']); ri = float(_J['Ri']); ro = ri + t; K = float(_J['K'])   # K/R: source in _J['kr_source'] (empirical unless measured)
 KR_SOURCE = _J.get('kr_source', 'empirical')
-g = float(_J['g'])
+g = 0.5
+if float(_J['g']) != g:
+    raise ValueError('盖体单边余量固定0.5mm；g不可覆盖')
+_expected_outer = [L + 2*(t + g), W + 2*(t + g), H]
+if not all(math.isclose(float(actual), expected, rel_tol=0, abs_tol=1e-8)
+           for actual, expected in zip((OUTER_L, OUTER_W, OUTER_H), _expected_outer)):
+    raise ValueError('盖外尺寸必须为箱体外尺寸加两侧实际板厚与0.5mm单边余量；禁止沿用不符尺寸链的盖外包')
 qmin = ri - math.sqrt(ri * ri - (ri - g) ** 2) if ri > g else 0.0
 q = _J['q'] if _J.get('q') is not None else math.ceil((qmin + max(.05, t * .05)) * 10) / 10   # skill q rule
 Hb = H - t - q

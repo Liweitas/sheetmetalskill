@@ -32,7 +32,7 @@ class GoldenWrap(unittest.TestCase):
 
     def test_body_length_width_do_not_shrink_with_lid_overhang(self):
         for thickness in (.8, 1, 1.2):
-            for clearance in (.5, 1):
+            for clearance in (.5,):
                 brief = self.brief() | dict(dimensions=dict(length=430,width=245,height=170),
                     thickness=thickness,g=clearance,rect_cutouts=[],
                     handles=dict(profile='handle-85-62-30-v1',cx=[215],cy=122.5))

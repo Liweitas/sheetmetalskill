@@ -46,7 +46,13 @@ def pipe_brief(brief, code):
     basis = brief.get('dim_basis', 'body_outer')
     if basis != 'body_outer':
         fail('长宽永远为不含盖子的箱体外尺寸；dim_basis必须为body_outer，历史含盖稿需重建')
-    ri, g = float(brief.get('Ri', .8)), float(brief.get('g', .5))
+    ri, g = float(brief.get('Ri', .8)), 0.5
+    try:
+        supplied_g = float(brief.get('g', g))
+    except (TypeError, ValueError):
+        fail('盖体单边余量固定0.5mm；g不可覆盖')
+    if supplied_g != g:
+        fail('盖体单边余量固定0.5mm；g不可覆盖，盖外尺寸按实际板厚加两侧板厚和余量计算')
     if not all(math.isfinite(v) and v >= 0 for v in (ri, g)) or ri == 0:
         fail('Ri must be positive and g nonnegative')
     structure = brief.get('structure') or ('u_endplates' if max(L, W) >= H else 'u_l_t7u')
