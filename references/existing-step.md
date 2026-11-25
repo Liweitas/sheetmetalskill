@@ -27,6 +27,14 @@ part_roles只为明确来源的语义分类标签，不凭Solid数量恢复装�
 5. 逐件成形三视、孔轴表、实际圆弯角/R和补偿状态、已得到的真实展开/折线，以及失败件缺平坯说明，统一纳入SOURCE_REVIEW_BENDING_PARTIAL_HOLD.pdf。图册覆盖全源件，不能称未取得的完整制造折弯图已完成。无确认K时BA/BD未知；显式诊断K算出的值均标diagnostic，几何折线位置不是机台BG。逐页渲染仍需执行agent目视。
 6. source_manifest与validate_source_manifest验证实际文件SHA、全部源件记录、每份可支持STEP/DXF绑定及PDF覆盖。AUDIT_RESULT独立报告audit_completed、geometry_delivery_complete和manufacturing_delivery_complete。PARTIAL_HOLD退出2且写BLOCKED_RESULT；没有制造成功RUN_RESULT。AUDIT_COMPLETE_WITH_HOLD退出0只表示支持的全部几何步骤完成，制造和批量放行仍false。
 
+## 用户要求拆分 STEP 时必须直接给出拆解图（2026-11-25）
+
+用户说“拆出来”或表示看不到分件时，不能只把源件和PDF放进ZIP让用户自行寻找。至少提供一张单独可查看的放大爆炸图PNG，并在回复中直接展示或附上该图；完整审核ZIP内也保留同版PNG。图应从本次源BRep/mesh与实际爆炸变换生成，完整显示所有实体，主体占据主要画幅，不能因整体长宽比导致零件缩成一小条。必要时按模型包围范围放大或裁剪，但不能裁掉任何实体、孔或装配关系。
+
+每个分离实体在图边标注其真实源实体ID（如 `SOLID_01`），编号与PDF实体页及独立STEP文件名一致；没有源装配元数据时只称源实体编号，不能编造零件名称、BOM序号或功能。另给装配图便于对照。用户要求制造拆分时，源实体爆炸图只证明原STEP中现有实体关系，不能冒充可生产的拆件方案；改变源拓扑或把实体重新分成U板、端板等属于设计变更，必须单独确认。
+
+图和文件应明确区分：源实体拆解/装配预览、诊断展开、几何核验展开、生产下料图。诊断K或不支持的实体不能标成可下料件；BOP/导出回读失败须在图包首页和回复摘要中说明。若审计门禁失败，不得称生产拆图已完成或伪造合格清单；仍应给可查看的受阻审核图包，并列出阻断实体和原因。
+
 ## 角方案与无设计变更试验
 
 既有盖保留原角，不自动套新订单03；8条斜边不证明符合本技能03。需要对照时使用diagnose_corner03.py明确给出t/Ri/裙高/角缝/K假设，对实际DXF比较，输出hypothesis_only；匹配也不能替代成形STEP严格BOP与native03_check。明确原03要求的交付仍须原生03门禁，不能用preserve_source标签把不符03冒充通过。
