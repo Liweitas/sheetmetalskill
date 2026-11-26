@@ -18,7 +18,8 @@ Hard rule pointer: SKILL.md user hard rule 13.
   top-level entries, which then collides across orders).
 - The ZIP has exactly one top-level directory named with the **real customer order number**, then the drawing version directory: `<ORDER_ID>/<VER>/...`.
   Keep CHANGELOG inside `<ORDER_ID>/<VER>/DOC/{VER}_CHANGELOG.txt`. No loose top-level files beside the order directory.
-- The dated archive path is `客户图纸/YYYYMMDD/<ORDER_ID>/<VER>/...`.
+- The dated archive path is `客户图纸/YYYYMMDD/<ORDER_ID>/`. Store the live `{VER}_CONFIRM_DRAFT.zip` directly in this order folder, alongside the extracted/current `<VER>/` directory; do not put the ZIP inside `<VER>/`.
+- After extraction, the ZIP itself creates `<ORDER_ID>/<VER>/...`, with the PDF under `<ORDER_ID>/<VER>/PDF/` and the other deliverables under their corresponding folders. Example: `客户图纸/20261118/3316998865128012695/{VER}_CONFIRM_DRAFT.zip` extracts to `3316998865128012695/<VER>/PDF/...`.
 - Never substitute VER, date, sequence, price, or a local task folder for the real order number. If the order number is absent, do not create a falsely named outbound archive; keep the work in the order workspace and ask for the order number.
 - Chat attachments must point at the VER-prefixed paths so the downloaded
   filename on disk also carries VER.
