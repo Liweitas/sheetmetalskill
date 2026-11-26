@@ -44,6 +44,8 @@ if _HJ:
     HANDLE_CX = [float(x) for x in _HJ['cx']]; HANDLE_CY = W / 2 if _HJ.get('cy') is None else float(_HJ['cy'])
 else:
     D_HDL = HDL_WIDE = HDL_NARROW = HDL_ROWS = 0.0; HANDLE_CX = []; HANDLE_CY = W / 2
+HANDLE_CYS = [float(y) for y in (_HJ.get('cys') or [HANDLE_CY]*len(HANDLE_CX))]
+assert len(HANDLE_CYS)==len(HANDLE_CX)
 HAS_HANDLES = bool(HANDLE_CX)
 HANDLE_MOUNT = "NONE"
 HANDLE_REF = bool(_HJ.get('reference_envelope', False))
@@ -51,11 +53,23 @@ def handle_holes():
     out = []
     for hi,cx in enumerate(HANDLE_CX):
         rotations = _HJ.get('rotations')
-        s = (1 if rotations[hi] == 90 else -1) if rotations is not None else (1 if cx < L / 2 else -1)          # wide row toward lid centre X (handles face each other)
-        tag = 'L' if s > 0 else 'R'
-        xw = cx + s * HDL_ROWS / 2; xn = cx - s * HDL_ROWS / 2
-        out += [dict(id=f'H{tag}-W1', handle=tag, row='wide', x=xw, y=HANDLE_CY - HDL_WIDE / 2), dict(id=f'H{tag}-W2', handle=tag, row='wide', x=xw, y=HANDLE_CY + HDL_WIDE / 2),
-                dict(id=f'H{tag}-N1', handle=tag, row='narrow', x=xn, y=HANDLE_CY - HDL_NARROW / 2), dict(id=f'H{tag}-N2', handle=tag, row='narrow', x=xn, y=HANDLE_CY + HDL_NARROW / 2)]
+        # Canonical profile: wide/narrow pitch along local Y; row spacing along local X.
+        # Apply the requested in-plane rotation to every mounting point, not just the row side.
+        angle = int(rotations[hi]) if rotations is not None else (0 if cx < L / 2 else 180)
+        if angle not in (0, 90, 180, 270): raise ValueError(f'unsupported handle rotation: {angle}')
+        tag = 'L' if angle in (0, 90) else 'R'
+        tags=[('L' if int(rr) in (0,90) else 'R') for rr in rotations] if rotations is not None else [('L' if xx<L/2 else 'R') for xx in HANDLE_CX]
+        if tags.count(tag)>1:tag+=str(hi+1)
+        cy=HANDLE_CYS[hi]
+        ca={0:(1,0),90:(0,1),180:(-1,0),270:(0,-1)}[angle]
+        sa={0:(0,1),90:(-1,0),180:(0,-1),270:(1,0)}[angle]
+        points=[]
+        for row,spacing,pitch in (('wide',HDL_ROWS/2,HDL_WIDE),('narrow',-HDL_ROWS/2,HDL_NARROW)):
+            for ix,along in enumerate((-pitch/2,pitch/2),1):
+                x=cx+ca[0]*spacing+sa[0]*along
+                y=cy+ca[1]*spacing+sa[1]*along
+                points.append(dict(id=f'H{tag}-{"W" if row=="wide" else "N"}{ix}',handle=tag,row=row,x=x,y=y,rotation=angle))
+        out += points
     return out
 # reference handle body (envelope only, NOT supplier geometry)
 _E = (_pf.get('reference_envelope_mm') if _HJ else None) or {'base': [50, 105, 3], 'posts': [10, 10, 35], 'bar': [10, 100, 8]}

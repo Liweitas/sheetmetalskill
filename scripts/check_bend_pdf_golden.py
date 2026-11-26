@@ -54,7 +54,10 @@ def main():
         report['gate'] = 'BLOCK'
         report['blocks'].append(f'golden missing: {GOLDEN}')
     else:
-        for name in FILES:
+        names=list(FILES)
+        rp=order/'work/report.json'
+        if rp.exists() and json.loads(rp.read_text()).get('lid_required') is False:names.append('engine_body_only.py')
+        for name in names:
             g = GOLDEN / name
             a = add / name
             entry = {'golden_sha256': sha256(g) if g.exists() else None}

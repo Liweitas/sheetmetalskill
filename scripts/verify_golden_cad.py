@@ -38,6 +38,23 @@ expected.update((h['x'], h['y'], h['d']) for h in rep['handle_holes'])
 expected = {tuple(round(v, 5) for v in row) for row in expected}
 lid = Part.read(str(work / 'LID.step'))
 assert circles(lid, job['H']) == expected
+roof_rectangles=[]
+for opening in job.get('lid_rectangles') or []:
+    from rect_cutout_tool import rounded_rect_prism
+    cx,cy=opening['center'];ww,hh=opening['size'];rr=opening.get('corner_radius',0)
+    cutter=rounded_rect_prism([cx,cy,job['H']-job['t']/2],[ww,hh],rr,[0,0,1],length=2*job['t']+4)
+    assert lid.common(cutter).Volume<1e-5
+    hits=[]
+    for face in lid.Faces:
+        if not isinstance(face.Surface,Part.Plane) or abs(face.CenterOfMass.z-job['H'])>1e-5:continue
+        for wire in face.Wires:
+            b=wire.BoundBox
+            if abs(b.XLength-ww)<1e-5 and abs(b.YLength-hh)<1e-5 and abs((b.XMin+b.XMax)/2-cx)<1e-5 and abs((b.YMin+b.YMax)/2-cy)<1e-5:
+                arcs=[e for e in wire.Edges if isinstance(e.Curve,Part.Circle)]
+                assert (len(arcs)==4 and all(abs(e.Curve.Radius-rr)<1e-5 for e in arcs)) if rr else len(wire.Edges)==4
+                hits.append(wire)
+    assert len(hits)==1,opening
+    roof_rectangles.append(opening)
 panel_readback = []
 for hole in job.get('panel_holes', []):
     shape = Part.read(str(work / (hole['part_id']+'.step')))
@@ -83,7 +100,7 @@ assert all(c['axis_line_material_lid_mm'] < 1e-5 and c['axis_line_material_body_
 result = {'pass': True, 'release': job['release'], 'finished_outer_from_STEP_mm': size,
           'roof_holes_from_STEP': sorted(expected),
           'panel_holes_from_STEP': panel_readback,
-          'rect_cutouts_open_in_STEP': job.get('rect_cutouts', []),
+          'rect_cutouts_open_in_STEP': job.get('rect_cutouts', []),'lid_rectangles_from_STEP':roof_rectangles,
           'main_hole_center_to_lid_edges_mm': [
               [h['x']-lid.BoundBox.XMin, min(h['y']-lid.BoundBox.YMin, lid.BoundBox.YMax-h['y'])]
               for h in job['lid_ports']],

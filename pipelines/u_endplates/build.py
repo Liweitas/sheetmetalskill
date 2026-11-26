@@ -153,6 +153,9 @@ for c in _LID_IN:
             for sx in (-1,1):
                 LID=LID.cut(cyl(small,[px+sx*pitch/2,py+sy*pitch/2,ZT-t/2],[0,0,1],ln=t+4))
     LID_PORT_REC.append({'x':px,'y':py,'d':big,'d_bolt':small,'pitch':pitch,'bolts':4 if small and pitch else 0})
+# Explicit lid cutouts use the same actual rounded-rectangle cutter as panel openings.
+for opening in JOB.get('lid_rectangles') or []:
+    LID=LID.cut(rounded_rect_prism([*opening['center'],ZT-t/2],opening['size'],opening.get('corner_radius',0),[0,0,1],length=2*t+4))
 LID=LID.removeSplitter()
 # reference handle bodies (envelope only, marked REFERENCE; not sheet metal, not supplier geometry)
 def handle_ref(cx):
@@ -211,10 +214,21 @@ pp=[(a,b) for a,b in itertools.combinations(HH,2)]
 rep['handle_holes']=hc
 rep['handle_pattern_check']={}
 for tag in sorted({h['handle'] for h in HH}):   # v2.8.2: no handles -> empty
-    hs={h['id'][3:]:h for h in HH if h['handle']==tag}
-    rep['handle_pattern_check'][tag]={'wide_pitch':abs(hs['W2']['y']-hs['W1']['y']),'narrow_pitch':abs(hs['N2']['y']-hs['N1']['y']),'row_spacing':abs(hs['W1']['x']-hs['N1']['x']),
-       'wide_row_x':hs['W1']['x'],'narrow_row_x':hs['N1']['x'],'wide_row_toward_centre':abs(hs['W1']['x']-L/2)<abs(hs['N1']['x']-L/2)}
-rep['handle_mirror_ok']=len(HANDLE_CX)!=2 or all(any(abs(a['x']+b['x']-L)<1e-9 and abs(a['y']-b['y'])<1e-9 for b in HH if b['handle']=='R') for a in HH if a['handle']=='L')
+    hs={h['id'].split('-',1)[1]:h for h in HH if h['handle']==tag}
+    mid=lambda a,b:((a['x']+b['x'])/2,(a['y']+b['y'])/2)
+    dist=lambda a,b:math.hypot(a['x']-b['x'],a['y']-b['y'])
+    wm=mid(hs['W1'],hs['W2']);nm=mid(hs['N1'],hs['N2'])
+    wd=(hs['W2']['x']-hs['W1']['x'],hs['W2']['y']-hs['W1']['y'])
+    wide_axis='X' if abs(wd[0])>abs(wd[1]) else 'Y'
+    rects=JOB.get('lid_rectangles') or []
+    rlong='X' if rects and max(rects[0]['size'])==rects[0]['size'][0] else ('Y' if rects else None)
+    rect_parallel=(wide_axis==rlong) if rlong else None
+    # The inward-facing row rule applies to paired handles with a defined inward X direction.
+    toward=(abs(wm[0]-L/2)<abs(nm[0]-L/2)) if wide_axis=='Y' else None
+    rep['handle_pattern_check'][tag]={'wide_pitch':dist(hs['W1'],hs['W2']),'narrow_pitch':dist(hs['N1'],hs['N2']),'row_spacing':math.hypot(wm[0]-nm[0],wm[1]-nm[1]),
+       'wide_axis':wide_axis,'rotation_deg':hs['W1'].get('rotation',0),'wide_row_midpoint':wm,'narrow_row_midpoint':nm,
+       'wide_row_toward_centre':toward,'lid_rect_long_axis':rlong,'wide_axis_parallel_to_lid_rect_long_axis':rect_parallel}
+rep['handle_mirror_ok']=len(HANDLE_CX)!=2 or all(any(a['handle']!=b['handle'] and abs(a['x']+b['x']-L)<1e-9 and abs(a['y']-b['y'])<1e-9 for b in HH) for a in HH)
 rep['handle_min_hole_edge_spacing']=min((math.dist([a['x'],a['y']],[b['x'],b['y']])-D_HDL for a,b in pp),default=None)
 # rivet tail / rivet-nut envelope under lid top: Ø12 x 12 below lid inner face (generic envelope, model 待确认)
 tails=Part.makeCompound([Part.makeCylinder(6,12,V(h['x'],h['y'],ZT-t-12)) for h in HH])
@@ -373,6 +387,14 @@ for n in parts:
         finally:DT.intersections=_orig
         dxfval='skill validate_planar with tangent points merged at 1e-6 (first try: %s)'%ex
     rep['parts'][n]['flat_rectangles']=[[w.BoundBox.XMin,w.BoundBox.YMin,w.BoundBox.XMax,w.BoundBox.YMax] for w in face.Wires if not w.isSame(face.OuterWire) and len(w.Edges)==4 and all(isinstance(e.Curve,Part.Line) for e in w.Edges)]
+    rounded=[]
+    for wire in face.Wires:
+        if wire.isSame(face.OuterWire) or len(wire.Edges)!=8:continue
+        arcs=[e for e in wire.Edges if isinstance(e.Curve,Part.Circle)]
+        lines_=[e for e in wire.Edges if isinstance(e.Curve,Part.Line)]
+        if len(arcs)==4 and len(lines_)==4 and max(e.Curve.Radius for e in arcs)-min(e.Curve.Radius for e in arcs)<1e-5:
+            bb_=wire.BoundBox;rounded.append([bb_.XMin,bb_.YMin,bb_.XMax,bb_.YMax,arcs[0].Curve.Radius])
+    rep['parts'][n]['flat_rounded_rectangles']=rounded
     rep['parts'][n]['dxf_validation']=dxfval
     flats[n]=face
     rep['parts'][n].update(flat_size=[face.BoundBox.XLength,face.BoundBox.YLength],flat_area=face.Area,dxf_native_area_diff=diff,bend_records=recs,thickness=tm,
@@ -383,7 +405,7 @@ F.closeDocument(doc.Name)
 proj={}
 for name,shape in {**parts,'ASSEMBLY':asm}.items():
     proj[name]={}
-    for label,dvec in (('front',V(0,-1,0)),('right',V(1,0,0)),('top',V(0,0,1))):
+    for label,dvec in (('front',V(0,-1,0)),('right',V(1,0,0)),('left',V(-1,0,0)),('top',V(0,0,1))):
         g_=TechDraw.projectEx(shape,dvec);pol=[];hid=[]
         for k,item in enumerate(g_[:10]):
             for e in item.Edges:

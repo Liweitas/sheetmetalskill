@@ -1,5 +1,7 @@
 # 通用输入、来源与交付等级 R11
 
+用户最新标注要求（2026-11-19）：有盖时直接标齐裸箱体、合盖总外包、盖子自身三组长×宽×高；订单的箱体长宽/含盖高口径另列。无盖时标裸箱体外长宽高，合盖及盖子项不适用。见[尺寸口径与实际回读](parameters.md#带盖与不带盖的完整长宽高)。这项规定是出图要求，不代表旧渲染器已自动满足；逐页核验实际输出。
+
 入口：`python3 scripts/build_general_package.py brief.json --output /absolute/customer-archive`。依赖与旧入口相同；`--resolve-only`只解析、不启动 CAD。原完整显式 job 入口继续可用，既有 STEP 仍使用 audit_step.py，不自动套新订单默认。
 
 最少 brief：
@@ -27,3 +29,15 @@ roof_ports默认two_reference，两孔直径候选18、沿宽中心对称、位�
 完整路径：原始brief+编译job+参数来源CSV/JSON；确认PNG；同件装配/爆炸/分件STEP；分件真实展开CUT及独立BEND层DXF；集中套料CUT/预览PDF；三视、成形斜视、展开、材料板厚、基准、逐弯位置方向角度顺序与Ri/K来源的中文工艺PDF；BOM/验收/哈希；同一修订目录、唯一完整ZIP。爆炸件只能平移同一实际成形零件。CUT禁止折弯线，BEND逐原生弯线回读。正式命名缺字段不猜，工厂v不等于内部R。
 
 支持边界：当前两类矩形等厚直角结构与圆通孔；小尺寸孔/裙/圆角冲突阻断。异形、非90度、沉座、翻孔、压铆、内折边、焊接工艺及机台访问须实际适配，不声称全支持。工厂签署记录不会绕过BRep/原生方向/03/干涉与范围校验。
+
+## 无盖无孔金样分支
+
+当前通用入口脚本已关闭，不能继续调用`build_general_package.py`后自行改造它的输出样式。明确无盖、无孔的201/1mm单套矩形箱，使用`build_golden_package.py BRIEF.json --output OUT --naming NAMING.json`；命名沿用户原三位编号，不自动补四位。
+
+此分支要求：`lid_required:false`、`height_basis:bare_body`、`dim_basis:body_outer`、`holes:[]`，以及`handles/roof_ports/fixings`各为`{mode:none}`，单位mm、material201、thickness1、quantity1。实际JSON键和值须带双引号，布尔false不带引号。max(L,W)须≥H，仅支持U底＋两外封端板；明确其它结构、孔或材料厚度时阻断，不忽略要求。
+
+g/q/裙高/盖外包均不适用；裸箱体H直接等于用户外高。无盖不增加盖体螺钉孔。U按实际底外面重新原生展开、测厚与signed bend方向回读；端板用det+1的外视刚体转平；回读成形/展开STEP及CUT面积，验证顶部开口自由和零孔。端板盖U零退让，拼接处焊接仅为本单装配候选，焊法/焊缝/变形须首件核验，CAD不伪造焊道。
+
+`engine_body_only.py`由金样make_bend_pdf分发，复用既有金样标准尺寸函数、真实轴测和版面检查，另作无盖页眉，不能打印含盖高度/盖余量或绿色假盖。金样哈希门禁对无盖报告额外检查该引擎。实际244×191×180、201/1mm案例：U平坯242×547.6、两端191×180、2/0/0折、8STEP、7DXF，4页A3红蓝PDF和1页NEST；这只是该案例校验记录，不是新尺寸的固定展开值。新尺寸必须实际重建并回读，不照抄本例数值。
+
+此适配器当前输出金样确认稿格式，通用R07/R12 DELIVERY_ENVELOPE门禁不支持该目录结构，不能声称已通过该门禁。独立实际STEP/原生展开/外视手性/CUT/NEST/标准尺寸/字体/逐页目视/ZIP检查须分别记录，实物首件和生产放行保持未完成。

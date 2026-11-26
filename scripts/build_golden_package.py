@@ -70,7 +70,7 @@ def pipe_brief(brief, code):
         fail('K must be between 0 and 1')
     from plan_lid_fixings import plan_side_fixings
     try:
-        auto_fixings=plan_side_fixings(L,W,overhang=offset,edge_inset=brief.get('fixing_edge_inset',12.0),max_pitch=brief.get('fixing_max_pitch',200.0))
+        auto_fixings=plan_side_fixings(L,W,overhang=offset,edge_inset=brief.get('fixing_edge_inset',12.0),max_pitch=brief.get('fixing_max_pitch',150.0))
     except ValueError as ex:
         fail(str(ex))
     fixings = {}
@@ -90,7 +90,7 @@ def pipe_brief(brief, code):
     handles = brief.get("handles") or {}
     if handles:
         if (not isinstance(handles, dict) or
-                set(handles) - {"profile", "cx", "cy", "rotations"} or
+                set(handles) - {"profile", "cx", "cy", "cys", "rotations"} or
                 handles.get("profile") != "handle-85-62-30-v1"):
             fail("handles needs the supported handle-85-62-30-v1 lid profile")
         handles = dict(handles)
@@ -108,10 +108,17 @@ def pipe_brief(brief, code):
                 type(cy) not in (int, float) or not math.isfinite(cy) or
                 not 45.8 < cy < W - 45.8):
             fail("handle mounting holes must fit inside the lid")
+    if handles.get('cys') is not None:
+        cys=handles['cys']
+        if (brief.get('review_adapter')!='mixed_end_ports_review' or
+                not isinstance(cys,list) or len(cys)!=len(handles['cx']) or
+                any(type(y) not in (int,float) or not math.isfinite(y) or not 45.8<y<W-45.8 for y in cys)):
+            fail('independent handle Y centers require mixed_end_ports_review and one valid cys value per handle')
+        if basis=='finished_outer': handles['cys']=[y-offset for y in cys]
     if handles.get('rotations') is not None:
         rotations=handles['rotations']
-        if not isinstance(rotations,list) or len(rotations)!=len(handles['cx']) or any(type(r) not in (int,float) or r not in (90,270) for r in rotations):
-            fail('handle rotations must be 90/270, one per center')
+        if not isinstance(rotations,list) or len(rotations)!=len(handles['cx']) or any(type(r) not in (int,float) or r not in (0,90,180,270) for r in rotations):
+            fail('handle rotations must be 0/90/180/270, one per center')
     panels = [h for h in brief.get('holes', []) if h.get('part_id') != 'LID']
     rects = brief.get('rect_cutouts') or []
     if (panels or rects) and basis != 'body_outer':
@@ -142,17 +149,48 @@ def pipe_brief(brief, code):
         if type(d) not in (int, float) or not math.isfinite(d) or d <= 0:
             fail('panel diameter must be finite and positive')
         panel_bounds(h, h.get('point'), [d/2, d/2])
-    for part in {h['part_id'] for h in panels if h.get('purpose') == 'handle'}:
-        group = [h for h in panels if h['part_id']==part and h.get('purpose')=='handle']
-        pts = sorted((h['point'][2], h['point'][1]) for h in group)
-        if (part not in ('END_L', 'END_R') or len(pts)!=4 or
+    lid_rectangles = brief.get('lid_rectangles') or []
+    rectangle_ids = set()
+    for opening in lid_rectangles:
+        size, center = opening.get('size'), opening.get('center')
+        radius = opening.get('corner_radius', 0)
+        if (not isinstance(size, list) or len(size) != 2 or
+                any(type(v) not in (int, float) or not math.isfinite(v) or v <= 0 for v in size) or
+                not isinstance(center, list) or len(center) != 2 or
+                any(type(v) not in (int, float) or not math.isfinite(v) for v in center) or
+                type(radius) not in (int, float) or not math.isfinite(radius) or
+                not 0 <= radius < min(size)/2):
+            fail('lid_rectangles need center:[x,y], size:[width,height], and valid corner_radius')
+        if not isinstance(opening.get('id'), str) or not opening['id'] or opening['id'] in rectangle_ids:
+            fail('lid rectangle IDs must be present and unique')
+        rectangle_ids.add(opening['id'])
+        cx, cy = center
+        hx, hy = size[0]/2, size[1]/2
+        if min(cx+offset-hx, L+offset-cx-hx,
+               cy+offset-hy, W+offset-cy-hy) < ri+t:
+            fail('lid rectangular opening crosses the lid bend zone')
+    centers=brief.get('panel_handle_centers') or {}
+    if (not isinstance(centers,dict) or any(part not in ('END_L','END_R') or
+            not isinstance(center,list) or len(center)!=2 or
+            any(type(v) not in (int,float) or not math.isfinite(v) for v in center)
+            for part,center in centers.items())):
+        fail('panel_handle_centers must map END_L/END_R to finite [globalY,Z] centers')
+    declared_parts={h['part_id'] for h in panels if h.get('purpose') == 'handle'}
+    if set(centers)-declared_parts: fail('declared panel handle center has no handle hole group')
+    for part in declared_parts:
+        group=[h for h in panels if h['part_id']==part and h.get('purpose')=='handle']
+        pts=sorted((h['point'][2],h['point'][1]) for h in group)
+        cy,cz=centers.get(part,[W/2,(H-t-brief.get('q',.2))/2])
+        if (part not in ('END_L','END_R') or len(pts)!=4 or
                 any(abs(h['diameter']-6.6)>1e-6 for h in group) or
                 abs(pts[0][0]-pts[1][0])>1e-6 or abs(pts[2][0]-pts[3][0])>1e-6 or
-                any(abs(p-w)>1e-6 for p,w in zip(sorted((pts[1][1]-pts[0][1], pts[3][1]-pts[2][1])), (62,85))) or
+                any(abs(p-w)>1e-6 for p,w in zip(sorted((pts[1][1]-pts[0][1],pts[3][1]-pts[2][1])),(62,85))) or
                 abs(pts[2][0]-pts[0][0]-30)>1e-6 or
-                any(abs((a+b)/2-W/2)>1e-6 for a,b in ((pts[0][1],pts[1][1]),(pts[2][1],pts[3][1]))) or
-                abs(sum(p[0] for p in pts)/4-(H-t-brief.get('q', .2))/2)>1e-6):
-            fail('panel handle must be centered 85/62/30, wide row up or down, 4x6.6')
+                any(abs((a+b)/2-cy)>1e-6 for a,b in ((pts[0][1],pts[1][1]),(pts[2][1],pts[3][1]))) or
+                abs(sum(p[0] for p in pts)/4-cz)>1e-6):
+            fail('panel handle must match its declared center and 85/62/30,4x6.6 pattern')
+        if brief.get('panel_handle_wide_down') and abs(pts[1][1]-pts[0][1]-85)>1e-6:
+            fail('declared wide-down handle has the narrow row below')
     for h in rects:
         if h.get('part_id') not in ('U','END_L','END_R'):
             fail('rectangular openings require a supported U or external endplate face')
@@ -193,13 +231,20 @@ def pipe_brief(brief, code):
                for x, y, d in circles):
             fail('functional hole crosses the lid bend zone')
         holes.append(item)
-    if not holes and not panels and not rects and not handles:
+    if not holes and not panels and not rects and not lid_rectangles and not handles:
         fail("brief needs at least one functional hole")
     if structure == 'u_l_t7u' and any(h['part_id'] != 'U' or h.get('axis') not in ([1, 0, 0], [-1, 0, 0]) for h in panels + rects):
         fail('U+L panel features currently support the two X-normal U walls only')
     return {
         "customer_requirement_text": original,
         "customer_requirement_updates": updates,
+        "order_id": str(brief.get('order_id', '')),
+        "customer_image": brief.get('customer_image'),
+        "customer_image_note": brief.get('customer_image_note'),
+        "ordinary_local_dimensions_review": bool(brief.get('ordinary_local_dimensions_review', False)),
+        "show_review_overall_dimensions": bool(brief.get('show_review_overall_dimensions', False)),
+        "detailed_lid_review": bool(brief.get('detailed_lid_review', False)),
+        "compact_wrap_review": bool(brief.get('compact_wrap_review', False)),
         "structure": structure,
         "release": code,
         "material_cn": "201不锈钢",
@@ -223,7 +268,10 @@ def pipe_brief(brief, code):
         "handles": handles,
         "lid_ports": holes,
         "panel_holes": panels,
+        "panel_handle_centers": centers,
+        "mixed_end_ports_review": brief.get("review_adapter")=="mixed_end_ports_review",
         "rect_cutouts": rects,
+        "lid_rectangles": lid_rectangles,
         "production_release": False,
     }
 
@@ -247,6 +295,9 @@ def main(argv):
         fail('order_number must be the real customer order number; do not substitute date, sequence, price, or drawing code')
     if out.exists():
         fail("fresh output dir required")
+    if src.get('lid_required') is False:
+        from build_golden_body_only import execute as body_only_execute
+        return body_only_execute(src,code,out,Path(argv[1]))
     job = pipe_brief(src, code)
     work_root = out.parent / "pipe"
     work_root.mkdir(parents=True)
@@ -288,7 +339,7 @@ def main(argv):
     from fontTools.ttLib import TTFont
     from fontTools.subset import Subsetter, Options
     font = TTFont(FONT, fontNumber=0)
-    text = ''.join(p.read_text(errors='replace') for p in list(gold_dir.glob('*.py'))+[brief_path])
+    text = ''.join(p.read_text(errors='replace') for p in list(gold_dir.glob('*.py'))+[brief_path,work_root/'work/conflicts.json'])
     subset = Subsetter(options=Options())
     subset.populate(text=text+''.join(chr(c) for c in range(32, 127)))
     subset.subset(font)

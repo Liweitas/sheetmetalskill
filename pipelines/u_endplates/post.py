@@ -14,7 +14,8 @@ for n in CN:
     fx, fy = rep['parts'][n]['flat_size']
     lab[n] = [f"{VER} {CN[n]} {n} {MATERIAL_CN} t{t:g} 展开{fx:.2f}x{fy:.2f} K{K}({'经验值' if KR_SOURCE == 'empirical' else KR_SOURCE}) 视图=成品外表面朝读者 客户确认图-非生产放行"]
 if HAS_HANDLES:
-    lab["LID"].append(f"把手铆接孔 Ø{D_HDL:g}x{len(handle_holes())} (每只4孔: 宽排{HDL_WIDE:g}/窄排{HDL_NARROW:g}/排距{HDL_ROWS:g}, 宽排朝盖中心) M6过孔（默认孔型85/62/30）")
+    orient=next(iter(rep.get('handle_pattern_check',{}).values()),{})
+    lab["LID"].append(f"把手铆接孔 Ø{D_HDL:g}x{len(handle_holes())} (每只4孔: 宽排{HDL_WIDE:g}/窄排{HDL_NARROW:g}/排距{HDL_ROWS:g}, 宽排沿{orient.get('wide_axis','?')}轴) M6过孔（孔型85/62/30）")
 for n in (('END_L', 'END_R') if STRUCTURE == 'u_endplates' else []):   # v2.8.3: outer cover end plates, zero bend
     lab[n].append(f"外封端板 零折平板（无折弯线）：外形=U端部外轮廓{W:g}x{Hb:g}，底角R{ro:g}与U外圆同心；盖住U端面，拼缝{SEAM:g}、轮廓退让{END_INSET:g}、上边{'齐口' if END_TOP_FLUSH else '低于口'}")
 c3 = rep['corner03']   # v2.8.3: lid corners = skill 03 scheme

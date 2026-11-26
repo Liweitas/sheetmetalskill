@@ -16,7 +16,8 @@ from zoneinfo import ZoneInfo
 
 # Early dispatch so u_endplates does not require SM_ORDER / work_main
 if __name__ == '__main__' and len(sys.argv) >= 3 and Path(sys.argv[1]).exists() and (Path(sys.argv[1]) / 'report.json').exists():
-    eng = Path(__file__).resolve().parent / 'engine_u_endplates.py'
+    _report=json.loads((Path(sys.argv[1])/'report.json').read_text())
+    eng = Path(__file__).resolve().parent / ('engine_body_only.py' if _report.get('lid_required') is False else 'engine_u_endplates.py')
     if not eng.exists():
         raise SystemExit(f'u_endplates engine missing: {eng}')
     import runpy
