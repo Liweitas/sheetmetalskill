@@ -10,6 +10,8 @@ Outbound trust: only the live `{VER}_CONFIRM_DRAFT.zip` + matching `{VER}_CONFIR
 
 Hard rule pointer: SKILL.md user hard rule 13.
 
+**Single canonical workspace location (user-confirmed 2026-11-26):** final drawing artifacts live only under `/Users/liweitas001/Desktop/aiqing/work/drawing/客户图纸/YYYYMMDD/<ORDER_ID>/<VER>/`. The live ZIP and `.sha256` are siblings of `<VER>/` under the order directory. `订单待确认/<ORDER_ID>/<VER>/` is for in-progress work only. Do not publish final output from or duplicate it under `WORK_vN`, `run_vN`, Downloads, or another workspace root. `YYYYMMDD` is the order/version date code. On a version bump, keep only the new version as current and move old package materials to that order's `SUPERSEDED/`.
+
 - Outbound zip **filenames must start with the factory code VER**:
   `{VER}_CONFIRM_DRAFT.zip`, `{VER}_CONFIRM_DRAFT_revN.zip`, `{VER}_OPEN_ME.zip`.
 - **Forbidden** as outbound live / chat attachments: bare `CONFIRM_DRAFT.zip`,
