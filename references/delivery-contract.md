@@ -29,7 +29,7 @@ ARCHIVE_BASE/
 
 客户与需求分开命名。job.id是本次设计ID，未提供delivery身份时仅作requirement ID，不猜客户编号。未指定revision时使用北京时间到秒+输入哈希后缀，避免分钟重名；工程文件仍使用同一北京时间分钟STAMP。历史修订原地保留，不覆盖/删除。发布ZIP是当前修订完整副本，不把旧修订混入。
 
-确认稿 ZIP 版本（用户 t69u / v2.8.8；t40u / v2.8.10；**t43u/t44u / v2.8.11 升版默认**）：**凡用户将下载的新 CONFIRM_DRAFT 默认升工厂 vN**（含 PDF/打包/README 及几何变更；废止「仅几何才升 v」）。旧厂版 live zip(+sha256) 进 `SUPERSEDED/`；CHANGELOG 写原因；`production_release=false` 除非用户另说。revN 仅内部快照，对外以工厂 vN 为准。对外只信 live `{VER}_CONFIRM_DRAFT.zip`+.sha256。对外 zip **文件名必须以 VER 开头**（`{VER}_CONFIRM_DRAFT.zip` / `{VER}_CONFIRM_DRAFT_revN.zip` / `{VER}_OPEN_ME.zip`）；**禁止**裸名 `CONFIRM_DRAFT*.zip` / `CONFIRM_DRAFT_current.zip`；zip 内有且仅有一个顶层目录 `{VER}/`，CHANGELOG 放目录内。见[确认稿版本规则](confirm-draft-versioning.md)。
+确认稿 ZIP 版本（用户 t69u / v2.8.8；t40u / v2.8.10；**t43u/t44u / v2.8.11 升版默认**）：**凡用户将下载的新 CONFIRM_DRAFT 默认升工厂 vN**（含 PDF/打包/README 及几何变更；废止「仅几何才升 v」）。旧厂版 live zip(+sha256) 进 `SUPERSEDED/`；CHANGELOG 写原因；`production_release=false` 除非用户另说。revN 仅内部快照，对外以工厂 vN 为准。对外只信 live `{VER}_CONFIRM_DRAFT.zip`+.sha256。对外 zip **文件名必须以 VER 开头**（`{VER}_CONFIRM_DRAFT.zip` / `{VER}_CONFIRM_DRAFT_revN.zip` / `{VER}_OPEN_ME.zip`）；**禁止**裸名 `CONFIRM_DRAFT*.zip` / `CONFIRM_DRAFT_current.zip`。按用户明确约定，日期归档为`客户图纸/YYYYMMDD/<订单号>/<VER>/`，ZIP内仅一个顶层真实订单号目录，其下为唯一`<VER>/`；内层图纸文件前缀VER。订单号缺失时不能用VER、日期、序号或任务目录冒充，先索取真实订单号。见[确认稿版本规则](confirm-draft-versioning.md)。
 
 可选job.delivery由references/job.schema.json验证：
 

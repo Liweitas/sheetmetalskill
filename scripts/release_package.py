@@ -2,7 +2,7 @@
 """v2.8.2 release packager + gate (stdlib + poppler pdfinfo/pdftotext/pdffonts; DXF gate via release_dxf with ezdxf python).
 Audit items #1 #2 #3 #6 #7. One complete ASCII zip per release, the release name used EXACTLY as given.
 
-  package  STAGE VER [--zip OUT.zip] [--orders /workspace/orders] [--pdf-pages 4] [--dxf-python PY]
+  package  STAGE VER --order-number ORDER_ID [--zip OUT.zip] [--orders /workspace/orders] [--pdf-pages 4] [--dxf-python PY]
            STAGE is the assembled release folder (STEP/ DXF_CUT/ DXF_BEND/ NEST/ PDF or *.pdf/ DOC/ EVIDENCE/ PREVIEW/ ...).
            Gate (all must pass, else no zip):
              name   VER non-empty, ASCII [A-Za-z0-9._-] only; never rewritten. Anything else -> FAIL, ask the user.
@@ -13,7 +13,7 @@ Audit items #1 #2 #3 #6 #7. One complete ASCII zip per release, the release name
              dxf    release_dxf check: cut/bend/nest roles (closed, no dup/overlap, CUT-only nests, SHEET border, 1:1 mm)
              clash  same VER already used by another folder under --orders -> WARN (name collision, e.g. 001-v1 x2)
            Writes EVIDENCE/{VER}_release_gate.json + {VER}_geometry_sha256.json, then the zip with an explicit arcname map
-           (all entries under {VER}/), testzip + byte-for-byte round trip + ASCII names, and a .sha256 next to it.
+           (all entries under {ORDER_ID}/{VER}/), testzip + byte-for-byte round trip + ASCII names, and a .sha256 next to it.
   geomhash STAGE VER   -> geometry-only hashes (STEP DATA section without header, DXF ENTITIES section); used by rename
   rename   OLD_STAGE OLD_VER NEW_VER NEW_STAGE   (干画图3 rename_release.py practice)
            copies the stage with the VER swapped in names, text docs, STEP header (not DATA) and DXF ($RELEASE, TEXT labels);
@@ -144,9 +144,9 @@ def gate(stage, ver, orders=None, pdf_pages=None, dxf_python=None, pdf_max_pages
     return res
 
 
-def write_zip(stage, ver, zpath):
+def write_zip(stage, ver, order_number, zpath):
     stage = Path(stage); zpath = Path(zpath)
-    amap = [(p, f'{ver}/{p.relative_to(stage).as_posix()}') for p in files(stage)]
+    amap = [(p, f'{order_number}/{ver}/{p.relative_to(stage).as_posix()}') for p in files(stage)]
     assert all(a.isascii() for _, a in amap), [a for _, a in amap if not a.isascii()]
     tmp = zpath.with_suffix('.zip.part')
     with zipfile.ZipFile(tmp, 'w', zipfile.ZIP_DEFLATED) as z:   # always rebuilt from scratch, never appended
@@ -180,7 +180,7 @@ def rename(old, old_ver, new_ver, new):
 
 def main():
     ap = argparse.ArgumentParser(); sp = ap.add_subparsers(dest='cmd', required=True)
-    a = sp.add_parser('package'); a.add_argument('stage'); a.add_argument('ver'); a.add_argument('--zip'); a.add_argument('--orders')
+    a = sp.add_parser('package'); a.add_argument('stage'); a.add_argument('ver'); a.add_argument('--order-number', required=True); a.add_argument('--zip'); a.add_argument('--orders')
     a.add_argument('--pdf-pages', type=int); a.add_argument('--pdf-max-pages', type=int, help='user t16u: fail if the PDF has more pages'); a.add_argument('--dxf-python')
     b = sp.add_parser('geomhash'); b.add_argument('stage'); b.add_argument('ver')
     c = sp.add_parser('rename'); c.add_argument('old'); c.add_argument('old_ver'); c.add_argument('new_ver'); c.add_argument('new')
@@ -196,7 +196,9 @@ def main():
     for c_ in g['checks']: print(('PASS ' if c_['pass'] else 'FAIL ') + c_['check'])
     for w in g['warnings']: print('WARN ' + w)
     if not g['pass']: sys.exit('gate failed - no zip written')
-    z = write_zip(st, x.ver, x.zip or st.parent / f'{x.ver}_CONFIRM_DRAFT.zip'); print(json.dumps(z, indent=1))
+    if not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9._-]{0,127}', x.order_number):
+        sys.exit('order number must be ASCII [A-Za-z0-9._-], path separators and empty values are forbidden')
+    z = write_zip(st, x.ver, x.order_number, x.zip or st.parent / f'{x.ver}_CONFIRM_DRAFT.zip'); print(json.dumps(z, indent=1))
 
 
 if __name__ == '__main__':

@@ -223,6 +223,9 @@ def main(argv):
     ])
     if not code:
         fail("naming file required; refusing to invent a drawing code")
+    order_number = src.get('order_number')
+    if not isinstance(order_number, str) or not order_number or not all(c.isascii() and (c.isalnum() or c in '._-') for c in order_number):
+        fail('order_number must be the real customer order number; do not substitute date, sequence, price, or drawing code')
     if out.exists():
         fail("fresh output dir required")
     job = pipe_brief(src, code)
@@ -330,7 +333,7 @@ def main(argv):
     for p in work_root.glob('page-*.png'):
         shutil.copy2(p, preview / (code+'_'+p.name))
     run('package', FC, '-B', HERE / 'release_package.py', 'package', stage, code,
-        '--zip', out / f'{code}_CONFIRM_DRAFT.zip', '--dxf-python', FC,
+        '--order-number', order_number, '--zip', out / f'{code}_CONFIRM_DRAFT.zip', '--dxf-python', FC,
         '--pdf-max-pages', '6')
     print(json.dumps({"ok": True, "pdf": str(pdfs[0]), "drawing_code": code,
                       "pipeline": "bend-pdf-golden-001-visual",
