@@ -6,7 +6,7 @@
 Outbound trust: only the live `{VER}_CONFIRM_DRAFT.zip` + matching `{VER}_CONFIRM_DRAFT.zip.sha256` is authoritative. Never treat older chat attachments, `_before_*` archives, or `*_CONFIRM_DRAFT_revN.zip` as the current outbound package.
 
 
-## Outbound zip filename + single top-level (user t40u / v2.8.10)
+## Outbound zip filename + order-number outer directory (user-confirmed 2026-11-26)
 
 Hard rule pointer: SKILL.md user hard rule 13.
 
@@ -16,9 +16,10 @@ Hard rule pointer: SKILL.md user hard rule 13.
   `CONFIRM_DRAFT_revN.zip`, `CONFIRM_DRAFT_current.zip` (download name collisions;
   macOS Archive Utility creates a folder named after the zip when there are multiple
   top-level entries, which then collides across orders).
-- Zip **interior must have exactly one top-level directory**, named `{VER}/`.
-  Put CHANGELOG inside that tree (prefer `{VER}/DOC/{VER}_CHANGELOG.txt` or
-  `{VER}/{VER}_CHANGELOG.txt`). No loose top-level files beside `{VER}/`.
+- The ZIP has exactly one top-level directory named with the **real customer order number**, then the drawing version directory: `<ORDER_ID>/<VER>/...`.
+  Keep CHANGELOG inside `<ORDER_ID>/<VER>/DOC/{VER}_CHANGELOG.txt`. No loose top-level files beside the order directory.
+- The dated archive path is `客户图纸/YYYYMMDD/<ORDER_ID>/<VER>/...`.
+- Never substitute VER, date, sequence, price, or a local task folder for the real order number. If the order number is absent, do not create a falsely named outbound archive; keep the work in the order workspace and ask for the order number.
 - Chat attachments must point at the VER-prefixed paths so the downloaded
   filename on disk also carries VER.
 
@@ -37,8 +38,8 @@ Do **not** keep shipping the same `…-v1` folder for successive confirm drafts 
 Full rename requirements on bump:
 
 - Zip filename = `{NEW_VER}_CONFIRM_DRAFT.zip` (optional same-payload `{NEW_VER}_OPEN_ME.zip`)
-- Zip has exactly one top-level dir = `{NEW_VER}/`
-- Every file inside is prefixed with `{NEW_VER}` (PDF pages, STEP headers, DXF names, DOC, NEST, etc.)
+- Zip has exactly one top-level dir = `<ORDER_ID>/`, then `<NEW_VER>/`
+- Every drawing file inside is prefixed with `{NEW_VER}` (PDF pages, STEP headers, DXF names, DOC, NEST, etc.)
 - Old factory VER’s complete live zip(+sha256) moves into `SUPERSEDED/`
 - Write a CHANGELOG line explaining the bump reason
 - Keep `production_release=false` unless the user said otherwise
@@ -86,7 +87,7 @@ When factory v does bump:
 - [ ] Decide next factory `NEW_VER` (same first five segments, bump trailing vN).
 - [ ] Geometry unchanged → `release_package.py rename` (geom hashes equal) + re-render PDFs with NEW_VER; geometry changed → rebuild then package under NEW_VER.
 - [ ] Live `{NEW_VER}_CONFIRM_DRAFT.zip` (+ optional OPEN_ME) written; sha256 refreshed.
-- [ ] Zip has exactly one top-level directory = NEW_VER; every file prefixed NEW_VER; CHANGELOG inside that tree with bump reason.
+- [ ] Zip has exactly one top-level order-number directory, containing exactly the current NEW_VER directory; drawing files prefixed NEW_VER; CHANGELOG inside that tree with bump reason.
 - [ ] Old factory VER live zip(+sha256) moved to `SUPERSEDED/`.
 - [ ] Outbound message attaches only live NEW_VER zip + its sha256 (no bare CONFIRM_DRAFT*.zip).
 - [ ] `production_release=false` unless user authorized otherwise.
